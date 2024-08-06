@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/evaluaciones.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a href="#{request.contextPath}/matriculacion/docente.jsf">#{docente.apellidos}
+					#{docente.nombres}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/grupoDeEvaluacion.jsf">#{grado.etiqueta}
+					#{paralelo.etiqueta} - #{asignatura.etiqueta}</a></li>
+			<li class="active">#{grupoDeEvaluacion.etiqueta}</li>
+		</ol>
+		<h:form id="evaluaciones"
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('4') || request.isUserInRole('7') || request.isUserInRole('7') }">
+			<h3>Evaluaciones</h3>
+			<p:dataTable id="tblDetalle" reflow="true"
+				value="#{asignaturaController.evaluaciones}"
+				var="evaluacionAsignatura" rowIndexVar="rowIndex">
+				<p:column headerText="Nómina" width="20%">
+					<h:outputText
+						value="#{evaluacionAsignatura.informeAnual.matricula.estudiante.apellidos} #{evaluacionAsignatura.informeAnual.matricula.estudiante.nombres}" />
+				</p:column>
+                            <p:column headerText="#{asignaturaController.periodoLectivo.insumo1}" width="5%">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{100 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Insumo1}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo2}" width="5%">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{200 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1RefuerzoAcademico1}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo3}" width="5%">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{300 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Insumo2}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo4}" width="5%">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{400 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1RefuerzoAcademico2}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo5}" width="5%"
+					rendered="#{asignaturaController.renderizarInsumos}">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{500 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Insumo3}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo6}" width="5%"
+					rendered="#{asignaturaController.renderizarInsumos}">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{600 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1RefuerzoAcademico3}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo7}" width="5%"
+					rendered="#{asignaturaController.renderizarInsumos}">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{700 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Insumo4}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="#{asignaturaController.periodoLectivo.insumo8}" width="5%"
+					rendered="#{asignaturaController.renderizarInsumos}">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{800 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1RefuerzoAcademico4}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="Quimestre 1 Parcial 1" width="5%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre1Parcial1Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Escala Cualitativa" width="5%">
+					<p:outputLabel converter="cualitativaConverter"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Nota}">
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Recomendaciones" width="12%">
+					<p:inputTextarea maxlength="255" tabindex="#{900 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1Recomendaciones}" />
+				</p:column>
+				<p:column headerText="Plan de mejora" width="12%">
+					<p:inputTextarea maxlength="255" tabindex="#{1000 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre1Parcial1PlanDeMejoraAcademico}" />
+				</p:column>
+				<p:column headerText="Acciones" width="6%">
+					<p:commandButton value="Guardar" update="tblDetalle"
+						action="#{asignaturaController.guardarEvaluacion}">
+						<f:setPropertyActionListener
+							target="#{asignaturaController.evaluacionAsignatura}"
+							value="#{evaluacionAsignatura}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

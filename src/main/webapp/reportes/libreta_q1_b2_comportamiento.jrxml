@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="libreta_q1_b2_comportamiento" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3ab47c2e-8311-4cc7-8149-eb2869b3b3ed">
+	<property name="ireport.zoom" value="1.4641000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="matricula_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     evaluacion_comportamiento.`b2` AS evaluacion_comportamiento_b2,
+     criterio_de_evaluacion.`etiqueta` AS criterio_de_evaluacion_etiqueta
+FROM
+     `criterio_de_evaluacion` criterio_de_evaluacion INNER JOIN `evaluacion_comportamiento` evaluacion_comportamiento ON criterio_de_evaluacion.`id` = evaluacion_comportamiento.`criterio_de_evaluacion_id`
+WHERE evaluacion_comportamiento.`matricula_id` = $P{matricula_id}]]>
+	</queryString>
+	<field name="evaluacion_comportamiento_b2" class="java.lang.String"/>
+	<field name="criterio_de_evaluacion_etiqueta" class="java.lang.String"/>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="475" height="16" forecolor="#000000" uuid="69f8c7c4-8676-4f71-a07e-de24c6410bda"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Evaluación de Comportamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="475" y="0" width="16" height="16" forecolor="#000000" uuid="11531af5-d011-47c8-a386-3620b7281e75"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="491" y="0" width="16" height="16" forecolor="#000000" uuid="95335a47-7e26-4546-9447-bd794a374134"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[B]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="507" y="0" width="16" height="16" forecolor="#000000" uuid="7b3c54fd-f963-4851-a739-36e81bdf512d"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[C]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="523" y="0" width="16" height="16" forecolor="#000000" uuid="ce144c40-3084-4aad-80b5-6e748a777b6e"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[D]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="539" y="0" width="16" height="16" forecolor="#000000" uuid="fd81e351-c2d6-43a2-8c7a-46db6f6defb6"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[E]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="475" y="0" width="16" height="16" forecolor="#000000" uuid="786bfaf8-028d-4653-b969-77d2f6507c0f"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_comportamiento_b2}.equals("A") ?  "X" :""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="475" height="16" forecolor="#000000" uuid="51e4da5c-16e1-4d17-99f3-c7025663e09b"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{criterio_de_evaluacion_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="491" y="0" width="16" height="16" forecolor="#000000" uuid="d65d3c7a-1229-4a63-b5c8-869b71b77ffc"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_comportamiento_b2}.equals("B") ?  "X" :""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="507" y="0" width="16" height="16" forecolor="#000000" uuid="34c8b9be-a5f8-4664-ba20-17ae48e7f176"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_comportamiento_b2}.equals("C") ?  "X" :""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="523" y="0" width="16" height="16" forecolor="#000000" uuid="84d07b1f-dc68-425b-b288-7fd8080aef15"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_comportamiento_b2}.equals("D") ?  "X" :""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="539" y="0" width="16" height="16" forecolor="#000000" uuid="e2043280-f1c9-4b16-99f1-ca418b932b12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_comportamiento_b2}.equals("E") ?  "X" :""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

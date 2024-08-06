@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:p="http://primefaces.org/ui"
+                template="/plantillas/comun.xhtml">
+    <ui:define name="content">
+        <link jsf:name="css/signin.css" rel="stylesheet" type="text/css" />
+        <div class="container">
+
+            <div class="col-lg-12 col-sm-12">
+                <h:form class="form-signin">
+
+                    <div class="center-block form-signin-control">
+                        <h3  class="form-signin-heading">Cambiar contraseña</h3>
+
+                        <label for="password_anterior" class="sr-only">Contraseña
+                            anterior</label>
+                        <p:password id="password_anterior" class="ui-inputtext contrasenia" value="#{cambiarClaveController.claveAnterior}" 
+                                    placeholder="Contraseña anterior"></p:password>
+                        <label for="password" class="sr-only">Contraseña nueva</label>
+                        <p:password id="password" class="ui-inputtext contrasenia" value="#{cambiarClaveController.clave}" 
+                                    placeholder="Contraseña nueva"></p:password>
+                        <p:commandButton
+                            action="#{cambiarClaveController.cambiar()}"
+                            value="Cambiar" />
+                        <p:messages for="login" escape="false"></p:messages>
+                        <p:growl for="login" escape="false"></p:growl>
+                    </div>
+                </h:form>
+            </div>
+
+        </div>
+
+    </ui:define>
+</ui:composition>
+

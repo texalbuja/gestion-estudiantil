@@ -1,0 +1,522 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">#{grado.etiqueta} - #{paralelo.etiqueta}</li>
+		</ol>
+		<h:panelGroup
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5') || request.isUserInRole('4') || request.isUserInRole('6') || request.isUserInRole('8') || request.isUserInRole('9')}">
+			<h:form>
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Nuevo Estudiante" icon="ui-icon-document"
+							update=":frmNuevoEstudiante:wdgNuevoEstudiante"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							actionListener="#{paraleloController.prepararNuevoEstudiante}"
+							oncomplete="PF('wdgNuevoEstudiante').show();">
+						</p:commandButton>
+
+						<p:commandButton value="Nueva Asignatura" icon="ui-icon-document"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							update=":frmNuevo:wdgNuevo"
+							actionListener="#{paraleloController.preparaNuevaAsignatura()}"
+							oncomplete="PF('wdgNuevo').show();" />
+
+						<p:commandButton value="Nuevo Proyecto Escolar"
+							icon="ui-icon-document"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							update=":frmNuevoProyecto:wdgNuevoProyecto"
+							actionListener="#{paraleloController.preparaNuevoProyectoEscolar()}"
+							oncomplete="PF('wdgNuevoProyecto').show();" />
+						<span class="ui-separator"> <span
+							class="ui-icon ui-icon-grip-dotted-vertical" />
+						</span>
+						<p:commandButton value="Certificados de Matrícula"
+							icon="ui-icon-print"
+							action="#{paraleloController.exportarReporteCertificadosMatriculas()}" />
+						<p:commandButton value="Certificados de Promoción"
+							icon="ui-icon-print"
+							action="#{paraleloController.exportarReporteCertificadosPromocion()}" />
+						<p:commandButton value="Promediar" icon="ui-icon-print"
+							action="#{paraleloController.promediar()}" />
+						<p:menuButton value="Evaluaciones">
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesPrimerQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesPrimerQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesPrimerQuimestreTercerBloque()}" />
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesPrimerQuimestre()}" />
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesSegundoQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesSegundoQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesSegundoQuimestreTercerBloque()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesSegundoQuimestre()}" />
+							<p:menuitem value="Anual" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEvaluacionesAnual()}" />
+						</p:menuButton>
+						<p:menuButton value="Estadísticas">
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaPrimerQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaPrimerQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaPrimerQuimestreTercerBloque()}" />
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaPrimerQuimestre()}" />
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaSegundoQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaSegundoQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaSegundoQuimestreTercerBloque()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteEstadisticaSegundoQuimestre()}" />
+						</p:menuButton>
+						<p:menuButton value="Libretas">
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasPrimerQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasPrimerQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasPrimerQuimestreTercerBloque()}" />
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasPrimerQuimestre()}" />
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasSegundoQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasSegundoQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasSegundoQuimestreTercerBloque()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteLibretasSegundoQuimestre()}" />
+						</p:menuButton>
+						<p:menuButton value="Asistencia">
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteAsistenciaPrimerQuimestre()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteAsistenciaSegundoQuimestre()}" />
+						</p:menuButton>
+						<p:menuButton value="Nóminas">
+							<p:menuitem value="Estudiantes" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteNominaEstudiantes()}" />
+							<p:menuitem value="Docentes" icon="ui-icon-print"
+								action="#{paraleloController.exportarReporteNominaDocentes()}" />
+						</p:menuButton>
+					</f:facet>
+				</p:toolbar>
+			</h:form>
+
+		</h:panelGroup>
+
+		<h3>#{grado.etiqueta} - #{paralelo.etiqueta}</h3>
+		<h4>Tutor: #{paralelo.tutor.apellidos} #{paralelo.tutor.nombres}
+		</h4>
+
+		<h3>Asignaturas</h3>
+		<p:dataTable id="tblDetalle" value="#{paraleloController.asignaturas}"
+			var="asignatura">
+			<p:column headerText="Asignatura">
+				<h:outputText value="#{asignatura.orden} #{asignatura.etiqueta}" />
+			</p:column>
+			<p:column headerText="Docente">
+				<h:outputText
+					value="#{asignatura.docente.apellidos} #{asignatura.docente.nombres}" />
+			</p:column>
+			<p:column headerText="Promedia">
+				<h:outputText
+					value="#{asignatura.logicaEvaluacion eq 'SP' ? 'Si promedia' : 'No promedia'}" />
+			</p:column>
+			<p:column headerText="Contenedor">
+				<h:outputText value="#{asignatura.asignatura.etiqueta}" />
+			</p:column>
+			<p:column headerText="Acciones"
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+				<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+					rendered="#{paraleloController.asignaturaPerteneceDocente(asignatura)}"
+					action="#{paraleloController.seleccionarAsignaturaDictada()}">
+					<f:setPropertyActionListener
+						target="#{paraleloController.asignatura}" value="#{asignatura}" />
+				</p:commandButton>
+				<p:commandButton value="Editar" icon="ui-icon-pencil"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					actionListener="#{paraleloController.preparaEditarAsignatura(asignatura)}"
+					update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloController.asignatura}" value="#{asignatura}" />
+					<f:setPropertyActionListener target="#{paraleloController.docente}"
+						value="#{asignatura.docente}" />
+				</p:commandButton>
+				<p:commandButton value="Eliminar" icon="ui-icon-trash"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEliminar:wdgEliminar"
+					oncomplete="PF('wdgEliminar').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloController.asignatura}" value="#{asignatura}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<h3>Proyectos Escolares</h3>
+		<p:dataTable id="tblDetalleProyectos"
+			value="#{paraleloController.proyectosEscolares}"
+			var="proyectoEscolar">
+			<p:column headerText="Proyecto Escolar">
+				<h:outputText value="#{proyectoEscolar.etiqueta}" />
+			</p:column>
+			<p:column headerText="Docente">
+				<h:outputText
+					value="#{proyectoEscolar.docente.apellidos} #{proyectoEscolar.docente.nombres}" />
+			</p:column>
+			<p:column headerText="Acciones"
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+				<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+					rendered="#{paraleloController.proyectoEscolarPerteneceDocente(proyectoEscolar)}"
+					action="#{paraleloController.seleccionarProyectoEscolar()}">
+					<f:setPropertyActionListener
+						target="#{paraleloController.proyectoEscolar}"
+						value="#{proyectoEscolar}" />
+				</p:commandButton>
+				<p:commandButton value="Editar" icon="ui-icon-pencil"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					actionListener="#{paraleloController.preparaEditarProyectoEscolar(proyectoEscolar)}"
+					update=":frmEditarProyecto:wdgEditarProyecto"
+					oncomplete="PF('wdgEditarProyecto').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloController.proyectoEscolar}"
+						value="#{proyectoEscolar}" />
+					<f:setPropertyActionListener target="#{paraleloController.docente}"
+						value="#{proyectoEscolar.docente}" />
+				</p:commandButton>
+				<p:commandButton value="Eliminar" icon="ui-icon-trash"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEliminarProyecto:wdgEliminarProyecto"
+					oncomplete="PF('wdgEliminarProyecto').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloController.proyectoEscolar}"
+						value="#{proyectoEscolar}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		<h3>Estudiantes</h3>
+		<p:dataTable id="tblDetalleMatriculados" paginator="true"
+			paginatorPosition="bottom" rows="10"
+			value="#{paraleloController.matriculas}" var="matricula">
+			<p:column headerText="Estudiante">
+				<h:outputText
+					value="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}" />
+			</p:column>
+			<p:column headerText="Identificación">
+				<h:outputText value="#{matricula.estudiante.identificacion}" />
+			</p:column>
+			<p:column headerText="Acciones"
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+				<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+					action="#{paraleloController.seleccionarMatricula()}">
+					<f:setPropertyActionListener
+						target="#{paraleloController.matricula}" value="#{matricula}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		<h:form id="frmNuevo" enctype="multipart/form-data">
+			<p:dialog header="Nueva Asignatura" id="wdgNuevo"
+				widgetVar="wdgNuevo" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente" value="#{paraleloController.docente}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="contenedor" value="Contenedor: "></p:outputLabel>
+					<p:selectOneMenu id="contenedor"
+						value="#{paraleloController.asignatura.asignatura}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Sin contenedor" itemValue="#{null}" />
+						<f:selectItems value="#{paraleloController.asignaturas}"
+							itemLabel="#{asignatura.etiqueta}" itemValue="#{asignatura}"
+							var="asignatura"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="contenedor" />
+					<p:outputLabel for="promedia" value="Promedia: "></p:outputLabel>
+					<p:selectOneRadio id="promedia" requiredMessage="Campo requerido"
+						required="true"
+						value="#{paraleloController.asignatura.logicaEvaluacion}">
+						<f:selectItem itemValue="SP" itemLabel="Si promedia"></f:selectItem>
+						<f:selectItem itemValue="NP" itemLabel="No promedia"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="promedia" />
+					<p:outputLabel for="asignatura" value="Asignatura: "></p:outputLabel>
+					<p:inputText id="asignatura" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.asignatura.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="asignatura" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden"
+						value="#{paraleloController.asignatura.orden}">
+						<f:validateDoubleRange minimum="0.0" maximum="20.0" />
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="tblDetalle"
+					action="#{paraleloController.guardar}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmNuevoProyecto" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Proyecto Escolar" id="wdgNuevoProyecto"
+				widgetVar="wdgNuevoProyecto" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente" value="#{paraleloController.docente}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="proyecto" value="Proyecto Escolar: "></p:outputLabel>
+					<p:inputText id="proyecto" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.proyectoEscolar.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="proyecto" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					update="tblDetalleProyectos"
+					action="#{paraleloController.guardarProyectoEscolar()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditar" enctype="multipart/form-data">
+			<p:dialog header="Editar Asignatura" id="wdgEditar"
+				widgetVar="wdgEditar" dragrable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente" value="#{paraleloController.docente}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="contenedor" value="Contenedor: "></p:outputLabel>
+					<p:selectOneMenu id="contenedor"
+						value="#{paraleloController.asignatura.asignatura}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Sin contenedor" itemValue="#{null}" />
+						<f:selectItems value="#{paraleloController.asignaturas}"
+							itemLabel="#{asignatura.etiqueta}" itemValue="#{asignatura}"
+							var="asignatura"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="contenedor" />
+
+					<p:outputLabel for="promedia" value="Promedia: "></p:outputLabel>
+					<p:selectOneRadio id="promedia" requiredMessage="Campo requerido"
+						required="true"
+						value="#{paraleloController.asignatura.logicaEvaluacion}">
+						<f:selectItem itemValue="SP" itemLabel="Si promedia"></f:selectItem>
+						<f:selectItem itemValue="NP" itemLabel="No promedia"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="promedia" />
+
+					<p:outputLabel for="asignatura" value="Asignatura: "></p:outputLabel>
+					<p:inputText id="asignatura" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.asignatura.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="asignatura" />
+					<p:outputLabel for="orden" value="Orden "></p:outputLabel>
+					<p:inputText id="orden"
+						value="#{paraleloController.asignatura.orden}">
+						<f:validateDoubleRange minimum="0.0" maximum="20.0" />
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="tblDetalle"
+					action="#{paraleloController.editar}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarProyecto" enctype="multipart/form-data">
+			<p:dialog header="Editar Proyecto Escolar" id="wdgEditarProyecto"
+				widgetVar="wdgEditarProyecto" dragrable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente" value="#{paraleloController.docente}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="proyecto" value="Proyecto Escolar: "></p:outputLabel>
+					<p:inputText id="proyecto" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.proyectoEscolar.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="proyecto" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					update="tblDetalleProyectos"
+					action="#{paraleloController.editarProyectoEscolar()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmCambiarDeParalelo" enctype="multipart/form-data">
+			<p:dialog header="Cambiar de Paralelo" id="wdgCambiarDeParalelo"
+				widgetVar="wdgCambiarDeParalelo" dragrable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="paralelo" value="Paralelo a asignar: "></p:outputLabel>
+					<p:selectOneMenu id="paralelo" required="true"
+						value="#{paraleloController.paraleloAAsignar}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem itemLabel="Seleccione el paralelo"
+							itemValue="#{null}" />
+						<f:selectItems value="#{paraleloController.grado.paralelos}"
+							itemLabel="#{grado.etiqueta} #{paralelo.etiqueta}"
+							itemValue="#{paralelo}" var="paralelo"></f:selectItems>
+						<f:ajax event="change" render="asignaturasAAsignar"
+							listener="#{paraleloController.seleccionarParalelo()}"></f:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="paralelo" />
+					<p:outputLabel for="paralelo" value="Asignaturas: "></p:outputLabel>
+					<h:panelGrid columns="2">
+						<p:orderList value="#{paraleloController.asignaturasAsignadas}"
+							id="asignaturasAsignadas" var="asignatura"
+							controlsLocation="none"
+							itemLabel="#{paraleloController.obtenerEtiquetaPorAsignatura(asignatura)}"
+							itemValue="#{asignatura}">
+						</p:orderList>
+						<p:orderList value="#{paraleloController.asignaturasAAsignar}"
+							id="asignaturasAAsignar" var="asignatura" controlsLocation="none"
+							itemLabel="#{paraleloController.obtenerEtiquetaPorAsignatura(asignatura)}"
+							itemValue="#{asignatura}">
+						</p:orderList>
+					</h:panelGrid>
+				</h:panelGrid>
+				<p:commandButton value="Cambiar de Paralelo" ajax="true"
+					oncomplete="PF('wdgCambiarDeParalelo').hide();"
+					process="asignaturasAAsignar, asignaturasAsignadas, @this"
+					update="tblDetalleMatriculados"
+					action="#{paraleloController.cambiarDeParalelo()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Asignatura" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la asignatura: #{paraleloController.asignatura.etiqueta}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{paraleloController.eliminar}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEliminarProyecto">
+			<p:dialog header="Eliminar Proyecto Escolar" id="wdgEliminarProyecto"
+				widgetVar="wdgEliminarProyecto" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el proyecto Escolar #{paraleloController.proyectoEscolar.etiqueta}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{paraleloController.eliminarProyectoEscolar}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmNuevoEstudiante" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Estudiante" id="wdgNuevoEstudiante"
+				widgetVar="wdgNuevoEstudiante" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:inputText id="identificacion" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.estudiante.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:inputText id="apellidos" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloController.estudiante.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="nombres" value="Nombres" />
+					<p:inputText id="nombres" requiredMessage="Campo requerido"
+						required="true" value="#{paraleloController.estudiante.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<p:outputLabel for="correo" value="Correo" />
+					<p:inputText id="correo"
+						value="#{paraleloController.estudiante.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:outputLabel for="sexo" value="Sexo " />
+					<p:selectOneRadio id="sexo" requiredMessage="Campo requerido"
+						required="true" value="#{paraleloController.estudiante.sexo}">
+						<f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="sexo" />
+					<p:outputLabel for="sexo" value="Sin identificación? " />
+					<p:commandButton value="Obtener código Temporal"
+						update="identificacion" process="@this"
+						actionListener="#{paraleloController.obtenerCodigoTemporal()}"></p:commandButton>
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="numeroMatricula"
+						value="Matrícula en este Curso: "></p:outputLabel>
+					<p:selectOneRadio id="numeroMatricula"
+						requiredMessage="Campo requerido" required="true"
+						value="#{paraleloController.matricula.numeroMatriculaGrado}">
+						<f:selectItem itemValue="Primera" itemLabel="Primera"></f:selectItem>
+						<f:selectItem itemValue="Segunda" itemLabel="Segunda"></f:selectItem>
+						<f:selectItem itemValue="Tercera" itemLabel="Tercera"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="numeroMatricula" />
+					<p:outputLabel for="observacion" value="Observación" />
+					<p:inputText id="observacion"
+						value="#{paraleloController.matricula.observacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="observacion" />
+					<p:commandButton value="Guardar Estudiante" ajax="false"
+						update="tblDetalleMatriculados"
+						action="#{paraleloController.guardarEstudiante()}"></p:commandButton>
+
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

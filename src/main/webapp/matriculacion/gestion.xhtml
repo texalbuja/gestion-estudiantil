@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active">#{institucion.nombre}</li>
+		</ol>
+		
+		<h3>Matrículas</h3>
+		
+
+		<p:dataTable id="tblDetalle" value="#{gestionController.matriculas}"
+			var="matricula">
+
+			<p:column headerText="Identificación">
+				<h:outputText value="#{matricula.estudiante.identificacion}" />
+			</p:column>
+			<p:column headerText="Estudiante">
+				<h:outputText
+					value="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}" />
+			</p:column>
+			<p:column headerText="Grado">
+				<h:outputText value="#{matricula.grado.grados.descripcionGrado}" />
+			</p:column>
+			<p:column headerText="Paralelo">
+				<h:outputText value="#{matricula.paralelo.etiqueta}" />
+			</p:column>
+			<p:column headerText="Acciones">
+				<p:commandButton value="Editar" icon="ui-icon-folder-open"
+					action="#{gestionController.seleccionarMatricula()}">
+					<f:setPropertyActionListener
+						target="#{gestionController.matricula}" value="#{matricula}" />
+				</p:commandButton>
+				<p:commandButton value="Eliminar" icon="ui-icon-trash"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEliminar:wdgEliminar"
+					oncomplete="PF('wdgEliminar').show();">
+					<f:setPropertyActionListener
+						target="#{gestionController.matricula}" value="#{matricula}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Matricula" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la matricula: #{gestionController.matricula.estudiante.apellidos} #{gestionController.matricula.estudiante.nombres}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{gestionController.eliminar}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

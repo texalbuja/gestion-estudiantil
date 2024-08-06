@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/evaluaciones.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+
+
+			<li><a href="#{request.contextPath}/matriculacion/paralelo.jsf">
+					#{grado.etiqueta} - #{paralelo.etiqueta}</a></li>
+			<li class="active">#{asignatura.etiqueta}</li>
+		</ol>
+		<h:form
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('4') || request.isUserInRole('7')}">
+			<h3>Evaluaciones</h3>
+
+
+			<p:dataTable id="tblDetalle"
+				value="#{asignaturaController.evaluaciones}"
+				var="evaluacionAsignatura" rowIndexVar="rowIndex">
+				<p:column headerText="Nomina" width="20%">
+					<h:outputText
+						value="#{evaluacionAsignatura.informeAnual.matricula.estudiante.apellidos} #{evaluacionAsignatura.informeAnual.matricula.estudiante.nombres}" />
+				</p:column>
+				<p:column headerText="Parcial 1" width="20%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre2Parcial1Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Parcial 2" width="20%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre2Parcial2Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Parcial 3" width="20%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre2Parcial3Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Examen" width="20%">
+					<p:inputNumber minValue="0.00" maxValue="10" decimalPlaces="2"
+						styleClass="nota" tabindex="#{100 + rowIndex}"
+						value="#{evaluacionAsignatura.quimestre2NotaExamen}">
+					</p:inputNumber>
+				</p:column>
+				<p:column headerText="80%" width="20%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre2NotaPromedioParciales}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="20%" width="20%">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.quimestre2NotaPromedioExamen}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Quimestre 2" width="20%">
+					<p:outputLabel value="#{evaluacionAsignatura.quimestre2Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Acciones" width="20%">
+					<p:commandButton value="Guardar" update="tblDetalle"
+						action="#{asignaturaController.guardarEvaluacion}">
+						<f:setPropertyActionListener
+							target="#{asignaturaController.evaluacionAsignatura}"
+							value="#{evaluacionAsignatura}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h3>Roles</h3>
+
+		<h3>Listado</h3>
+		<p:dataTable value="#{rolesController.roles}" var="rol"
+			id="tblDetalle">
+			<p:column headerText="Nombre">
+				<h:outputText value="#{rol.id} - " />
+				<h:outputText value="#{rol.etiqueta}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

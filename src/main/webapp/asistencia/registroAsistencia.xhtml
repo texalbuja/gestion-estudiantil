@@ -1,0 +1,196 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li class="active">Registrar asistencia</li>
+		</ol>
+		<h3>Registrar asistencia</h3>
+		<h:form id="frmObservacion"
+			rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}">
+			<p:panel header="Búsqueda de Estudiante">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="matricula" value="Búsqueda por apellidos" />
+					<p:autoComplete id="matricula"
+						emptyMessage="No existen estudiantes" size="50"
+						value="#{registroAsistenciaController.matricula}"
+						converter="matriculaConverter" var="matricula"
+						itemLabel="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}"
+						itemValue="#{matricula}"
+						completeMethod="#{registroAsistenciaController.completarMatriculas}"
+						effect="fade" forceSelection="true" />
+					<p:messages showIcon="false" autoUpdate="true" for="matricula" />
+					<p:outputLabel for="bloque" value="Bloque"></p:outputLabel>
+					<p:selectOneRadio id="bloque" converter="javax.faces.Integer"
+						requiredMessage="Campo requerido" required="true"
+						value="#{registroAsistenciaController.bloque}">
+						<f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+						<f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+						<f:selectItem itemValue="3" itemLabel="3"></f:selectItem>
+						<f:selectItem itemValue="4" itemLabel="4"></f:selectItem>
+						<f:selectItem itemValue="5" itemLabel="5"></f:selectItem>
+						<f:selectItem itemValue="6" itemLabel="6"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="bloque" />
+					<p:outputLabel for="fecha" value="Fecha: " />
+					<p:calendar id="fecha"
+						value="#{registroAsistenciaController.fecha}" showOn="button" />
+					<p:messages showIcon="false" autoUpdate="true" for="fecha" />
+					<p:outputLabel for="tipo" value="Tipo"></p:outputLabel>
+					<p:selectOneRadio id="tipo" requiredMessage="Campo requerido"
+						required="true" value="#{registroAsistenciaController.tipo}">
+						<f:selectItem itemValue="A" itemLabel="Atraso"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Falta"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="tipo" />
+
+					<p:commandButton value="Guardar" update="tblDetalle"
+						action="#{registroAsistenciaController.guardar()}"></p:commandButton>
+					<p:commandButton value="Consultar" update="tblDetalle"
+						action="#{registroAsistenciaController.consultar()}"></p:commandButton>
+					<p:commandButton value="Todos" update="tblDetalle" process="@this"
+						action="#{registroAsistenciaController.consultarTodos()}"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+			<h:panelGroup>
+				<h3>Asistencias</h3>
+
+				<p:dataTable id="tblDetalle" paginatorPosition="bottom"
+					value="#{registroAsistenciaController.asistencias}"
+					var="asistencia">
+					<p:column headerText="Estudiante">
+						<h:outputText
+							value="#{asistencia.matricula.estudiante.apellidos} #{asistencia.matricula.estudiante.nombres}" />
+					</p:column>
+					<p:column headerText="Bloque">
+						<h:outputText value="#{asistencia.bloque}" />
+					</p:column>
+					<p:column headerText="Fecha">
+						<h:outputText value="#{asistencia.fecha}" />
+					</p:column>
+					<p:column headerText="Tipo">
+						<h:outputText
+							value="#{asistencia.tipo.equals('A') ? 'Atraso' : 'Falta'}" />
+					</p:column>
+					<p:column headerText="Estado">
+						<h:outputText
+							value="#{asistencia.estado.equals('SJ') ? 'Sin Justificar' : 'Justificado'}" />
+					</p:column>
+					<p:column headerText="Observacion">
+						<h:outputText value="#{asistencia.observacion}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						<p:commandButton value="Editar" icon="ui-icon-pencil"
+							rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}"
+							update=":frmEditar:wdgEditar" process="@this"
+							oncomplete="PF('wdgEditar').show();">
+							<f:setPropertyActionListener
+								target="#{registroAsistenciaController.asistencia}"
+								value="#{asistencia}" />
+						</p:commandButton>
+						<p:commandButton value="Justificar" icon="ui-icon-pencil"
+							rendered="#{(request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1') and asistencia.estado.equals('SJ'))}"
+							update=":frmJustificar:wdgJustificar" process="@this"
+							oncomplete="PF('wdgJustificar').show();">
+							<f:setPropertyActionListener
+								target="#{registroAsistenciaController.asistencia}"
+								value="#{asistencia}" />
+						</p:commandButton>
+						<p:commandButton value="Eliminar" icon="ui-icon-trash"
+							rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}"
+							process="@this" update=":frmEliminar:wdgEliminar"
+							oncomplete="PF('wdgEliminar').show();">
+							<f:setPropertyActionListener
+								target="#{registroAsistenciaController.asistencia}"
+								value="#{asistencia}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+		</h:form>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Observación" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la observación: #{registroAsistenciaController.asistencia.fecha}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{registroAsistenciaController.eliminar}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditar">
+			<p:dialog header="Editar Asistencia" widgetVar="wdgEditar"
+				id="wdgEditar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="matricula" value="Búsqueda por apellidos" />
+					<p:autoComplete id="matricula"
+						emptyMessage="No existen estudiantes" size="50"
+						value="#{registroAsistenciaController.asistencia.matricula}"
+						converter="matriculaConverter" var="matricula"
+						itemLabel="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}"
+						itemValue="#{matricula}"
+						completeMethod="#{registroAsistenciaController.completarMatriculas}"
+						effect="fade" forceSelection="true" />
+					<p:messages showIcon="false" autoUpdate="true" for="matricula" />
+					<p:outputLabel for="bloque" value="Bloque"></p:outputLabel>
+					<p:selectOneRadio id="bloque" converter="javax.faces.Integer"
+						requiredMessage="Campo requerido" required="true"
+						value="#{registroAsistenciaController.asistencia.bloque}">
+						<f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+						<f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+						<f:selectItem itemValue="3" itemLabel="3"></f:selectItem>
+						<f:selectItem itemValue="4" itemLabel="4"></f:selectItem>
+						<f:selectItem itemValue="5" itemLabel="5"></f:selectItem>
+						<f:selectItem itemValue="6" itemLabel="6"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="numeroMatricula" />
+					<p:outputLabel for="fecha" value="Fecha: " />
+					<p:calendar id="fecha"
+						value="#{registroAsistenciaController.asistencia.fecha}"
+						showOn="button" />
+					<p:messages showIcon="false" autoUpdate="true" for="fecha" />
+					<p:commandButton value="Editar Asistencia"
+						update=":frmObservacion:tblDetalle"
+						oncomplete="PF('wdgEditar').hide();"
+						action="#{registroAsistenciaController.editar()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		<h:form id="frmJustificar">
+			<p:dialog header="Justificar Asistencia" widgetVar="wdgJustificar"
+				id="wdgJustificar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="matricula" value="Estudiante" />
+					<p:outputLabel id="matricula"
+						value="#{registroAsistenciaController.asistencia.matricula.estudiante.apellidos} #{registroAsistenciaController.asistencia.matricula.estudiante.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="matricula" />
+					<p:outputLabel for="observacion" value="Observación" />
+					<p:inputTextarea id="observacion" cols="50"
+						value="#{registroAsistenciaController.asistencia.observacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="observacion" />
+					<p:commandButton value="Justificar Asistencia"
+						update=":frmObservacion:tblDetalle"
+						oncomplete="PF('wdgJustificar').hide();"
+						action="#{registroAsistenciaController.justificar()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

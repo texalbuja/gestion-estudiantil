@@ -1,0 +1,636 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">#{grado.etiqueta} - #{paralelo.etiqueta}</li>
+		</ol>
+		<h:panelGroup
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5') || request.isUserInRole('4') || request.isUserInRole('6') || request.isUserInRole('8') || request.isUserInRole('9')}">
+			<h:form>
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Nuevo Estudiante" icon="ui-icon-document"
+							update=":frmNuevoEstudiante:wdgNuevoEstudiante"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							actionListener="#{paraleloPreparatoriaController.prepararNuevoEstudiante}"
+							oncomplete="PF('wdgNuevoEstudiante').show();">
+						</p:commandButton>
+						<p:commandButton value="Crear Ejes de Desarrollo y Aprendizaje"
+							icon="ui-icon-document" update="ejes"
+							rendered="#{(request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')) and paraleloPreparatoriaController.ejesDeDesarrollo.size() eq 0}"
+							actionListener="#{paraleloPreparatoriaController.crearEjesDeDesarrolloYAprendizaje()}" />
+						<p:commandButton value="Nuevo Eje de Desarrollo y Aprendizaje"
+							update=":frmNuevoEjeDeDesarrollo:wdgNuevoEjeDeDesarrollo"
+							icon="ui-icon-document"
+							actionListener="#{paraleloPreparatoriaController.prepararEjeDeDesarrollo}"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							oncomplete="PF('wdgNuevoEjeDeDesarrollo').show();" />
+						<p:commandButton value="Nuevo Ámbito de Desarrollo y Aprendizaje"
+							update=":frmNuevoAmbitoDeDesarrollo:wdgNuevoAmbitoDeDesarrollo"
+							icon="ui-icon-document"
+							actionListener="#{paraleloPreparatoriaController.prepararAmbitoDeDesarrollo}"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							oncomplete="PF('wdgNuevoAmbitoDeDesarrollo').show();" />
+						<p:commandButton
+							value="Nueva Destreza de Desarrollo y Aprendizaje"
+							update=":frmNuevaDestrezaDeDesarrollo:wdgNuevaDestrezaDeDesarrollo"
+							icon="ui-icon-document"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							oncomplete="PF('wdgNuevaDestrezaDeDesarrollo').show();" />
+						<span class="ui-separator"> <span
+							class="ui-icon ui-icon-grip-dotted-vertical" />
+						</span>
+						<p:commandButton value="Carnetización" icon="ui-icon-print"
+							rendered="#{request.isUserInRole('1')}"
+							action="#{paraleloController.carnetizacion}" />
+						<p:commandButton value="Certificados de Matrícula"
+							icon="ui-icon-print"
+							action="#{paraleloPreparatoriaController.exportarReporteCertificadosMatriculas()}" />
+						<p:commandButton value="Ficha de Matrícula" icon="ui-icon-print"
+							action="#{paraleloController.exportarReporteFichaDeMatriculas()}" />
+						<p:menuButton value="Libretas">
+							<p:menuitem value="Bloque Uno" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasPrimerQuimestreBloqueUno()}" />
+							<p:menuitem value="Bloque Dos" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasPrimerQuimestreBloqueDos()}" />
+							<p:menuitem value="Bloque Tres" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasPrimerQuimestreBloqueTres()}" />
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasPrimerQuimestre()}" />
+							<p:menuitem value="Bloque Uno" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasSegundoQuimestreBloqueUno()}" />
+							<p:menuitem value="Bloque Dos" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasSegundoQuimestreBloqueDos()}" />
+							<p:menuitem value="Bloque Tres" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasPrimerQuimestreBloqueTres()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasSegundoQuimestre()}" />
+							<p:menuitem value="Anual" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteLibretasAnual()}" />
+						</p:menuButton>
+						<p:menuButton value="Asistencia">
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteAsistenciaPrimerQuimestre()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteAsistenciaSegundoQuimestre()}" />
+						</p:menuButton>
+						<p:menuButton value="Nóminas">
+							<p:menuitem value="Estudiantes" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteNominaEstudiantes()}" />
+							<p:menuitem value="Docentes" icon="ui-icon-print"
+								action="#{paraleloPreparatoriaController.exportarReporteNominaDocentes()}" />
+						</p:menuButton>
+					</f:facet>
+				</p:toolbar>
+			</h:form>
+
+		</h:panelGroup>
+
+		<h3>#{grado.etiqueta} - #{paralelo.etiqueta}</h3>
+		<h4>Tutor: #{paralelo.tutor.apellidos} #{paralelo.tutor.nombres}
+		</h4>
+		<h3>Ejes de desarrollo y Aprendizaje</h3>
+
+		<h:panelGroup id="ejes">
+			<p:repeat
+				size="#{paraleloPreparatoriaController.ejesDeDesarrollo.size()}"
+				var="eje" step="1"
+				value="#{paraleloPreparatoriaController.ejesDeDesarrollo}"
+				varStatus="status">
+				<h:outputText styleClass="h4" value="#{eje.orden} #{eje.etiqueta}" />
+				<p:commandButton value="Editar" icon="ui-icon-pencil"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEditarEjeDeDesarrollo:wdgEditarEjeDeDesarrollo"
+					oncomplete="PF('wdgEditarEjeDeDesarrollo').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloPreparatoriaController.ejeDeDesarrollo}"
+						value="#{eje}" />
+				</p:commandButton>
+				<p:commandButton value="Eliminar" icon="ui-icon-trash"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEliminarEjeDeDesarrollo:wdgEliminarEjeDeDesarrollo"
+					oncomplete="PF('wdgEliminarEjeDeDesarrollo').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloPreparatoriaController.ejeDeDesarrollo}"
+						value="#{eje}" />
+				</p:commandButton>
+
+
+				<p:repeat size="#{eje.ambitosDeDesarrollo.size()}" var="ambito"
+					step="1" value="#{eje.ambitosDeDesarrollo}" varStatus="status">
+					<br />
+					<h:outputText styleClass="h5"
+						value="#{ambito.orden} #{ambito.etiqueta}" />
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditarAmbitoDeDesarrollo:wdgEditarAmbitoDeDesarrollo"
+						oncomplete="PF('wdgEditarAmbitoDeDesarrollo').show();">
+						<f:setPropertyActionListener
+							target="#{paraleloPreparatoriaController.ambitoDeDesarrollo}"
+							value="#{ambito}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminarAmbitoDeDesarrollo:wdgEliminarAmbitoDeDesarrollo"
+						oncomplete="PF('wdgEliminarAmbitoDeDesarrollo').show();">
+						<f:setPropertyActionListener
+							target="#{paraleloPreparatoriaController.ambitoDeDesarrollo}"
+							value="#{ambito}" />
+					</p:commandButton>
+
+					<p:dataTable value="#{ambito.destrezasDeDesarrollo}" var="destreza">
+						<p:column headerText="Destreza">
+							<h:outputText value="#{destreza.orden} #{destreza.etiqueta}" />
+						</p:column>
+						<p:column headerText="Docente">
+							<h:outputText
+								value="#{destreza.docente.apellidos} #{destreza.docente.nombres}" />
+						</p:column>
+						<p:column>
+							<p:commandButton value="Editar" icon="ui-icon-pencil"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+								update=":frmEditarDestrezaDeDesarrollo:wdgEditarDestrezaDeDesarrollo"
+								oncomplete="PF('wdgEditarDestrezaDeDesarrollo').show();">
+								<f:setPropertyActionListener
+									target="#{paraleloPreparatoriaController.destrezaDeDesarrollo}"
+									value="#{destreza}" />
+							</p:commandButton>
+							<p:commandButton value="Eliminar" icon="ui-icon-trash"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+								update=":frmEliminarDestrezaDeDesarrollo:wdgEliminarDestrezaDeDesarrollo"
+								oncomplete="PF('wdgEliminarDestrezaDeDesarrollo').show();">
+								<f:setPropertyActionListener
+									target="#{paraleloPreparatoriaController.destrezaDeDesarrollo}"
+									value="#{destreza}" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:repeat>
+				<br />
+			</p:repeat>
+		</h:panelGroup>
+
+		<h3>Estudiantes</h3>
+		<p:dataTable id="tblDetalleMatriculados" paginator="true"
+			paginatorPosition="bottom" rows="10"
+			value="#{paraleloPreparatoriaController.matriculas}" var="matricula">
+			<p:column headerText="Estudiante">
+				<h:outputText
+					value="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}" />
+			</p:column>
+			<p:column headerText="Identificación">
+				<h:outputText value="#{matricula.estudiante.identificacion}" />
+			</p:column>
+			<p:column headerText="Acciones"
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+				<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+					action="#{paraleloPreparatoriaController.seleccionarMatricula()}">
+					<f:setPropertyActionListener
+						target="#{paraleloPreparatoriaController.matricula}"
+						value="#{matricula}" />
+				</p:commandButton>
+				<p:commandButton value="Eliminar" icon="ui-icon-trash"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+					update=":frmEliminarMatricula:wdgEliminarMatricula"
+					oncomplete="PF('wdgEliminarMatricula').show();">
+					<f:setPropertyActionListener
+						target="#{paraleloPreparatoriaController.matricula}"
+						value="#{matricula}" />
+				</p:commandButton>
+				<p:commandButton value="Actualizar Datos" icon="ui-icon-folder-open"
+					action="#{paraleloPreparatoriaController.actualizarDatosEstudiante()}">
+					<f:setPropertyActionListener
+						target="#{paraleloPreparatoriaController.estudiante}"
+						value="#{matricula.estudiante}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+
+		<h:form id="frmNuevaDestrezaDeDesarrollo"
+			enctype="multipart/form-data">
+			<p:dialog header="Nueva Destreza de Desarrollo"
+				id="wdgNuevaDestrezaDeDesarrollo"
+				widgetVar="wdgNuevaDestrezaDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente"
+						value="#{paraleloPreparatoriaController.docente}" required="true"
+						requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloPreparatoriaController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="eje"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ejesDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+						<p:ajax update="ambito" process="@this"
+							listener="#{paraleloPreparatoriaController.obtenerAmbitos()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="ambito"
+						value="Ámbito de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="ambito"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ambitosDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="objetivo"
+						value="Destreza de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="objetivo" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="objetivo" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1.1.1"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.guardarDestrezaDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarDestrezaDeDesarrollo"
+			enctype="multipart/form-data">
+			<p:dialog header="Editar Destreza de Desarrollo"
+				id="wdgEditarDestrezaDeDesarrollo"
+				widgetVar="wdgEditarDestrezaDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.docente}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{paraleloPreparatoriaController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="eje"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ejesDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+						<p:ajax update="ambito" process="@this"
+							listener="#{paraleloPreparatoriaController.obtenerAmbitos()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="ambito"
+						value="Ambito de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="ambito"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.ambitoDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ambitosDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="destreza"
+						value="Destreza de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="destreza" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="destreza" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1.1.1"
+						value="#{paraleloPreparatoriaController.destrezaDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.editarDestrezaDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarDestrezaDeDesarrollo">
+			<p:dialog header="Eliminar Destreza de Desarrollo"
+				id="wdgEliminarDestrezaDeDesarrollo"
+				widgetVar="wdgEliminarDestrezaDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la destreza de desarrollo y aprendizaje #{paraleloPreparatoriaController.destrezaDeDesarrollo.etiqueta}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.eliminarDestrezaDeDesarrollo}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarMatricula">
+			<p:dialog header="Eliminar Matricula" id="wdgEliminarMatricula"
+				widgetVar="wdgEliminarMatricula" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la matricula del estudiante: #{paraleloPreparatoriaController.matricula.estudiante.apellidos} #{paraleloPreparatoriaController.matricula.estudiante.nombres} Se eliminarán las notas?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{paraleloPreparatoriaController.eliminarMatricula}" />
+			</p:dialog>
+		</h:form>
+
+
+		<h:form id="frmNuevoEstudiante" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Estudiante" id="wdgNuevoEstudiante"
+				widgetVar="wdgNuevoEstudiante" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3" id="pnlNuevoEstudiante">
+					<p:outputLabel for="tipoMatricula" value="Matrícula "></p:outputLabel>
+					<p:selectOneRadio id="tipoMatricula"
+						requiredMessage="Campo requerido" required="true"
+						value="#{paraleloPreparatoriaController.tipoMatricula}">
+						<f:selectItem itemValue="Antiguo" itemLabel="Antiguo"></f:selectItem>
+						<f:selectItem itemValue="Nuevo" itemLabel="Nuevo"></f:selectItem>
+						<p:ajax event="change"
+							listener="#{paraleloPreparatoriaController.cambiarTipoMatricula}"
+							update="pnlNuevoEstudiante" />
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="tipoMatricula" />
+					<p:outputLabel for="estudiante" value="Estudiante: "
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:selectOneMenu id="estudiante"
+						value="#{paraleloPreparatoriaController.estudiante}"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"
+						required="true" requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.estudiantesAprobados}"
+							itemLabel="#{estudiante.apellidos} #{estudiante.nombres}"
+							itemValue="#{estudiante}" var="estudiante"></f:selectItems>
+						<p:ajax
+							update="outputIdentificacion, outputApellidos, outputNombres, outputCorreo, outputSexo"
+							process="@this" />
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="estudiante"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}" />
+
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:inputText id="identificacion" required="true"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.estudiante.identificacion}" />
+					<p:outputLabel for="identificacion" id="outputIdentificacion"
+						value="#{paraleloPreparatoriaController.estudiante.identificacion}"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:inputText id="apellidos" required="true"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.estudiante.apellidos}" />
+					<p:outputLabel
+						value="#{paraleloPreparatoriaController.estudiante.apellidos}"
+						id="outputApellidos"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="nombres" value="Nombres" />
+					<p:inputText id="nombres" requiredMessage="Campo requerido"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						required="true"
+						value="#{paraleloPreparatoriaController.estudiante.nombres}" />
+					<p:outputLabel
+						value="#{paraleloPreparatoriaController.estudiante.nombres}"
+						id="outputNombres"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<p:outputLabel for="correo" value="Correo" />
+					<p:inputText id="correo"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						value="#{paraleloPreparatoriaController.estudiante.correo}" />
+					<p:outputLabel
+						value="#{paraleloPreparatoriaController.estudiante.correo}"
+						id="outputCorreo"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:outputLabel for="sexo" value="Sexo " />
+					<p:selectOneRadio id="sexo" requiredMessage="Campo requerido"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						required="true"
+						value="#{paraleloPreparatoriaController.estudiante.sexo}">
+						<f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+					</p:selectOneRadio>
+					<p:outputLabel id="outputSexo"
+						value="#{paraleloPreparatoriaController.estudiante.sexo eq 'M' ? 'Masculino': 'Femenino'}"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Antiguo'}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="sexo" />
+					<p:outputLabel for="codigoTemporal" value="Sin identificación? "
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}" />
+					<p:commandButton value="Obtener código Temporal"
+						id="codigoTemporal"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}"
+						update="identificacion" process="@this"
+						actionListener="#{paraleloPreparatoriaController.obtenerCodigoTemporal()}"></p:commandButton>
+					<p:messages showIcon="false" autoUpdate="true" for="codigoTemporal"
+						rendered="#{paraleloPreparatoriaController.tipoMatricula eq 'Nuevo'}" />
+					<p:outputLabel for="numeroMatricula"
+						value="Matrícula en este Curso: "></p:outputLabel>
+					<p:selectOneRadio id="numeroMatricula"
+						requiredMessage="Campo requerido" required="true"
+						value="#{paraleloPreparatoriaController.matricula.numeroMatriculaGrado}">
+						<f:selectItem itemValue="Primera" itemLabel="Primera"></f:selectItem>
+						<f:selectItem itemValue="Segunda" itemLabel="Segunda"></f:selectItem>
+						<f:selectItem itemValue="Tercera" itemLabel="Tercera"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="numeroMatricula" />
+					<p:outputLabel for="observacion" value="Observación" />
+					<p:inputText id="observacion"
+						value="#{paraleloPreparatoriaController.matricula.observacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="observacion" />
+					<p:commandButton value="Guardar Estudiante" ajax="false"
+						update="tblDetalleMatriculados"
+						action="#{paraleloPreparatoriaController.guardarEstudiante()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmNuevoEjeDeDesarrollo" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Eje de Desarrollo"
+				id="wdgNuevoEjeDeDesarrollo" widgetVar="wdgNuevoEjeDeDesarrollo"
+				draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="eje" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1.0"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.guardarEjeDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarEjeDeDesarrollo" enctype="multipart/form-data">
+			<p:dialog header="Editar Eje de Desarrollo"
+				id="wdgEditarEjeDeDesarrollo" widgetVar="wdgEditarEjeDeDesarrollo"
+				draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="eje" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1.0"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.editarEjeDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarEjeDeDesarrollo">
+			<p:dialog header="Eliminar Eje de Desarrollo"
+				id="wdgEliminarEjeDeDesarrollo"
+				widgetVar="wdgEliminarEjeDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el eje de desarrollo y aprendizaje #{paraleloPreparatoriaController.ejeDeDesarrollo.etiqueta}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.eliminarEjeDeDesarrollo}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmNuevoAmbitoDeDesarrollo" enctype="multipart/form-data">
+			<p:dialog header="Nueva Ambito de Desarrollo"
+				id="wdgNuevoAmbitoDeDesarrollo"
+				widgetVar="wdgNuevoAmbitoDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="eje"
+						value="#{paraleloPreparatoriaController.ejeDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ejesDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="ambito"
+						value="Ámbito de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="ambito" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="ambito" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.guardarAmbitoDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarAmbitoDeDesarrollo" enctype="multipart/form-data">
+			<p:dialog header="Editar Ambito de Desarrollo"
+				id="wdgEditarAmbitoDeDesarrollo"
+				widgetVar="wdgEditarAmbitoDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="eje" value="Eje de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:selectOneMenu id="eje"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo.ejeDeDesarrollo}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems
+							value="#{paraleloPreparatoriaController.ejesDeDesarrollo}"
+							itemLabel="#{ejeDeDesarrollo.etiqueta}"
+							itemValue="#{ejeDeDesarrollo}" var="ejeDeDesarrollo"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="eje" />
+					<p:outputLabel for="ambito"
+						value="Ámbito de Desarrollo y Aprendizaje: "></p:outputLabel>
+					<p:inputTextarea id="ambito" required="true"
+						requiredMessage="Campo requerido"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo.etiqueta}">
+					</p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="ambito" />
+					<p:outputLabel for="orden" value="Orden: "></p:outputLabel>
+					<p:inputText id="orden" required="true"
+						requiredMessage="Ejemplo: 1.1"
+						value="#{paraleloPreparatoriaController.ambitoDeDesarrollo.orden}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Editar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.editarAmbitoDeDesarrollo()}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarAmbitoDeDesarrollo">
+			<p:dialog header="Eliminar Ambito de Desarrollo"
+				id="wdgEliminarAmbitoDeDesarrollo"
+				widgetVar="wdgEliminarAmbitoDeDesarrollo" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el ámbito de desarrollo y aprendizaje #{paraleloPreparatoriaController.ambitoDeDesarrollo.etiqueta}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="ejes"
+					action="#{paraleloPreparatoriaController.eliminarAmbitoDeDesarrollo}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

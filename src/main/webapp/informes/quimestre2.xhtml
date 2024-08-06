@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h:panelGroup>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Libreta"
+						icon="ui-icon-print"
+						action="#{informeParcialController.exportarReporteLibretaQuimestre2()}" />
+				</f:facet>
+			</p:toolbar>
+		</h:panelGroup>
+
+		<h3>Quimestre 2</h3>
+
+		<br />
+		<p:dataTable id="tblDetalle"
+			value="#{informeParcialController.evaluaciones}"
+			var="evaluacionAsignatura">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column rowspan="4" headerText="Asignaturas" width="25%" />
+					<p:column colspan="8" headerText="Quimestre 2" />
+
+				</p:row>
+				<p:row>
+					<p:column headerText="Parcial 1" />
+					<p:column headerText="Parcial 2" />
+					<p:column headerText="Parcial 3"  rendered="#{informeParcialController.renderizarParciales}"  />
+					<p:column headerText="Examen Quimestral" />
+					<p:column headerText="80%" />
+					<p:column headerText="20%" />
+					<p:column headerText="Promedio Quimestral" />
+					<p:column headerText="Descripción Cualitativa" />
+				</p:row>
+			</p:columnGroup>
+
+			<p:column>
+				<h:outputText value="#{evaluacionAsignatura.asignatura.etiqueta}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2Parcial1Nota}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2Parcial2Nota}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column  rendered="#{informeParcialController.renderizarParciales}" >
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2Parcial3Nota}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre2NotaExamen}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2NotaPromedioParciales}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2NotaPromedioExamen}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre2Nota}">
+					<f:convertNumber pattern="#0.00"></f:convertNumber>
+				</p:outputLabel>
+			</p:column>
+
+			<p:column>
+				<p:outputLabel converter="cualitativaConverter"
+					value="#{evaluacionAsignatura.quimestre2Nota}">
+				</p:outputLabel>
+			</p:column>
+		</p:dataTable>
+
+		<h3>Evaluación de Comportamiento</h3>
+		<p:dataTable id="tblDetalleEvaluaciones"
+			value="#{informeParcialController.evaluacionesComportamiento}"
+			var="evaluacion">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Criterio de Evaluación" />
+					<p:column headerText="Evaluación Cualitativa" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{evaluacion.criterioDeEvaluacion.etiqueta}" />
+			</p:column>
+			<p:column>
+				<p:selectOneRadio id="evaluacion" requiredMessage="Campo requerido"
+					disabled="true" required="true" immediate="true"
+					value="#{evaluacion.b3}">
+					<f:selectItem itemValue="A" itemLabel="Lidera"></f:selectItem>
+					<f:selectItem itemValue="B" itemLabel="Cumple"></f:selectItem>
+					<f:selectItem itemValue="C" itemLabel="Falla ocasionalmente"></f:selectItem>
+					<f:selectItem itemValue="D" itemLabel="Falla reiteradamente"></f:selectItem>
+					<f:selectItem itemValue="E" itemLabel="No cumple"></f:selectItem>
+				</p:selectOneRadio>
+			</p:column>
+		</p:dataTable>
+
+		<h3>Observaciones Inspección</h3>
+
+		<p:dataTable id="tblDetalleObservaciones"
+			value="#{informeParcialController.observaciones}" var="observacion">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Fecha" />
+					<p:column headerText="Bloque" />
+					<p:column headerText="Observación" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{observacion.fecha}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{observacion.bloque}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{observacion.observacion}" />
+			</p:column>
+		</p:dataTable>
+		<h3>Asistencia</h3>
+
+		<p:dataTable id="tblDetalleAsistencias"
+			value="#{informeParcialController.asistencias}" var="asistencia">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Fecha" />
+					<p:column headerText="Estado" />
+					<p:column headerText="Observación" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{asistencia.fecha}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{asistencia.estado.equals('SJ') ? 'Sin Justificar' : 'Justificado'}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{asistencia.observacion}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

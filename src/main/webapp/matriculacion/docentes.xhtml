@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active">#{institucion.nombre}</li>
+		</ol>
+
+
+		<h:form id="frmDocentes"
+			rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1') ||request.isUserInRole('6') || request.isUserInRole('9')}">
+
+			<p:panel header="Búsqueda de Docentes">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:inputText id="apellidos" value="#{docentesController.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:inputText id="identificacion"
+						value="#{docentesController.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:commandButton value="Consultar" update="@form"
+						action="#{docentesController.consultar}"></p:commandButton>
+					<p:commandButton value="Nuevo Docente" icon="ui-icon-document"
+						update=":frmNuevoDocente:wdgNuevoDocente" rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}"
+						actionListener="#{docentesController.preparaNuevoDocente}"
+						oncomplete="PF('wdgNuevoDocente').show();">
+					</p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+
+			<h:panelGroup
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('8') || request.isUserInRole('9')}">
+				<h3>Docentes</h3>
+
+				<p:dataTable id="tblDetalle" paginator="true"
+					paginatorPosition="bottom" rows="10"
+					value="#{docentesController.docentes}" var="docente">
+					<p:column headerText="Identificación">
+						<h:outputText value="#{docente.identificacion}" />
+					</p:column>
+					<p:column headerText="Apellidos Nombres">
+						<h:outputText value="#{docente.apellidos} #{docente.nombres}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+							action="#{docentesController.seleccionarDocente()}">
+							<f:setPropertyActionListener
+								target="#{docentesController.docente}" value="#{docente}" />
+						</p:commandButton>
+						<p:commandButton value="Editar" icon="ui-icon-pencil"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							update=":frmEditarDocente:wdgEditarDocente"
+							oncomplete="PF('wdgEditarDocente').show();">
+							<f:setPropertyActionListener
+								target="#{docentesController.docente}" value="#{docente}" />
+						</p:commandButton>
+						<p:commandButton value="Eliminar" icon="ui-icon-trash"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							update=":frmEliminarDocente:wdgEliminarDocente"
+							oncomplete="PF('wdgEliminarDocente').show();">
+							<f:setPropertyActionListener
+								target="#{docentesController.docente}" value="#{docente}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+
+		<h:form id="frmNuevoDocente">
+			<p:dialog header="Nuevo Docente" widgetVar="wdgNuevoDocente"
+				id="wdgNuevoDocente" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="identificacion" value="Identificación" />
+					<h:inputText id="identificacion" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<h:outputLabel for="apellidos" value="Apellidos" />
+					<h:inputText id="apellidos" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<h:outputLabel for="nombres" value="Nombres" />
+					<h:inputText id="nombres" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<h:outputLabel for="correo" value="Correo" />
+					<h:inputText id="correo" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:commandButton value="Guardar Docente" ajax="false"
+						action="#{docentesController.guardar()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEliminarDocente">
+			<p:dialog header="Eliminar Docente" id="wdgEliminarDocente"
+				widgetVar="wdgEliminarDocente" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el docente: #{institucionController.docente.apellidos} #{institucionController.docente.nombres}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false"
+					update="tblDetalleDocentes"
+					action="#{docentesController.eliminarDocente}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEditarDocente">
+			<p:dialog header="Editar Docente" widgetVar="wdgEditarDocente"
+				id="wdgEditarDocente" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="identificacion" value="Identificación" />
+					<h:inputText id="identificacion" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<h:outputLabel for="apellidos" value="Apellidos" />
+					<h:inputText id="apellidos" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<h:outputLabel for="nombres" value="Nombres" />
+					<h:inputText id="nombres" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<h:outputLabel for="correo" value="Correo" />
+					<h:inputText id="correo" required="true"
+						requiredMessage="Campo requerido"
+						value="#{docentesController.docente.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:commandButton value="Guardar Docente"
+						update="tblDetalleDocentes" ajax="false" process="@form"
+						action="#{docentesController.editarDocente()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

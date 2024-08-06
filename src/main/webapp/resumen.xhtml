@@ -1,0 +1,121 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<div class="row">
+				<div class="thumbnail">
+					<h:panelGroup
+						rendered="#{request.isUserInRole('1') and institucion eq null}">
+						<h3>Gestión Estudiantil</h3>
+						<p:graphicImage library="imagenes" name="oficina_128x128_tricolor.png">
+						</p:graphicImage>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{institucion != null}">
+						<h3>#{institucion.nombre}</h3>
+						<p:graphicImage value="#{imagenUtil.image}">
+							<f:param name="id" value="#{institucion.imagen.id}" />
+						</p:graphicImage>
+					</h:panelGroup>
+					<div class="caption">
+						<div class="list-group">
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1')}"
+								action="#{navegacionController.seleccionarInstitucion()}">
+								<h4 class="list-group-item-heading">Instituciones</h4>
+								<p class="list-group-item-text">Seleccionar una
+									institución..</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('3')}"
+								action="#{navegacionController.actualizarDatos()}">
+								<h4 class="list-group-item-heading">Actualización de datos</h4>
+								<p class="list-group-item-text">Información del Padre, Madre
+									y Representante</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('3')}"
+								action="#{navegacionController.evaluaciones()}">
+								<h4 class="list-group-item-heading">Evaluaciones</h4>
+								<p class="list-group-item-text">Información de rendimiento
+									académico</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('3')}"
+								action="#{navegacionController.asistencia()}">
+								<h4 class="list-group-item-heading">Asistencia</h4>
+								<p class="list-group-item-text">Faltas, atrasos y
+									justificaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('3')}"
+								action="#{navegacionController.comportamiento()}">
+								<h4 class="list-group-item-heading">Comportamiento</h4>
+								<p class="list-group-item-text">Resumen de Observaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('9') || request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('8') || request.isUserInRole('5')}"
+								action="#{navegacionController.periodosLectivos()}">
+								<h4 class="list-group-item-heading">Periodos Lectivos</h4>
+								<p class="list-group-item-text">Revisar los paralelos y
+									evaluaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('8') || request.isUserInRole('9')}"
+								action="#{navegacionController.docentes()}">
+								<h4 class="list-group-item-heading">Docentes</h4>
+								<p class="list-group-item-text">Revisar las asignaturas,
+									proyectos escolares y tutorías</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{ request.isUserInRole('4')}"
+								action="#{navegacionController.docente()}">
+								<h4 class="list-group-item-heading">Evaluaciones</h4>
+								<p class="list-group-item-text">Registro de evaluaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('8') || request.isUserInRole('9')}"
+								action="#{navegacionController.estudiantes()}">
+								<h4 class="list-group-item-heading">Estudiantes</h4>
+								<p class="list-group-item-text">Revisar las evaluaciones,
+									asistencia y observaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('5') || request.isUserInRole('2') || request.isUserInRole('7')}"
+								action="#{navegacionController.registroAsistencia()}">
+								<h4 class="list-group-item-heading">Asistencia</h4>
+								<p class="list-group-item-text">Registro y consulta de
+									asistencia</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('5') || request.isUserInRole('2') || request.isUserInRole('7')}"
+								action="#{navegacionController.registroObservaciones()}">
+								<h4 class="list-group-item-heading">Observaciones</h4>
+								<p class="list-group-item-text">Registro y consulta de
+									observaciones</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}"
+								action="#{navegacionController.bloqueos()}">
+								<h4 class="list-group-item-heading">Bloqueos y contraseñas</h4>
+								<p class="list-group-item-text">Bloquear usuarios y resetear
+									contraseñas</p>
+							</h:commandLink>
+							<h:commandLink styleClass="list-group-item"
+								rendered="#{request.isUserInRole('1')}"
+								action="/monitoring">
+								<h4 class="list-group-item-heading">Monitoreo</h4>
+								<p class="list-group-item-text">Revisar el estado del
+									servidor..</p>
+							</h:commandLink>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

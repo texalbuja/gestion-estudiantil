@@ -1,0 +1,197 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li class="active">Inicio</li>
+		</ol>
+		<h:panelGroup rendered="#{request.isUserInRole('1')}">
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Nueva Institución" icon="ui-icon-document"
+						update=":frmNuevo:wdgNuevo"
+						actionListener="#{inicioController.preparaNuevo}"
+						oncomplete="PF('wdgNuevo').show();" />
+				</f:facet>
+			</p:toolbar>
+			<h3>Instituciones</h3>
+			<p:dataTable id="tblDetalle"
+				value="#{inicioController.instituciones}" var="institucion">
+				<p:column headerText="Escudo">
+					<p:graphicImage value="#{imagenUtil.image}" cache="false">
+						<f:param name="id" value="#{institucion.imagen.id}" />
+					</p:graphicImage>
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{institucion.nombre}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						action="#{inicioController.seleccionar()}">
+						<f:setPropertyActionListener
+							target="#{inicioController.institucion}" value="#{institucion}" />
+					</p:commandButton>
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+						<f:setPropertyActionListener
+							target="#{inicioController.institucion}" value="#{institucion}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						update=":frmEliminar:wdgEliminar"
+						oncomplete="PF('wdgEliminar').show();">
+						<f:setPropertyActionListener
+							target="#{inicioController.institucion}" value="#{institucion}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<h:form id="frmNuevo" enctype="multipart/form-data">
+				<p:dialog header="Nueva Institución" id="wdgNuevo"
+					widgetVar="wdgNuevo" draggable="false" resizable="false"
+					modal="true">
+					<p:messages id="messages" showDetail="true" />
+					<h:panelGrid columns="3">
+						<p:outputLabel for="nombre" value="Nombre"></p:outputLabel>
+						<p:inputText id="nombre" required="true"
+							requiredMessage="Campo requerido"
+							value="#{inicioController.institucion.nombre}"></p:inputText>
+						<p:messages showIcon="false" autoUpdate="true" for="nombre" />
+						<p:outputLabel for="regimen" value="Régimen"></p:outputLabel>
+						<p:selectOneRadio id="regimen" requiredMessage="Campo requerido"
+							required="true" value="#{inicioController.institucion.regimen}">
+							<f:selectItem itemValue="Sierra" itemLabel="Sierra"></f:selectItem>
+							<f:selectItem itemValue="Costa" itemLabel="Costa"></f:selectItem>
+						</p:selectOneRadio>
+						<p:messages showIcon="false" autoUpdate="true" for="regimen" />
+						<p:outputLabel for="direccion" value="Direccion"></p:outputLabel>
+						<p:inputText id="direccion" required="true"
+							requiredMessage="Campo requerido"
+							value="#{inicioController.institucion.direccion}"></p:inputText>
+						<p:messages showIcon="false" autoUpdate="true" for="direccion" />
+						<p:outputLabel for="file" value="Logotipo"></p:outputLabel>
+						<p:fileUpload id="file" value="#{inicioController.file}"
+							mode="simple" />
+						<p:messages showIcon="false" autoUpdate="true" for="file" />
+					</h:panelGrid>
+					<p:commandButton value="Guardar" ajax="false" update="tblDetalle"
+						action="#{inicioController.guardar}" />
+				</p:dialog>
+			</h:form>
+			<h:form id="frmEditar" enctype="multipart/form-data">
+				<p:dialog header="Editar Institución" id="wdgEditar"
+					widgetVar="wdgEditar" draggable="false" resizable="false"
+					modal="true">
+					<p:outputPanel id="pnlEditar">
+						<p:messages id="messages" showDetail="true" />
+						<h:panelGrid columns="3" cellpadding="10">
+							<p:outputLabel for="nombre" value="Nombre:"></p:outputLabel>
+							<p:inputText id="nombre"
+								value="#{inicioController.institucion.nombre}"></p:inputText>
+							<p:messages showIcon="false" autoUpdate="true" for="nombre" />
+							<p:outputLabel for="regimen" value="Régimen"></p:outputLabel>
+							<p:selectOneRadio id="regimen" requiredMessage="Campo requerido"
+								required="true" value="#{inicioController.institucion.regimen}">
+								<f:selectItem itemValue="Sierra" itemLabel="Sierra"></f:selectItem>
+								<f:selectItem itemValue="Costa" itemLabel="Costa"></f:selectItem>
+							</p:selectOneRadio>
+							<p:messages showIcon="false" autoUpdate="true" for="regimen" />
+							<p:outputLabel for="direccion" value="Direccion"></p:outputLabel>
+							<p:inputText id="direccion" required="true"
+								requiredMessage="Campo requerido"
+								value="#{inicioController.institucion.direccion}"></p:inputText>
+							<p:messages showIcon="false" autoUpdate="true" for="direccion" />
+							<p:outputLabel for="logo" value="Logo:"></p:outputLabel>
+							<p:fileUpload id="logo" value="#{inicioController.file}"
+								mode="simple" />
+						</h:panelGrid>
+						<p:commandButton value="Editar" ajax="false" update="tblDetalle"
+							action="#{inicioController.editar}" />
+					</p:outputPanel>
+				</p:dialog>
+			</h:form>
+			<h:form id="frmEliminar">
+				<p:dialog header="Eliminar Institución" id="wdgEliminar"
+					widgetVar="wdgEliminar" draggable="false" resizable="false"
+					modal="true">
+					<p:messages id="messages" showDetail="true" />
+					<h:panelGrid columns="1" cellpadding="5">
+						<p:outputLabel
+							value="Seguro que desea eliminar la institución: #{inicioController.institucion.nombre}?">
+						</p:outputLabel>
+					</h:panelGrid>
+					<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+						action="#{inicioController.eliminar}" />
+				</p:dialog>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup rendered="#{request.isUserInRole('2')}">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+						<h3>#{institucion.nombre}</h3>
+						<p:graphicImage value="#{imagenUtil.image}">
+							<f:param name="id" value="#{institucion.imagen.id}" />
+						</p:graphicImage>
+						<div class="caption">
+							<p>Inscripciones</p>
+							<div class="list-group">
+								<a href="#{request.contextPath}/matriculacion/institucion.jsf"
+									class="list-group-item">
+									<h4 class="list-group-item-heading">Definir años lectivos</h4>
+									<p class="list-group-item-text">Crear años lectivos, grados
+										a abrir, docentes entre otros</p>
+								</a> <a
+									href="#{request.contextPath}/matriculacion/inscribirNuevoEstudiante.jsf"
+									class="list-group-item">
+									<h4 class="list-group-item-heading">Inscribir nuevo
+										estudiante</h4>
+									<p class="list-group-item-text">Un estudiante acaba de
+										llegar, inscríbelo</p>
+								</a> <a
+									href="#{request.contextPath}/matriculacion/inscribirNuevoDocente.jsf"
+									class="list-group-item ">
+									<h4 class="list-group-item-heading">Crear nuevo docente</h4>
+									<p class="list-group-item-text">Este año tenemos nuevo
+										profesor, regístralo</p>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+		<h:panelGroup rendered="#{request.isUserInRole('4')}">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="thumbnail">
+						<h3>#{usuario.institucion.nombre}</h3>
+						<p:graphicImage value="#{imagenUtil.image}">
+							<f:param name="id" value="#{usuario.institucion.imagen.id}" />
+						</p:graphicImage>
+						<div class="caption">
+							<p>Inscripciones</p>
+							<div class="list-group">
+								<a href="#{request.contextPath}/matriculacion/docente.jsf"
+									class="list-group-item">
+									<h4 class="list-group-item-heading">Ver listas de
+										estudiantes</h4>
+									<p class="list-group-item-text">Una forma fácil de obtener
+										los datos básicos...</p>
+								</a> <a href="#{request.contextPath}/matriculacion/docente.jsf"
+									class="list-group-item ">
+									<h4 class="list-group-item-heading">Ingresar notas del
+										primer bloque</h4>
+									<p class="list-group-item-text">Comienza a registrar las
+										evaluaciones de tus estudiantes...</p>
+								</a>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

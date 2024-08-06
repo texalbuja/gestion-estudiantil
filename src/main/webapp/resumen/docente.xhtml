@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<h3>#{usuario.institucion.nombre}</h3>
+					<p:graphicImage value="#{imagenUtil.image}">
+						<f:param name="id" value="#{usuario.institucion.imagen.id}" />
+					</p:graphicImage>
+					<div class="caption">
+						<div class="list-group">
+							<a href="#{request.contextPath}/matriculacion/docente.jsf" class="list-group-item ">
+								<h4 class="list-group-item-heading">Evaluaciones</h4>
+								<p class="list-group-item-text">Comienza a registrar las evaluaciones de tus estudiantes...</p>
+							</a>
+							<a class="list-group-item" style="background-color: #d9edf7 !important;">
+								<h4 class="list-group-item-heading">Nueva característica</h4>
+								<p class="list-group-item-text">El promedio se calcula sobre las notas pasadas. Utilizar en asignaturas con pocas horas, por ejemplo:</p>
+								<p class="list-group-item-text">Nota Lecciones: 9 Nota Actividades Individuales: 10    Promedio: 9.5 (Se divide para 2)</p>
+								<p class="list-group-item-text">Nota Lecciones: 10 Nota Actividades Individuales: 00.00 Promedio: 5 (Ingresar 00.00 cuando se quiera promediar)</p>
+								
+								
+							</a>
+							    
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

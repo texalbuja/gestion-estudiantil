@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contacto" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2aa9e537-600f-491a-8b63-e51a067eb83e">
+	<property name="ireport.zoom" value="1.9487171000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="contacto_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT apellidos, nombres, identificacion, ocupacion, nacionalidad, parentesco, refugiado, telefono_celular, telefono_domicilio, telefono_trabajo, correo, direccion.calle_principal, direccion.numero, direccion.calle_secundaria, direccion.referencia
+FROM contacto, direccion
+WHERE contacto.domicilio_id = direccion.id
+AND contacto.id = $P{contacto_id}]]>
+	</queryString>
+	<field name="apellidos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombres" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identificacion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ocupacion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nacionalidad" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="parentesco" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="refugiado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono_celular" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono_domicilio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono_trabajo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="calle_principal" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="calle_secundaria" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="referencia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="168" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="96" width="466" height="24" forecolor="#000000" uuid="bd386e03-a1fa-41f7-bc86-e9fa61483470"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{calle_principal} != null ? $F{calle_principal} : "") + " " + ($F{numero} != null ? $F{numero} : "") + " " + ($F{calle_secundaria} != null ? $F{calle_secundaria} : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="72" y="48" width="483" height="24" forecolor="#000000" uuid="ca8089f2-3ace-4c43-b38c-a4ff84ff8986"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="96" width="89" height="24" uuid="b91f3b1e-ec74-40a3-9b12-250864e1fc8e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Lugar de trabajo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="120" width="89" height="24" uuid="0e8cbc06-52be-4a84-814a-cf64a6d84ea5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Correo electrónico: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="48" width="72" height="24" uuid="5011b638-a0e7-482e-8f4c-b82526055a1e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Identificación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="120" width="466" height="24" forecolor="#000000" uuid="c688325e-a0fc-42aa-9ea9-ea82bf540ab1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{correo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="125" height="24" uuid="6419571b-4f88-41bb-ad83-28d78a7ab8ac"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Nombre del representante:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="125" y="0" width="430" height="24" forecolor="#000000" uuid="0cf2cb58-7ac1-4fa5-8d0d-2ca6c28075b6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{apellidos} != null ? $F{apellidos} : "") + " " + ($F{nombres} != null ? $F{nombres} : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="72" width="112" height="24" uuid="126a22ea-84ea-4f2b-acd0-cb85eafc6e95"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Profesión /Ocupación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="112" y="72" width="443" height="24" forecolor="#000000" uuid="225d7577-7b6d-4770-8286-dd74a0ebe303"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ocupacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="24" width="57" height="24" uuid="2a5e9f0f-2ba5-4271-b9e8-5a22ddef4822"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Parentezco: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="24" width="498" height="24" forecolor="#000000" uuid="3b39a096-82a9-4fde-9dc4-bb7606437063"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{parentesco}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="144" width="89" height="24" uuid="8d185f46-02ae-496e-98fd-f0465b4f3678"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono Domicilio: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="144" width="97" height="24" forecolor="#000000" uuid="de10d773-e047-457a-b7cd-65da50174b86"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefono_domicilio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="186" y="144" width="80" height="24" uuid="cff3bbb8-dd20-4507-b641-641cc1fb6b7b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono Trabajo: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="446" y="144" width="97" height="24" forecolor="#000000" uuid="7b5fdf89-6e40-45dd-808f-3f6f61259139"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefono_celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="363" y="144" width="83" height="24" uuid="a1dc432d-1ffb-4ef2-9eca-62f1bc1d966f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Teléfono Celular:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="266" y="144" width="97" height="24" forecolor="#000000" uuid="aebb1640-e1ca-448a-b6fc-7fc87b1782fa"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telefono_trabajo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

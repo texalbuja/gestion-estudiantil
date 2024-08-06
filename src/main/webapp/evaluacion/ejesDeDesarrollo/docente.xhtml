@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<h:panelGroup
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+
+				<h3>#{paralelo.grado.etiqueta} - #{paralelo.etiqueta}</h3>
+				<h4>Evaluación de Destrezas de Desarrollo y Aprendizaje</h4>
+				<h3>Estudiantes</h3>
+				<p:dataTable id="tblDetalleMatriculados"
+					value="#{paraleloController.matriculas}" var="matricula">
+					<p:column headerText="Estudiante">
+						<h:outputText
+							value="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}" />
+					</p:column>
+					<p:column headerText="Identificación">
+						<h:outputText value="#{matricula.estudiante.identificacion}" />
+					</p:column>
+					<p:column headerText="Acciones"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+						<p:commandButton value="Evaluar" icon="ui-icon-folder-open"
+							action="#{paraleloPreparatoriaController.evaluarMatricula()}">
+							<f:setPropertyActionListener
+								target="#{paraleloPreparatoriaController.matricula}"
+								value="#{matricula}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+			<p:commandButton value="Guardar" ajax="false"
+				action="#{evaluacionEjeDeDesarrolloPorDocenteController.guardar}" />
+		</h:form>
+	</ui:define>
+</ui:composition>

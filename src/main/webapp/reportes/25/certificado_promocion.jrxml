@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="paralelo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGE_DIR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestion-estudiantil\\src\\main\\webapp\\reportes"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     imagen.`bytes` AS imagen_bytes,
+     informe_anual.`resultado` AS resultado,
+     institucion.`nombre` AS institucion_nombre,
+     institucion.`direccion` AS institucion_direccion,
+     periodo_lectivo.`etiqueta` AS periodo_lectivo_etiqueta,
+     periodo_lectivo.`seccion` AS periodo_lectivo_seccion,
+     grado.`etiqueta` AS grado_etiqueta,
+     grado.`grado` AS grado_grado,
+     grado.`etiqueta_nivel` AS grado_etiqueta_nivel,
+     grado.`nombre_firmante_a` AS grado_nombre_firmante_a,
+     grado.`nombre_firmante_b` AS grado_nombre_firmante_b,
+     grado.`cargo_firmante_a` AS grado_cargo_firmante_a,
+     grado.`cargo_firmante_b` AS grado_cargo_firmante_b,
+     grado.`pronombre_a` AS grado_pronombre_a,
+     grado.`pronombre_b` AS grado_pronombre_b,
+     paralelo.`id` AS paralelo_id,
+     paralelo.`etiqueta` AS paralelo_etiqueta,
+     matricula.`numero_matricula` AS matricula_numero_matricula,
+     estudiante.`apellidos` AS estudiante_apellidos,
+     estudiante.`nombres` AS estudiante_nombres,
+     matricula.`fecha` AS matricula_fecha,
+     matricula.`id` AS matricula_id,
+     informe_anual.`id` AS informe_anual_id,
+     informe_anual.`nota_final` AS informe_anual_nota_final,
+     informe_anual.`etiqueta_nota_final` AS informe_anual_etiqueta_nota_final,
+     informe_anual.`evaluacion_comportamiento_b6` AS informe_anual_evaluacion_comportamiento_b6,
+     evaluacion_proyecto_escolar.`q2` AS evaluacion_proyecto_escolar_q2,
+     proyecto_escolar.`etiqueta` AS proyecto_escolar_etiqueta
+FROM
+     `institucion` institucion INNER JOIN `periodo_lectivo` periodo_lectivo ON institucion.`id` = periodo_lectivo.`institucion_id`
+     INNER JOIN `imagen` imagen ON institucion.`imagen_id` = imagen.`id`
+     INNER JOIN `grado` grado ON periodo_lectivo.`id` = grado.`periodo_lectivo_id`
+     INNER JOIN `paralelo` paralelo ON grado.`id` = paralelo.`grado_id`
+     INNER JOIN `matricula` matricula ON paralelo.`id` = matricula.`paralelo_id`
+     INNER JOIN `estudiante` estudiante ON matricula.`estudiante_id` = estudiante.`id`
+     INNER JOIN `informe_anual` informe_anual ON matricula.`id` = informe_anual.`matricula_id`
+     LEFT JOIN grado superior ON superior.grado = grado.grado + 1 AND superior.periodo_lectivo_id = grado.periodo_lectivo_id
+     LEFT JOIN `proyecto_escolar` proyecto_escolar ON proyecto_escolar.`paralelo_id` = paralelo.`id`
+     LEFT JOIN `evaluacion_proyecto_escolar` evaluacion_proyecto_escolar ON evaluacion_proyecto_escolar.`proyecto_escolar_id` = proyecto_escolar.id AND        evaluacion_proyecto_escolar.matricula_id = matricula.id
+WHERE
+     paralelo.`id` = $P{paralelo_id}
+ORDER BY
+     estudiante_apellidos ASC,
+     estudiante_nombres ASC]]>
+	</queryString>
+	<field name="imagen_bytes" class="java.io.InputStream"/>
+	<field name="resultado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="institucion_nombre" class="java.lang.String"/>
+	<field name="institucion_direccion" class="java.lang.String"/>
+	<field name="periodo_lectivo_etiqueta" class="java.lang.String"/>
+	<field name="periodo_lectivo_seccion" class="java.lang.String"/>
+	<field name="grado_etiqueta" class="java.lang.String"/>
+	<field name="grado_grado" class="java.lang.Integer"/>
+	<field name="grado_etiqueta_nivel" class="java.lang.String"/>
+	<field name="grado_nombre_firmante_a" class="java.lang.String"/>
+	<field name="grado_nombre_firmante_b" class="java.lang.String"/>
+	<field name="grado_cargo_firmante_a" class="java.lang.String"/>
+	<field name="grado_cargo_firmante_b" class="java.lang.String"/>
+	<field name="grado_pronombre_a" class="java.lang.String"/>
+	<field name="grado_pronombre_b" class="java.lang.String"/>
+	<field name="paralelo_id" class="java.lang.Long"/>
+	<field name="paralelo_etiqueta" class="java.lang.String"/>
+	<field name="matricula_numero_matricula" class="java.lang.String"/>
+	<field name="estudiante_apellidos" class="java.lang.String"/>
+	<field name="estudiante_nombres" class="java.lang.String"/>
+	<field name="matricula_fecha" class="java.sql.Date"/>
+	<field name="matricula_id" class="java.lang.Long"/>
+	<field name="informe_anual_id" class="java.lang.Long"/>
+	<field name="informe_anual_nota_final" class="java.lang.Double"/>
+	<field name="informe_anual_etiqueta_nota_final" class="java.lang.String"/>
+	<field name="informe_anual_evaluacion_comportamiento_b6" class="java.lang.String"/>
+	<field name="evaluacion_proyecto_escolar_q2" class="java.lang.String"/>
+	<field name="proyecto_escolar_etiqueta" class="java.lang.String"/>
+	<group name="paralelo" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{paralelo_id}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="58">
+			<image>
+				<reportElement x="407" y="6" width="108" height="50" uuid="b4f673d8-e2bb-4dd2-87b8-1afcd8aaf8fb"/>
+				<imageExpression><![CDATA[$P{IMAGE_DIR}+ File.separator +"logo_ministerio.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="SubTitle" x="72" y="2" width="323" height="18" forecolor="#000000" uuid="eb189608-7de4-4b64-9feb-a3104eb1c96a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{institucion_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="72" y="38" width="323" height="20" uuid="e7d9d2f4-cd1c-4d58-ada7-f7e333be84b9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CERTIFICADO DE PROMOCIÓN]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement style="SubTitle" x="72" y="20" width="323" height="18" forecolor="#000000" uuid="1c9ffc57-3cc9-4155-9faf-29f8f46b93f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{institucion_direccion}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Top">
+				<reportElement x="0" y="2" width="72" height="56" uuid="39914fe0-3e30-4db2-8ef9-778b8704a6ef"/>
+				<imageExpression><![CDATA[$P{IMAGE_DIR}+ File.separator +"cotacachi.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="175" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="102" width="515" height="73" uuid="8f899404-01af-417c-a043-d0c533a8b3a6"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["De conformidad con lo prescrito en  el Art. 197  del Reglamento General  a  la  Ley  Orgánica de Educación Intercultural   y  demás  normativas  vigentes,  certifica  que  el/la  estudiante " + $F{estudiante_apellidos} + " " + $F{estudiante_nombres} +" del " + $F{grado_etiqueta} + " " + $F{paralelo_etiqueta} + " obtuvo  las siguientes calificaciones durante el presente año lectivo:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SubTitle" x="0" y="16" width="229" height="24" forecolor="#000000" uuid="0371a074-789f-44ce-beae-40f8efc18984"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Año Lectivo: "+$F{periodo_lectivo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SubTitle" x="299" y="16" width="216" height="24" forecolor="#000000" uuid="b907b731-1e92-4211-ae7f-5fdeac5b32cf"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["No. Matrícula: " + $F{matricula_numero_matricula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SubTitle" x="0" y="40" width="229" height="24" forecolor="#000000" uuid="b5f9ba53-8d1a-40f3-9b19-fb6425356b5f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nivel de Educación: "+  $F{grado_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SubTitle" x="299" y="40" width="216" height="24" forecolor="#000000" uuid="ae1a0f2e-08df-41bc-b9bb-a8e8b11451cc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Paralelo: " + $F{paralelo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="SubTitle" x="-1" y="64" width="229" height="24" forecolor="#000000" uuid="95a27192-0116-4aa2-b713-7dc2267fc8a0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jornada: "+  ("M".equals($F{periodo_lectivo_seccion}) ? "Matutina": "Vespertina")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="515" height="50" uuid="30b5a187-b62a-4a96-9349-2ab9a6c2c0fe"/>
+				<subreportParameter name="matricula_id">
+					<subreportParameterExpression><![CDATA[$F{matricula_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$F{grado_grado} > 9 ? $P{SUBREPORT_DIR} + File.separator + "promocion_anual_octavo_tercero_bachillerato.jasper" : $P{SUBREPORT_DIR} + File.separator + "promocion_anual_primero_septimo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="218" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="0" y="32" width="24" height="32" uuid="83a66f3e-c036-492f-9d6e-fe79deb78f28">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="177" y="32" width="36" height="32" uuid="e34de338-02fe-49bd-ace7-2735f8bc5adf">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_proyecto_escolar_q2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" x="24" y="32" width="153" height="32" uuid="8cadf394-61c5-4ac8-8a6a-ce0d64b28393">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proyecto_escolar_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="213" y="32" width="301" height="32" uuid="640b9414-d4fa-4981-9f8d-5631a2d97e3f">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_proyecto_escolar_q2}.equals("EX") ? "Demuestra destacado desempeño en cada fase del desarrollo del proyecto escolar lo que constituye un excelente aporte a su formación integral" : $F{evaluacion_proyecto_escolar_q2}.equals("MB") ? "Demuestra fiabilidad en el desempeño para cada fase del desarrollo del proyecto escolar lo que constituye un aporte a su formación integral." : $F{evaluacion_proyecto_escolar_q2}.equals("B") ? "Demuestra un desempeño medianamiente aceptable, en cada fase del desarrollo del proyecto escolar lo que no contribuye totalmente a su formación integral" : $F{evaluacion_proyecto_escolar_q2}.equals("R") ? "Demuestra dificultad en atender cada fase del desarrollo del proyecto escolar lo que contribuye escasamente a su formación integral":""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="24" y="0" width="153" height="16" uuid="22a7c712-39fa-4a48-b172-5b047f440a55"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PROMEDIO GENERAL"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="0" y="0" width="24" height="16" uuid="895ef3b7-8286-4879-9544-ffb9fafe850a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="177" y="0" width="36" height="16" uuid="104f4925-130a-47f7-9b16-87f0b61cd2d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{informe_anual_nota_final}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="213" y="0" width="301" height="16" uuid="7f69641e-0d7d-4c71-b166-b71c24db78b1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{informe_anual_etiqueta_nota_final}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-1" y="80" width="515" height="26" uuid="2a486eb3-ffae-481b-b916-4d2ef63d4e36"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Por lo tanto " + ($F{resultado}!= null ? $F{resultado} : "") +". Para certificar suscriben en unidad de acto " + ($F{grado_pronombre_a}!= null ? $F{grado_pronombre_a} : "") +" " + ($F{grado_cargo_firmante_a}!= null ? $F{grado_cargo_firmante_a} : "") +" con " + ($F{grado_pronombre_b}!= null ? $F{grado_pronombre_b} : "") +" " + ($F{grado_cargo_firmante_b}!= null ? $F{grado_cargo_firmante_b} : "") +" del Plantel ."]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Footer" x="17" y="200" width="61" height="18" uuid="7b20eaea-23b0-468f-ab3c-3704a1e331e4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="216" width="100" height="1" uuid="f5bf1c3e-012e-4ba3-99c6-4c823be901a8"/>
+			</break>
+			<line>
+				<reportElement x="38" y="164" width="172" height="1" uuid="f6490f78-59f2-4d64-abd4-6364c6ae82d2"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="181" width="172" height="14" uuid="129f8426-8b0f-4af8-b0b4-c16d7c98bfb6"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{grado_cargo_firmante_a}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="167" width="172" height="14" uuid="c33a5802-8417-414a-8f5c-7b243911e033"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{grado_nombre_firmante_a}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="301" y="167" width="172" height="14" uuid="420ec8d8-818d-42df-b9d1-981a3c79849d"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{grado_nombre_firmante_b}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="301" y="181" width="172" height="14" uuid="df471eae-f2ac-402c-981e-bcd3915289de"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{grado_cargo_firmante_b}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="301" y="163" width="172" height="1" uuid="c94b1b92-31df-4c4b-acc7-c68c0ab551e9"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="177" y="16" width="36" height="16" uuid="85f2da2e-d353-4c93-b7d0-fcac2df6b2af"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{informe_anual_evaluacion_comportamiento_b6}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="0" y="16" width="24" height="16" uuid="8a2b9fb3-3dc5-429a-b1bc-f52493de03d8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="24" y="16" width="153" height="16" uuid="18ffd4c3-6c9d-420c-a3c1-869e517de9e5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["COMPORTAMIENTO"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="213" y="16" width="301" height="16" uuid="d1a895ba-ee78-416f-ae2f-f403d0f58b07"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{informe_anual_evaluacion_comportamiento_b6}.equals("A") ? "LIDERA el cumplimiento de los compromisos establecidos" : $F{informe_anual_evaluacion_comportamiento_b6}.equals("B") ? "CUMPLE con los compromisos establecidos" : $F{informe_anual_evaluacion_comportamiento_b6}.equals("C") ? "FALLA OCASIONALMENTE en el cumplimiento de los compromisos establecidos" : $F{informe_anual_evaluacion_comportamiento_b6}.equals("D") ? "FALLA REITERADAMENTE en el cumplimiento de los compromisos establecidos" : $F{informe_anual_evaluacion_comportamiento_b6}.equals("E") ? "NO CUMPLE con los compromisos establecidos": ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

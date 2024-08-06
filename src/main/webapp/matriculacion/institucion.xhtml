@@ -1,0 +1,269 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active">#{institucion.nombre}</li>
+		</ol>
+		<p:toolbar
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+			<f:facet name="left">
+				<p:commandButton value="Nuevo Periodo Lectivo"
+					icon="ui-icon-document" update=":frmNuevo:wdgNuevo"
+					actionListener="#{institucionController.preparaNuevo}"
+					oncomplete="PF('wdgNuevo').show();" />
+				<p:commandButton value="Nuevo Funcionario" icon="ui-icon-document"
+					update=":frmNuevoFuncionario:wdgNuevoFuncionario"
+					actionListener="#{institucionController.preparaNuevoFuncionario}"
+					oncomplete="PF('wdgNuevoFuncionario').show();">
+				</p:commandButton>
+			</f:facet>
+		</p:toolbar>
+		<h:panelGroup>
+			<h3>Periodos Lectivos</h3>
+			<p:dataTable id="tblDetalle"
+				value="#{institucionController.periodosLectivos}"
+				var="periodoLectivo">
+				<p:column headerText="Periodo Lectivo">
+					<h:outputText value="#{periodoLectivo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Sección">
+					<h:outputText
+						value="#{institucionController.desdeSeccion(periodoLectivo.seccion)}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						action="#{institucionController.seleccionarPeriodoLectivo()}">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminar:wdgEliminar"
+						oncomplete="PF('wdgEliminar').show();">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+					<p:commandButton value="Gestionar Matriculas"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						icon="ui-icon-folder-open"
+						action="#{institucionController.gestionarMatriculas()}">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+					<p:commandButton value="Ingresar Observación"
+						icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5')}"
+						action="#{institucionController.ingresarObservacion()}">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+					<p:commandButton value="Ingresar Asistencia"
+						icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5')}"
+						action="#{institucionController.registrarAsistencia()}">
+						<f:setPropertyActionListener
+							target="#{institucionController.periodoLectivo}"
+							value="#{periodoLectivo}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+
+		<h:panelGroup
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+			<h3>Funcionarios</h3>
+			<p:dataTable id="tblDetalleFuncionarios"
+				value="#{institucionController.autoridades}" var="autoridad">
+				<p:column headerText="Identificación">
+					<h:outputText value="#{autoridad.usuario.identificacion}" />
+				</p:column>
+				<p:column headerText="Apellidos y Nombres">
+					<h:outputText value="#{autoridad.usuario.nombre}" />
+				</p:column>
+				<p:column headerText="Rol">
+					<h:outputText value="#{autoridad.rol.descripcion}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditarUsuario:wdgEditarUsuario"
+						oncomplete="PF('wdgEditarUsuario').show();">
+						<f:setPropertyActionListener
+							target="#{institucionController.autoridad}" value="#{autoridad}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminarUsuario:wdgEliminarUsuario"
+						oncomplete="PF('wdgEliminarUsuario').show();">
+						<f:setPropertyActionListener
+							target="#{institucionController.autoridad}" value="#{autoridad}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+		<h:form id="frmNuevo" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Periodo Lectivo" widgetVar="wdgNuevo"
+				id="wdgNuevo" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="etiqueta" value="Periodo Lectivo: "></p:outputLabel>
+					<p:inputText id="etiqueta"
+						value="#{institucionController.periodoLectivo.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="etiqueta" />
+					<p:outputLabel for="seccion" value="Sección: "></p:outputLabel>
+					<p:selectOneRadio id="seccion" requiredMessage="Campo requerido"
+						required="true"
+						value="#{institucionController.periodoLectivo.seccion}">
+						<f:selectItems value="#{institucionController.secciones}"
+							itemLabel="#{seccion.descripcion}" itemValue="#{seccion.codigo}"
+							var="seccion"></f:selectItems>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="seccion" />
+					<p:outputLabel for="estado" value="Estado: "></p:outputLabel>
+					<p:outputLabel id="estado" required="true"
+						requiredMessage="Campo requerido"
+						value="#{institucionController.periodoLectivo.estado}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="estado" />
+					<p:outputLabel for="grado" value="Grados: "></p:outputLabel>
+					<p:selectManyCheckbox columns="3" layout="grid" id="grado"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo requerido"
+						value="#{institucionController.gradosHabilitados}">
+						<f:selectItems value="#{institucionController.grados}"
+							itemLabel="#{grado.descripcionGrado}" itemValue="#{grado}"
+							var="grado"></f:selectItems>
+					</p:selectManyCheckbox>
+					<p:messages showIcon="false" autoUpdate="true" for="grado" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					action="#{institucionController.guardar}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEditar">
+			<p:dialog header="Editar Periodo Lectivo" widgetVar="wdgEditar"
+				id="wdgEditar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="etiqueta" value="Periodo Lectivo: "></p:outputLabel>
+					<p:inputText id="etiqueta"
+						value="#{institucionController.periodoLectivo.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="etiqueta" />
+					<p:outputLabel for="seccion" value="Sección: "></p:outputLabel>
+					<p:selectOneRadio id="seccion" requiredMessage="Campo requerido"
+						required="true"
+						value="#{institucionController.periodoLectivo.seccion}">
+						<f:selectItems value="#{institucionController.secciones}"
+							itemLabel="#{seccion.descripcion}" itemValue="#{seccion.codigo}"
+							var="seccion"></f:selectItems>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="seccion" />
+					<p:outputLabel for="insumos" value="Insumos: "></p:outputLabel>
+					<p:inputText id="insumos"
+						value="#{institucionController.periodoLectivo.insumos}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="insumos" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					action="#{institucionController.editar()}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmNuevoFuncionario">
+			<p:dialog header="Nuevo Funcionario" widgetVar="wdgNuevoFuncionario"
+				id="wdgNuevoFuncionario" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="2" cellpadding="5" id="usuario">
+					<p:outputLabel for="identificacion" value="Identificación:"></p:outputLabel>
+					<p:inputText id="identificacion"
+						value="#{institucionController.usuario.identificacion}">
+						<p:ajax event="change" update="usuario" process="identificacion"
+							listener="#{institucionController.completarUsuario}"></p:ajax>
+					</p:inputText>
+					<p:outputLabel for="nombre" value="Nombres"></p:outputLabel>
+					<p:inputText id="nombre"
+						value="#{institucionController.usuario.nombre}"></p:inputText>
+					<p:outputLabel for="correo" value="Correo:"></p:outputLabel>
+					<p:inputText id="correo"
+						value="#{institucionController.usuario.correo}"></p:inputText>
+					<p:outputLabel for="cargo" value="Cargo:"></p:outputLabel>
+					<p:selectOneRadio columns="2" id="cargo" layout="grid"
+						required="true" requiredMessage="Debe seleccionar un rol"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{institucionController.rol}">
+						<f:selectItems value="#{institucionController.roles}" var="rol"
+							itemLabel="#{rol.descripcion}" itemValue="#{rol}" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					update="tblDetalleFuncionarios"
+					action="#{institucionController.guardarUsuario}" />
+
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Periodo Lectivo" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el periodo lectivo: #{institucionController.periodoLectivo.etiqueta} sección #{institucionController.periodoLectivo.seccion}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{institucionController.eliminarPeriodoLectivo}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarUsuario">
+			<p:dialog header="Editar Usuario" widgetVar="wdgEditarUsuario"
+				id="wdgEditarUsuario" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="identificacion" value="Identificación:"></p:outputLabel>
+					<p:inputText id="identificacion"
+						value="#{institucionController.autoridad.usuario.identificacion}"></p:inputText>
+					<p:outputLabel for="nombre" value="Nombres"></p:outputLabel>
+					<p:inputText id="nombre"
+						value="#{institucionController.autoridad.usuario.nombre}"></p:inputText>
+					<p:outputLabel for="correo" value="Correo:"></p:outputLabel>
+					<p:inputText id="correo"
+						value="#{institucionController.autoridad.usuario.correo}"></p:inputText>
+				</h:panelGrid>
+				<p:commandButton value="Editar" ajax="false"
+					action="#{institucionController.editarUsuario}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarUsuario">
+			<p:dialog header="Eliminar Usuario" id="wdgEliminarUsuario"
+				widgetVar="wdgEliminarUsuario" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el usuario: #{institucionController.usuario.nombre}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{institucionController.eliminarUsuario}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

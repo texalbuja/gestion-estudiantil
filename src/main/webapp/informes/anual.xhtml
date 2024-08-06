@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h3>Matrícula</h3>
+
+		<p:panel header="Información General">
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Periodo Lectivo:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.grado.periodoLectivo.etiqueta}" />
+				<h:outputLabel value="Número de Matrícula: " />
+				<h:outputLabel
+					value="#{matriculaController.matricula.numeroMatricula}" />
+				<h:outputLabel value="Nivel de Educación:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.grado.grados.descripcionNivel}" />
+				<h:outputLabel value="Paralelo:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.etiqueta}" />
+				<h:outputLabel value="Fecha:" />
+				<h:outputLabel value="#{matriculaController.matricula.fecha}" />
+
+				<h:outputLabel value="Estudiante:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.estudiante.apellidos} #{matriculaController.matricula.estudiante.nombres}" />
+			</h:panelGrid>
+		</p:panel>
+
+		<br />
+		<p:dataTable id="tblDetalle"
+			value="#{matriculaController.matricula.informeAnual.informesAnuales}"
+			var="evaluacionAsignatura">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column rowspan="3" headerText="Nómina" width="25%" />
+					<p:column colspan="6" headerText="Anual" />
+
+				</p:row>
+				<p:row>
+					<p:column colspan="3" headerText="Quimestre 1" />
+					<p:column colspan="3" headerText="Quimestre 2" />
+				</p:row>
+				
+				<p:row>
+					<p:column headerText="Nota" />
+					<p:column headerText="Promedios Parciales" />
+					<p:column headerText="Examen" />
+					<p:column headerText="Nota" />
+					<p:column headerText="Promedios Parciales" />
+					<p:column headerText="Examen" />
+				</p:row>
+			</p:columnGroup>
+
+			<p:column>
+				<h:outputText value="#{evaluacionAsignatura.asignatura.etiqueta}" />
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre1Nota}">
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre1NotaPromedioParciales}">
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre1NotaExamen}">
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre2Nota}">
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel
+					value="#{evaluacionAsignatura.quimestre2NotaPromedioParciales}">
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<p:outputLabel value="#{evaluacionAsignatura.quimestre2NotaExamen}">
+				</p:outputLabel>
+			</p:column>
+		</p:dataTable>
+
+	</ui:define>
+</ui:composition>

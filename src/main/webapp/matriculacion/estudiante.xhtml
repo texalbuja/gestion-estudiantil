@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active"><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+
+		</ol>
+		<h:form id="frmEstudiantes"
+			rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('9')}">
+
+			<h:panelGroup>
+
+				<h3>Matriculas</h3>
+				<p:dataTable id="tblDetalleMatriculas" paginator="true"
+					paginatorPosition="bottom" rows="10"
+					value="#{estudianteController.estudiante.matriculas}"
+					var="matricula">
+					<p:column headerText="Matrícula">
+						<h:outputText value="#{matricula.estudiante.identificacion}" />
+					</p:column>
+					<p:column headerText="Periodo Lectivo">
+						<h:outputText
+							value="#{matricula.paralelo.grado.periodoLectivo.etiqueta}" />
+					</p:column>
+					<p:column headerText="Grado - Paralelo">
+						<h:outputText
+							value="#{matricula.paralelo.grado.etiqueta} - #{matricula.paralelo.etiqueta}" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					- #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">Editar matricula</li>
+		</ol>
+		<h3>Editar matricula</h3>
+		<h:form>
+			<p:panel header="Información General">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:outputLabel id="identificacion"
+						value="#{editarMatriculaController.matricula.estudiante.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:outputLabel id="apellidos"
+						value="#{editarMatriculaController.matricula.estudiante.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="nombres" value="Nombres" />
+					<p:outputLabel id="nombres"
+						value="#{editarMatriculaController.matricula.estudiante.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<p:outputLabel for="correo" value="Correo" />
+					<p:outputLabel id="correo" requiredMessage="Campo requerido"
+						required="true"
+						value="#{editarMatriculaController.matricula.estudiante.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:outputLabel for="sexo" value="Sexo " />
+					<p:selectOneRadio id="sexo" disabled="true"
+						value="#{editarMatriculaController.matricula.estudiante.sexo}">
+						<f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="sexo" />
+
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<p:panel header="Matrícula">
+				<h:panelGrid columns="3" id="pnlMatricula">
+					<p:outputLabel for="somPeriodos" value="Periodo Lectivo" />
+					<p:selectOneMenu id="somPeriodos"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo requerido"
+						value="#{editarMatriculaController.periodoLectivo}">
+						<f:selectItems
+							value="#{editarMatriculaController.periodosLectivos}"
+							itemLabel="#{periodoLectivo.etiqueta} (#{periodoLectivo.seccion})"
+							var="periodoLectivo"></f:selectItems>
+						<p:ajax update="somGrados, somParalelos" process="@this"
+							listener="#{editarMatriculaController.obtenerGrados()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somPeriodos" />
+					<p:outputLabel for="somGrados" value="Grado" />
+					<p:selectOneMenu id="somGrados"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo requerido"
+						value="#{editarMatriculaController.grado}">
+						<f:selectItems value="#{editarMatriculaController.grados}"
+							itemLabel="#{grado.grados.descripcionGrado}" var="grado"></f:selectItems>
+						<p:ajax update="somParalelos" process="@this"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somGrados" />
+					<p:outputLabel for="somParalelos" value="Paralelo" />
+					<p:selectOneMenu id="somParalelos"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo requerido"
+						value="#{editarMatriculaController.paralelo}">
+						<f:selectItems
+							value="#{editarMatriculaController.grado.paralelos}"
+							itemLabel="Paralelo #{paralelo.etiqueta}" var="paralelo"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somParalelos" />
+					<p:commandButton value="Editar Matricula" oncomplete="PF('wdgEditarMatricula').show();"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+		<h:form id="frmEliminar">
+			<p:dialog header="Editar Matricula" id="wdgEditarMatricula"
+				widgetVar="wdgEditarMatricula" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Al cambiar la matrícula se perderán las evaluaciones registradas hasta la fecha, desea continuar?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="pnlMatricula"
+					action="#{editarMatriculaController.guardar()}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="5.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" fontName="Arial" fontSize="9">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="matricula_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     evaluacion_proyecto_escolar.`q2` AS evaluacion_proyecto_escolar_q2,
+     proyecto_escolar.`etiqueta` AS proyecto_escolar_etiqueta
+FROM
+     `proyecto_escolar` proyecto_escolar LEFT JOIN `evaluacion_proyecto_escolar` evaluacion_proyecto_escolar
+     ON evaluacion_proyecto_escolar.`proyecto_escolar_id` = proyecto_escolar.id
+WHERE
+      evaluacion_proyecto_escolar.matricula_id = $P{matricula_id}]]>
+	</queryString>
+	<field name="evaluacion_proyecto_escolar_q2" class="java.lang.String"/>
+	<field name="proyecto_escolar_etiqueta" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" x="0" y="0" width="24" height="32" uuid="d445e307-9df9-4076-8739-64b9ebb1aeff">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="213" y="0" width="301" height="32" uuid="e332fc26-b578-4521-ab8d-7ef2c40fd519">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_proyecto_escolar_q2}.equals("EX") ? "Demuestra destacado desempeño en cada fase del desarrollo del proyecto escolar lo que constituye un excelente aporte a su formación integral" : $F{evaluacion_proyecto_escolar_q2}.equals("MB") ? "Demuestra fiabilidad en el desempeño para cada fase del desarrollo del proyecto escolar lo que constituye un aporte a su formación integral." : $F{evaluacion_proyecto_escolar_q2}.equals("B") ? "Demuestra un desempeño medianamiente aceptable, en cada fase del desarrollo del proyecto escolar lo que no contribuye totalmente a su formación integral" : $F{evaluacion_proyecto_escolar_q2}.equals("R") ? "Demuestra dificultad en atender cada fase del desarrollo del proyecto escolar lo que contribuye escasamente a su formación integral":""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="177" y="0" width="36" height="32" uuid="8c33b1cd-81d3-43fa-99d6-ff4b65e52cc3">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_proyecto_escolar_q2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" x="24" y="0" width="153" height="32" uuid="056f5f4a-1bbc-4bfe-967e-c38e3aaf708f">
+					<printWhenExpression><![CDATA[$F{proyecto_escolar_etiqueta}!= null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proyecto_escolar_etiqueta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

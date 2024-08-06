@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<head jsf:id="head">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Gestión Estudiantil</title>
+<link jsf:name="css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link jsf:name="css/form.css" rel="stylesheet" type="text/css" />
+<link jsf:name="css/layout.css" rel="stylesheet" type="text/css" />
+<h:outputScript library="primefaces" name="jquery/jquery.js" />
+<script jsf:name="js/bootstrap.js" />
+<script jsf:name="js/i18n.js" />
+<STYLE type="text/css">
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 70% !important;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td,
+	.ui-datatable tfoot th {
+	padding: 2px;
+}
+</STYLE>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body jsf:id="body">
+
+	<p:messages autoUpdate="true" closable="false" showIcon="false"
+		globalOnly="true" showDetail="true" showSummary="true"></p:messages>
+	<ui:insert name="content">
+                    [Template content will be inserted here]
+         </ui:insert>
+
+
+
+</body>
+
+</html>

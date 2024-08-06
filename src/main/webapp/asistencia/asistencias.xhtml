@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					- #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">Consulta de asistencia</li>
+		</ol>
+		<h3>Consulta de asistencias</h3>
+
+		<h:panelGroup>
+			<h3>Asistencias</h3>
+
+			<p:dataTable id="tblDetalle" paginatorPosition="bottom"
+				value="#{asistenciasController.asistencias}" var="asistencia">
+				<p:column headerText="Bloque">
+					<h:outputText value="#{asistencia.bloque}" />
+				</p:column>
+				<p:column headerText="Fecha">
+					<h:outputText value="#{asistencia.fecha}" />
+				</p:column>
+				<p:column headerText="Tipo">
+					<h:outputText
+						value="#{asistencia.tipo.equals('A') ? 'Atraso' : 'Falta'}" />
+				</p:column>
+				<p:column headerText="Estado">
+					<h:outputText
+						value="#{asistencia.estado.equals('SJ') ? 'Sin Justificar' : 'Justificado'}" />
+				</p:column>
+				<p:column headerText="Observacion">
+					<h:outputText value="#{asistencia.observacion}" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+

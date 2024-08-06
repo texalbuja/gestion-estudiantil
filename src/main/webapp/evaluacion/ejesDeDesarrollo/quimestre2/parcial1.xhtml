@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<h:panelGroup
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}">
+
+				<h3>#{grado.etiqueta} - #{paralelo.etiqueta}</h3>
+				<h4>#{matricula.estudiante.apellidos} -
+					#{matricula.estudiante.nombres}</h4>
+				<h4>Evaluación de Destrezas de Desarrollo y Aprendizaje</h4>
+				<h4>#{grupoDeEvaluacion.etiqueta}</h4>
+				<p:dataTable id="tblDetalleFuncionarios"
+					value="#{evaluacionEjeDeDesarrolloPorDocenteController.evaluacionesDestrezaDeDesarrollo}"
+					var="evaluacion">
+					<p:column headerText="Eje de Desarrollo" width="20%">
+						<h:outputText
+							value="#{evaluacion.destrezaDeDesarrollo.ambitoDeDesarrollo.ejeDeDesarrollo.orden} #{evaluacion.destrezaDeDesarrollo.ambitoDeDesarrollo.ejeDeDesarrollo.etiqueta}" />
+					</p:column>
+					<p:column headerText="Ámbito de Desarrollo" width="20%">
+						<h:outputText
+							value="#{evaluacion.destrezaDeDesarrollo.ambitoDeDesarrollo.orden} #{evaluacion.destrezaDeDesarrollo.ambitoDeDesarrollo.etiqueta}" />
+					</p:column>
+					<p:column headerText="Destreza de Desarrollo" width="20%">
+						<h:outputText
+							value="#{evaluacion.destrezaDeDesarrollo.orden} #{evaluacion.destrezaDeDesarrollo.etiqueta}" />
+					</p:column>
+					<p:column headerText="Primer Quimestre" width="5%">
+						<h:outputText
+							value="#{evaluacion.q1 eq 'I' ? 'Inicio' : evaluacion.q1 eq 'EP' ? 'En progreso' : evaluacion.q1 eq 'A' ? 'Adquirido' : evaluacion.q1 eq 'N/E' ? 'No Evaluado': ''}" />
+					</p:column>
+					<p:column headerText="Primer Parcial">
+						<p:selectOneRadio immediate="true" value="#{evaluacion.q2_b1}">
+							<f:selectItem itemValue="I" itemLabel="Inicio"></f:selectItem>
+							<f:selectItem itemValue="EP" itemLabel="En proceso"></f:selectItem>
+							<f:selectItem itemValue="A" itemLabel="Adquirido"></f:selectItem>
+							<f:selectItem itemValue="N/E" itemLabel="No Evaluado"></f:selectItem>
+						</p:selectOneRadio>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+			<p:commandButton value="Guardar" ajax="false"
+				action="#{evaluacionEjeDeDesarrolloPorDocenteController.guardar}" />
+		</h:form>
+	</ui:define>
+</ui:composition>

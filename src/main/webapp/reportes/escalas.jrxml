@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="1.996500000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true" fontName="Arial"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestionestudiantil\\gestion-estudiantil\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT VERSION();]]>
+	</queryString>
+	<field name="VERSION()" class="java.lang.String"/>
+	<columnHeader>
+		<band height="91">
+			<staticText>
+				<reportElement style="Column header" x="0" y="13" width="35" height="26" uuid="6097a45b-bcda-4cf2-a17f-7f8cba10e9a7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Iniciales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="35" y="13" width="47" height="26" uuid="4a6baa35-e796-4a62-9b9d-ab656f5528d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Escala Cuantitativa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="82" y="13" width="143" height="26" uuid="5a514c3d-f274-427a-bf27-8987346ae687"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Escala Cualitativa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="225" height="13" uuid="3954641b-0c8f-4a48-bc36-e3c679fc951a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Escala de Evaluación Cognitiva]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="0" width="330" height="13" uuid="3acdb7e8-d6d6-460d-b8cf-60e80d43bbe3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Escala de Evaluación de Comportamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="13" width="221" height="13" uuid="a7466e5d-cc1a-423a-b7ac-34583979dbaf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="35" y="39" width="47" height="13" uuid="c8d03888-d4bc-4d03-a101-70059f67c9f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[9.00 - 10.00]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="26" width="221" height="13" uuid="77533f9e-5658-4fea-abba-e6c7bf6a945f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[LIDERA el cumplimiento de los compromisos establecidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="39" width="35" height="13" uuid="46b15a52-1d46-42fd-a9d2-8ca6f6c72ede"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[DAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="82" y="39" width="143" height="13" uuid="788d9767-f846-4430-a970-d04c47a27f43"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Domina los aprendizajes requeridos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="13" width="24" height="13" uuid="062e5614-7761-4299-801b-f155b432124f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Letra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="26" width="24" height="13" uuid="d5c5913d-a975-42e8-84f1-8143c204d45c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="13" width="85" height="13" uuid="2a11bd1c-5725-43e2-8ebd-e3264f1940e6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Cualificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="26" width="85" height="13" uuid="f4e8ea99-dd8d-47f3-8de1-58bb76883b81"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[MUY SATISFACTORIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="35" y="52" width="47" height="13" uuid="9d76a545-c2d1-4c3d-9e73-6357324eafdc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[7.00 - 8.99]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="52" width="35" height="13" uuid="6e7d0f3f-b65e-456c-ab3d-df47f7799404"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[AAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="82" y="52" width="143" height="13" uuid="e03aab7d-b037-4710-828f-d5978d49f118"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Alcanza los aprendizajes requeridos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="35" y="65" width="47" height="13" uuid="a0152da2-b4c4-45a6-967e-b8223e4b35ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[4.01 - 6.99]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="65" width="35" height="13" uuid="f3df5125-c3fa-40a7-9cb2-b8eb0c90fb96"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[PAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="82" y="65" width="143" height="13" uuid="519cf965-cdf8-4d7b-9a36-effd9dcb7261"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Está próximo a alcanzar los aprendizajes requeridos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="35" y="78" width="47" height="13" uuid="ab78fb0b-ae17-4e9a-8ff7-8ae434e27c45"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[< 4.00]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="78" width="35" height="13" uuid="6ae7c80a-a3c1-44b6-a195-86028f394804"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[NAR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="82" y="78" width="143" height="13" uuid="f60ab157-f094-4cf0-bece-abbf335d2205"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[No alcanza los aprendizajes requeridos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="39" width="221" height="13" uuid="864e3270-1742-4dc3-8d20-d9ff562db5ce"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[CUMPLE con los compromisos establecidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="39" width="24" height="13" uuid="277366fd-782c-4d3a-a2f9-f083b2664496"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[B]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="39" width="85" height="13" uuid="b3b44c99-4d5e-440f-98ac-39c27792f16a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[SATISFACTORIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="52" width="85" height="13" uuid="b2ebb20f-347e-4e68-bf5e-f6e4c14119d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[POCO SATISFACTORIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="52" width="24" height="13" uuid="fb1bb3ee-5c5b-404d-bee2-dd5a3f7c5ba1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[C]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="52" width="221" height="13" uuid="bffed1e1-bc0e-4b3e-970e-3553bf2acef6"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[FALLA OCASIONALMENTE en el cumplimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="65" width="85" height="13" uuid="c1ce124d-8ac3-42aa-8155-9310f8dc1568"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[MEJORABLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="65" width="24" height="13" uuid="d087f779-3aad-44d7-858d-9474ed64720e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[D]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="65" width="221" height="13" uuid="4143ed3b-9fa8-4850-b42b-592fca8e6586"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[FALLA REITERADAMENTE en el cumplimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="225" y="78" width="24" height="13" uuid="e345505b-73f0-418f-8dcf-757408f9f6ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="249" y="78" width="85" height="13" uuid="7701bb3f-ad90-4929-a5e2-2c8d2d7f74f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[INSATISFACTORIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="334" y="78" width="221" height="13" uuid="5198efaf-08e9-4a5d-b3b7-771e9b575150"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[NO CUMPLE con los compromisos establecidos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+</jasperReport>

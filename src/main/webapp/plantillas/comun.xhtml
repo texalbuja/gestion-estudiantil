@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:jsf="http://xmlns.jcp.org/jsf" xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <head jsf:id="head">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Gestión Estudiantil</title>
+        <link jsf:name="css/bootstrap.css" rel="stylesheet" type="text/css" />
+        <link jsf:name="css/layout.v5.css" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" type="image/x-icon"
+              href="#{request.contextPath}/resources/imagenes/pencil.ico" />
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+        <script jsf:name="js/bootstrap.js" />
+        <script jsf:name="js/i18n.js" />
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+              <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+              <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+            <![endif]-->
+    </head>
+
+    <body jsf:id="body">
+
+        <h:form>
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed"
+                                data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                                aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span> <span
+                                class="icon-bar"></span> <span class="icon-bar"></span> <span
+                                class="icon-bar"></span>
+                        </button>
+                        <h:commandLink rendered="#{request.remoteUser != null}"
+                                       styleClass="navbar-brand"
+                                       action="#{navegacionController.inicio()}"
+                                       value="Gestión Estudiantil" />
+                        <h:commandLink rendered="#{request.remoteUser == null}"
+                                       styleClass="navbar-brand"
+                                       action="#{navegacionController.iniciarSesion()}"
+                                       value="Gestión Estudiantil" />
+
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <h:panelGroup>
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown"><a href="#" class="dropdown-toggle"
+                                                        data-toggle="dropdown" role="button" aria-expanded="false">#{periodo}
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20212022()}"
+                                                value="2021-2022" /></li>
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20202021()}"
+                                                value="2020-2021" /></li>
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20192020()}"
+                                                value="2019-2020" /></li>
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20182019()}"
+                                                value="2018-2019" /></li>
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20172018()}"
+                                                value="2017-2018" /></li>
+                                        <li><h:commandLink
+                                                action="#{iniciarSesionController.seleccionar20162017()}"
+                                                value="2016-2017" /></li>
+                                        <li><a
+                                                href="http://www.gestionestudiantil.com/2015-2016">2015-2016</a></li>
+                                    </ul></li>
+                            </ul>
+                        </h:panelGroup>
+                        <h:panelGroup
+                            rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown"><a href="#" class="dropdown-toggle"
+                                                        data-toggle="dropdown" role="button" aria-expanded="false">Seguridad
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a
+                                                href="#{request.contextPath}/seguridad/usuarios.jsf">Usuarios</a></li>
+                                        <li><a href="#{request.contextPath}/seguridad/roles.jsf">Roles</a></li>
+                                    </ul></li>
+                            </ul>
+                        </h:panelGroup>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <h:panelGroup rendered="#{request.remoteUser != null}">
+                                <li class="dropdown"><a href="#" class="dropdown-toggle"
+                                                        data-toggle="dropdown" role="button" aria-expanded="false">#{usuario.nombre}
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#{request.contextPath}/seguridad/cambiar.jsf">Cambiar
+                                                contraseña</a></li>
+                                        <li><h:commandLink
+                                                action="#{cerrarSesionController.cerrarSesion()}"
+                                                value="Cerrar sesión" /></li>
+                                    </ul></li>
+                            </h:panelGroup>
+
+                        </ul>
+                    </div>
+                    <!--/.nav-collapse -->
+                </div>
+            </nav>
+        </h:form>
+        <!-- Begin page content -->
+        <div class="container">
+            <p:messages autoUpdate="true" closable="false" showIcon="false"
+                        globalOnly="true" showDetail="true" showSummary="true"></p:messages>
+            <ui:insert name="content">
+                [Template content will be inserted here]
+            </ui:insert>
+            <p:ajaxStatus onstart="PF('statusDialog').show()"
+                          onsuccess="PF('statusDialog').hide()" />
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+                      closable="false" resizable="false" showHeader="false">
+                <p:graphicImage name="imagenes/loading.gif" />
+            </p:dialog>
+
+        </div>
+    </body>
+
+    <h:outputScript>
+        $(document).ready(function(){
+        $(window).keydown(function(event){
+        if(event.keyCode == 13){
+        event.preventDefault();
+        return false;
+        }
+        });
+        });
+    </h:outputScript>
+
+</html>

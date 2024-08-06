@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<h3>#{usuario.institucion.nombre}</h3>
+					<p:graphicImage value="#{imagenUtil.image}">
+						<f:param name="id" value="#{usuario.institucion.imagen.id}" />
+					</p:graphicImage>
+					<div class="caption">
+						<div class="list-group">
+							<a
+								href="#{request.contextPath}/matriculacion/actualizarDatos.jsf"
+								class="list-group-item">
+								<h4 class="list-group-item-heading">Actualización de datos</h4>
+								<p class="list-group-item-text">Información del Padre, Madre
+									y Representante</p>
+							</a> <a href="#{request.contextPath}/matriculacion/matricula.jsf"
+								class="list-group-item">
+								<h4 class="list-group-item-heading">Evaluaciones</h4>
+								<p class="list-group-item-text">Información de rendimiento
+									académico</p>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</ui:define>
+</ui:composition>

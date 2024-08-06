@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active">Bloqueos</li>
+		</ol>
+		<h3>Bloqueos</h3>
+		<h:form id="frmBloqueos"
+			rendered="#{request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}">
+			<p:panel header="Búsqueda de Usuario">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="usuario" value="Búsqueda por apellidos" />
+					<p:autoComplete id="usuario" emptyMessage="No existe usuario"
+						size="50" value="#{bloqueosController.usuario}"
+						converter="usuarioConverter" var="usuario"
+						itemLabel="#{usuario.nombre}" itemValue="#{usuario}"
+						completeMethod="#{bloqueosController.completarUsuarios}"
+						effect="fade" forceSelection="true" />
+					<p:messages showIcon="false" autoUpdate="true" for="usuario" />
+					<p:commandButton value="Bloquear Usuario" update="tblDetalle"
+						action="#{bloqueosController.bloquear()}"></p:commandButton>
+					<p:commandButton value="Reiniciar Clave" update="@form"
+						action="#{bloqueosController.reiniciarClave()}"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+			<h:panelGroup>
+				<h3>Bloqueos</h3>
+
+				<p:dataTable id="tblDetalle" paginator="true"
+					paginatorPosition="bottom" rows="10"
+					value="#{bloqueosController.bloqueosUsuarios}" var="bloqueoUsuario">
+					<p:column headerText="Usuario">
+						<h:outputText value="#{bloqueoUsuario.usuario.nombre}" />
+					</p:column>
+					<p:column headerText="Identificacion">
+						<h:outputText value="#{bloqueoUsuario.usuario.identificacion}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						<p:commandButton value="Desbloquear" icon="ui-icon-trash"
+							rendered="#{ request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('1')}"
+							process="@this" update=":frmEliminar:wdgEliminar"
+							oncomplete="PF('wdgEliminar').show();">
+							<f:setPropertyActionListener
+								target="#{bloqueosController.bloqueoUsuario}"
+								value="#{bloqueoUsuario}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:form>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Observación" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el bloqueo al usuario #{bloqueosController.bloqueoUsuario.usuario.nombre}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{bloqueosController.desbloquear()}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

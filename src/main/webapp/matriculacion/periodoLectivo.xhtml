@@ -1,0 +1,425 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li class="active">#{periodoLectivo.etiqueta} :
+				#{periodoLectivo.secciones.descripcion}</li>
+		</ol>
+		<h:form>
+
+			<p:toolbar
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('5') || request.isUserInRole('7')  || request.isUserInRole('6') || request.isUserInRole('9')}">
+				<f:facet name="left">
+					<p:commandButton value="Nuevo Paralelo" icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2') ||request.isUserInRole('7')}"
+						oncomplete="PF('wdgNuevo').show();" update=":frmNuevo:wdgNuevo"
+						action="#{periodoLectivoController.preparaNuevoParalelo()}">
+					</p:commandButton>
+					<p:commandButton value="Nuevo Criterio de Evaluación"
+						icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('5') ||request.isUserInRole('7')}"
+						update=":frmAgregarCriterioDeEvaluacion:wdgCriterioDeEvaluacion"
+						actionListener="#{periodoLectivoController.preparaNuevoCriterioDeEvaluacion}"
+						oncomplete="PF('wdgCriterioDeEvaluacion').show();">
+					</p:commandButton>
+					<p:commandButton value="Nuevos Grados" icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2') ||request.isUserInRole('7')}"
+						update=":frmAgregarGrados:wdgAgregarGrados"
+						actionListener="#{periodoLectivoController.preparaNuevo}"
+						oncomplete="PF('wdgAgregarGrados').show();" />
+					<p:commandButton value="Nueva Area" icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2') ||request.isUserInRole('7')}"
+						update=":frmAgregarArea:wdgAgregarArea"
+						actionListener="#{periodoLectivoController.preparaNuevaArea}"
+						oncomplete="PF('wdgAgregarArea').show();" />
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+					<p:commandButton value="Listas de Estudiantes" icon="ui-icon-print"
+						action="#{periodoLectivoController.exportarReporteListas()}" />
+					<p:commandButton value="Datos de Estudiantes" icon="ui-icon-print"
+						action="#{periodoLectivoController.exportarReporteDatosEstudiantes()}" />
+					<p:commandButton value="Nómina para votaciones Primaria"
+						icon="ui-icon-print"
+						action="#{periodoLectivoController.exportarReporteNominaVotacionesPrimaria()}" />
+					<p:commandButton value="Nómina para votaciones Secundaria"
+						icon="ui-icon-print"
+						action="#{periodoLectivoController.exportarReporteNominaVotacionesSecundaria()}" />
+
+				</f:facet>
+			</p:toolbar>
+
+			<h3>Paralelos</h3>
+
+			<p:dataTable id="tblDetalle"
+				value="#{periodoLectivoController.paralelos}" var="paralelo">
+				<p:column headerText="Subnivel" width="15%">
+					<h:outputText value="#{paralelo.grado.etiquetaSubNivel}" />
+				</p:column>
+				<p:column headerText="Paralelo" width="30%">
+					<h:outputText
+						value="#{paralelo.grado.etiqueta} - #{paralelo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Tutor" width="30%">
+					<h:outputText
+						value="#{paralelo.tutor.apellidos} #{paralelo.tutor.nombres}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						rendered="#{periodoLectivoController.paraleloPerteneceDocente(paralelo)}"
+						action="#{periodoLectivoController.seleccionarParalelo()}">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+					<p:commandButton value="Editar" icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditarParalelo:wdgEditarParalelo"
+						oncomplete="PF('wdgEditarParalelo').show();">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminarParalelo:wdgEliminarParalelo"
+						oncomplete="PF('wdgEliminarParalelo').show();">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<h3>Desarrollo Comportamental</h3>
+			<p:dataTable id="tblDetalleCriterio"
+				value="#{periodoLectivoController.criteriosDeEvaluacion}"
+				var="criterioDeEvaluacion">
+				<p:column headerText="No.">
+					<h:outputText value="#{criterioDeEvaluacion.orden}" />
+				</p:column>
+				<p:column headerText="Criterio">
+					<h:outputText value="#{criterioDeEvaluacion.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Editar" icon="ui-icon-document"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5')}"
+						update=":frmEditarCriterioDeEvaluacion:wdgEditarCriterioDeEvaluacion"
+						oncomplete="PF('wdgEditarCriterioDeEvaluacion').show();">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.criterioDeEvaluacion}"
+							value="#{criterioDeEvaluacion}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')|| request.isUserInRole('5')}"
+						update=":frmEliminarCriterioDeEvaluacion:wdgEliminarCriterioDeEvaluacion"
+						oncomplete="PF('wdgEliminarCriterioDeEvaluacion').show();">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.criterioDeEvaluacion}"
+							value="#{criterioDeEvaluacion}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h3>Evaluaciones</h3>
+			<p:dataTable id="tblDetalleEvaluaciones"
+				value="#{periodoLectivoController.gruposDeEvaluacion}" reflow="true"
+				var="grupoDeEvaluacion">
+				<p:column headerText="Paralelo">
+					<h:outputText value="#{grupoDeEvaluacion.etiqueta}" />
+				</p:column>
+				<p:column headerText="Total Días Asistidos">
+					<h:inputText value="#{grupoDeEvaluacion.diasAsistidos}" />
+				</p:column>
+				<p:column headerText="Habilitado Estudiantes">
+					<p:selectOneRadio id="habilitadoEstudiante"
+						value="#{grupoDeEvaluacion.habilitadoEstudiante}">
+						<f:selectItem itemValue="true" itemLabel="Si"></f:selectItem>
+						<f:selectItem itemValue="false" itemLabel="No"></f:selectItem>
+					</p:selectOneRadio>
+				</p:column>
+				<p:column headerText="Habilitado Docentes">
+					<p:selectOneRadio id="habilitadoDocente"
+						requiredMessage="Campo requerido" required="true"
+						value="#{grupoDeEvaluacion.habilitado}">
+						<f:selectItem itemValue="true" itemLabel="Si"></f:selectItem>
+						<f:selectItem itemValue="false" itemLabel="No"></f:selectItem>
+					</p:selectOneRadio>
+				</p:column>
+				<p:column headerText="Acciones"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}">
+					<p:commandButton value="Guardar"
+						action="#{periodoLectivoController.editarGrupoDeEvaluacion}">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.grupoDeEvaluacion}"
+							value="#{grupoDeEvaluacion}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h3>Firmantes</h3>
+			<p:dataTable id="tblGrados"
+				value="#{periodoLectivoController.grados}" var="grado">
+				<p:column headerText="Grado">
+					<h:outputText value="#{grado.etiqueta}" />
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:inputText value="#{grado.nombreFirmanteA}" />
+				</p:column>
+				<p:column headerText="Cargo">
+					<h:inputText value="#{grado.cargoFirmanteA}" />
+				</p:column>
+				<p:column headerText="Pronombre">
+					<p:selectOneRadio value="#{grado.pronombreA}">
+						<f:selectItem itemValue="el" itemLabel="el"></f:selectItem>
+						<f:selectItem itemValue="la" itemLabel="la"></f:selectItem>
+					</p:selectOneRadio>
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:inputText value="#{grado.nombreFirmanteB}" />
+				</p:column>
+				<p:column headerText="Cargo">
+					<h:inputText value="#{grado.cargoFirmanteB}" />
+				</p:column>
+				<p:column headerText="Pronombre">
+					<p:selectOneRadio value="#{grado.pronombreB}">
+						<f:selectItem itemValue="el" itemLabel="el"></f:selectItem>
+						<f:selectItem itemValue="la" itemLabel="la"></f:selectItem>
+					</p:selectOneRadio>
+				</p:column>
+				<p:column headerText="Acciones"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}">
+					<p:commandButton value="Guardar"
+						action="#{periodoLectivoController.editarGrado()}">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.grado}" value="#{grado}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			
+			<h3>Areas</h3>
+			<p:dataTable id="tblAreas"
+				value="#{periodoLectivoController.areas}" var="area">
+				<p:column headerText="Area">
+					<h:inputText value="#{area.etiqueta}" />
+				</p:column>
+				<p:column headerText="Orden">
+					<h:inputText value="#{area.orden}" />
+				</p:column>
+				<p:column headerText="Acciones"
+					rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}">
+					<p:commandButton value="Guardar"
+						action="#{periodoLectivoController.editarArea()}">
+						<f:setPropertyActionListener
+							target="#{periodoLectivoController.area}" value="#{area}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<h:form id="frmAgregarGrados" enctype="multipart/form-data">
+			<p:dialog header="Agregar Grados" id="wdgAgregarGrados"
+				widgetVar="wdgAgregarGrados" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="grado" value="Grados: "></p:outputLabel>
+					<p:selectManyCheckbox columns="3" layout="grid" id="grado"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.gradosAgregados}">
+						<f:selectItems
+							value="#{periodoLectivoController.gradosDisponibles}"
+							itemLabel="#{grado.descripcionGrado}" itemValue="#{grado}"
+							var="grado"></f:selectItems>
+					</p:selectManyCheckbox>
+					<p:messages showIcon="false" autoUpdate="true" for="grado" />
+				</h:panelGrid>
+				<p:commandButton value="Agregar Grados" ajax="false"
+					update="tblDetalle"
+					action="#{periodoLectivoController.agregarGrados}" />
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="frmAgregarArea" enctype="multipart/form-data">
+			<p:dialog header="Agregar Area" id="wdgAgregarArea"
+				widgetVar="wdgAgregarArea" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="area" value="Area: "></p:outputLabel>
+					<h:inputText id="area" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.area.etiqueta}" />
+					<p:messages showIcon="false" autoUpdate="true" for="area" />
+					<p:outputLabel for="orden" value="Area: "></p:outputLabel>
+					<h:inputText id="orden" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.area.orden}" />
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+				</h:panelGrid>
+				<p:commandButton value="Agregar Area" ajax="false"
+					update="tblAreas"
+					action="#{periodoLectivoController.agregarArea}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmAgregarCriterioDeEvaluacion"
+			enctype="multipart/form-data">
+			<p:dialog header="Nuevo Criterio de Evaluación"
+				id="wdgCriterioDeEvaluacion" widgetVar="wdgCriterioDeEvaluacion"
+				draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<h:outputLabel for="orden" value="Orden" />
+					<h:inputText id="orden" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.criterioDeEvaluacion.orden}" />
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+					<h:outputLabel for="criterio" value="Criterio de Evaluación" />
+					<p:inputTextarea id="criterio" cols="40" rows="6" maxlength="255"
+						required="true" requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.criterioDeEvaluacion.etiqueta}"></p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="criterio" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					update="tblDetalleCriterio"
+					action="#{periodoLectivoController.guardarCriterioDeEvaluacion}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarCriterioDeEvaluacion"
+			enctype="multipart/form-data">
+			<p:dialog header="Editar Criterio de Evaluación"
+				id="wdgEditarCriterioDeEvaluacion"
+				widgetVar="wdgEditarCriterioDeEvaluacion" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+
+					<h:outputLabel for="orden" value="Orden" />
+					<h:inputText id="orden" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.criterioDeEvaluacion.orden}" />
+					<p:messages showIcon="false" autoUpdate="true" for="orden" />
+
+					<h:outputLabel for="criterio" value="Criterio de Evaluación" />
+					<p:inputTextarea id="criterio" cols="40" rows="6" maxlength="255"
+						required="true" requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.criterioDeEvaluacion.etiqueta}"></p:inputTextarea>
+					<p:messages showIcon="false" autoUpdate="true" for="criterio" />
+
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					update="tblDetalleCriterio"
+					action="#{periodoLectivoController.editarCriterioDeEvaluacion}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminarCriterioDeEvaluacion">
+			<p:dialog header="Eliminar Criterio de Evaluacion"
+				id="wdgEliminarCriterioDeEvaluacion"
+				widgetVar="wdgEliminarCriterioDeEvaluacion" draggable="false"
+				resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el criterio de evaluación:  #{periodoLectivoController.criterioDeEvaluacion.etiqueta}">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false"
+					update="tblDetalleCriterio"
+					action="#{periodoLectivoController.eliminarCriterioDeEvaluacion}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditarParalelo" enctype="multipart/form-data">
+			<p:dialog header="Editar Paralelo" id="wdgEditarParalelo"
+				widgetVar="wdgEditarParalelo" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="docente" value="Tutor: "></p:outputLabel>
+					<p:selectOneMenu id="docente"
+						value="#{periodoLectivoController.paralelo.tutor}" required="true"
+						requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{periodoLectivoController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+					<p:outputLabel
+						rendered="#{periodoLectivoController.paralelo.grado.grado >= 13}"
+						for="especialidad" value="Especialidad: "></p:outputLabel>
+					<p:inputText
+						rendered="#{periodoLectivoController.paralelo.grado.grado >= 13}"
+						id="especialidad"
+						value="#{periodoLectivoController.paralelo.especialidad}"></p:inputText>
+					<p:outputLabel for="etiqueta" value="Paralelo: "></p:outputLabel>
+					<p:inputText id="etiqueta"
+						value="#{periodoLectivoController.paralelo.etiqueta}"></p:inputText>
+					<p:messages
+						rendered="#{periodoLectivoController.paralelo.grado.grado >= 13}"
+						showIcon="false" autoUpdate="true" for="especialidad" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="tblDetalle"
+					action="#{periodoLectivoController.editarParalelo}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEliminarParalelo">
+			<p:dialog header="Eliminar Paralelo" id="wdgEliminarParalelo"
+				widgetVar="wdgEliminarParalelo" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el paralelo #{periodoLectivoController.paralelo.grado.etiqueta} #{periodoLectivoController.paralelo.etiqueta}">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{periodoLectivoController.eliminarParalelo}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmNuevo" enctype="multipart/form-data">
+			<p:dialog header="Nuevo Paralelo" id="wdgNuevo" widgetVar="wdgNuevo"
+				draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+
+					<p:outputLabel for="grado" value="Grado:"></p:outputLabel>
+					<p:selectOneMenu id="grado"
+						value="#{periodoLectivoController.paralelo.grado}" required="true"
+						requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{periodoLectivoController.grados}"
+							itemLabel="#{grado.etiqueta}" itemValue="#{grado}" var="grado"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="grado" />
+					<p:outputLabel for="etiqueta" value="Nombre: "></p:outputLabel>
+					<p:inputText id="etiqueta" required="true"
+						requiredMessage="Campo requerido"
+						value="#{periodoLectivoController.paralelo.etiqueta}"></p:inputText>
+					<p:messages showIcon="false" autoUpdate="true" for="etiqueta" />
+					<p:outputLabel for="docente" value="Tutor: "></p:outputLabel>
+					<p:selectOneMenu id="docente"
+						value="#{periodoLectivoController.paralelo.tutor}" required="true"
+						requiredMessage="Campo requerido"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItems value="#{periodoLectivoController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar Paralelo" ajax="false"
+					update="tblDetalle"
+					action="#{periodoLectivoController.guardarParalelo}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

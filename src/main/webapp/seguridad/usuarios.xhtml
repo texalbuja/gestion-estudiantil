@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h3>Usuarios</h3>
+		<p:toolbar>
+			<f:facet name="left">
+				<p:commandButton value="Nuevo" icon="ui-icon-document"
+					actionListener="#{usuarioController.preparaNuevo}"
+					oncomplete="PF('wdgNuevo').show();" update=":frmNuevo:wdgNuevo" />
+			</f:facet>
+		</p:toolbar>
+		
+		<h3>Listado</h3>
+		<p:dataTable value="#{usuarioController.usuarios}" var="usuario"
+			id="tblDetalle">
+			<p:column headerText="Identificación">
+				<h:outputText value="#{usuario.identificacion}" />
+			</p:column>
+			<p:column headerText="Nombre">
+				<h:outputText value="#{usuario.nombre}" />
+			</p:column>
+			<p:column headerText="Correo">
+				<h:outputText value="#{usuario.correo}" />
+			</p:column>
+			<p:column headerText="Rol">
+				<h:outputText
+					value="#{empty usuario.rolUsuarioList ? '' :usuario.rolUsuarioList.get(0).rol.etiqueta}" />
+			</p:column>
+			<p:column headerText="Acciones">
+				<p:commandButton value="Editar" icon="ui-icon-pencil"
+					update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+					<f:setPropertyActionListener target="#{usuarioController.usuario}"
+						value="#{usuario}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+		<h:form id="frmNuevo">
+			<p:dialog header="Nuevo Usuario" widgetVar="wdgNuevo" id="wdgNuevo"
+				draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="2" cellpadding="5">
+
+					<p:outputLabel for="institucion" value="Institución: "
+						rendered="#{request.isUserInRole('1')}"></p:outputLabel>
+					<p:selectOneMenu id="institucion"
+						rendered="#{request.isUserInRole('1')}"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{usuarioController.usuario.institucion}">
+						<f:selectItems value="#{usuarioController.instituciones}"
+							var="institucion" itemLabel="#{institucion.nombre}"></f:selectItems>
+					</p:selectOneMenu>
+
+					<p:outputLabel for="identificacion" value="Identificación:"></p:outputLabel>
+					<p:inputText id="identificacion"
+						value="#{usuarioController.usuario.identificacion}"></p:inputText>
+					<p:outputLabel for="nombre" value="Nombres"></p:outputLabel>
+					<p:inputText id="nombre"
+						value="#{usuarioController.usuario.nombre}"></p:inputText>
+					<p:outputLabel for="correo" value="Correo:"></p:outputLabel>
+					<p:inputText id="correo"
+						value="#{usuarioController.usuario.correo}"></p:inputText>
+					<p:outputLabel for="roles" value="Roles:"></p:outputLabel>
+					<p:selectManyCheckbox columns="3" id="roles" layout="grid"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{usuarioController.rolesSeleccionados}">
+						<f:selectItems value="#{usuarioController.roles}" var="rol"
+							itemLabel="#{rol.etiqueta}" itemValue="#{rol}" />
+					</p:selectManyCheckbox>
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					action="#{usuarioController.guardar}" />
+
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEditar">
+			<p:dialog header="Editar Usuario" widgetVar="wdgEditar"
+				id="wdgEditar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="institucion" value="Institución: " rendered="#{request.isUserInRole('1')}"></p:outputLabel>
+					<p:selectOneMenu id="institucion"
+						converter="omnifaces.SelectItemsConverter"
+						rendered="#{request.isUserInRole('1')}"
+						value="#{usuarioController.usuario.institucion}">
+						<f:selectItems value="#{usuarioController.instituciones}"
+							var="institucion" itemLabel="#{institucion.nombre}"></f:selectItems>
+					</p:selectOneMenu>
+					<p:outputLabel for="identificacion" value="Identificación:"></p:outputLabel>
+					<p:inputText id="identificacion"
+						value="#{usuarioController.usuario.identificacion}"></p:inputText>
+					<p:outputLabel for="nombre" value="Nombres"></p:outputLabel>
+					<p:inputText id="nombre"
+						value="#{usuarioController.usuario.nombre}"></p:inputText>
+					<p:outputLabel for="correo" value="Correo:"></p:outputLabel>
+					<p:inputText id="correo"
+						value="#{usuarioController.usuario.correo}"></p:inputText>
+				</h:panelGrid>
+				<p:outputLabel
+					value="Al presionar Editar, el usuario ingresará con su identificación como clave"></p:outputLabel>
+				<br />
+				<p:commandButton value="Editar" ajax="false"
+					action="#{usuarioController.editar}" />
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

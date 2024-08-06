@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
+					<h3>Gestión Estudiantil</h3>
+					<p:graphicImage library="imagenes" name="pencil.png">
+					</p:graphicImage>
+					<div class="caption">
+						<p>
+						<div class="list-group">
+							<a href="#{request.contextPath}/matriculacion/inicio.jsf"
+								class="list-group-item">
+								<h4 class="list-group-item-heading">Selecciona una
+									institución</h4>
+								<p class="list-group-item-text">Todo comienza aquí..</p>
+							</a> <a
+								href="#{request.contextPath}/matriculacion/periodoLectivo.jsf"
+								class="list-group-item ">
+								<h4 class="list-group-item-heading">Abre un nuevo periodo</h4>
+								<p class="list-group-item-text">Registra los grados que se
+									van a abrir.</p>
+							</a> <a href="#{request.contextPath}/seguridad/usuarios.jsf"
+								class="list-group-item ">
+								<h4 class="list-group-item-heading">Crear usuarios</h4>
+								<p class="list-group-item-text">Registro de secretaria</p>
+							</a> <a href="#{request.contextPath}/monitoring"
+								class="list-group-item">
+								<h4 class="list-group-item-heading">Monitoreo</h4>
+								<p class="list-group-item-text">Revisar el estado del
+									servidor</p>
+							</a>
+						</div>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</ui:define>
+</ui:composition>

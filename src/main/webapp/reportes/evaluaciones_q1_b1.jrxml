@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0f64beb4-4f2e-4381-97d5-9710d4e8bb11">
+	<property name="ireport.zoom" value="2.9282000000000012"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center" fontSize="8">
+		<pen lineWidth="0.5"/>
+		<box topPadding="0" leftPadding="0" bottomPadding="1" rightPadding="1">
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="paralelo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+     matricula.`paralelo_id` AS matricula_paralelo_id,
+     asignatura_dictada.`etiqueta` AS asignatura_dictada_etiqueta,
+     asignatura_dictada.`orden` AS asignatura_dictada_orden,
+     evaluacion_asignatura.`q1_p1_i1` AS evaluacion_asignatura_q1_p1_i1,
+     evaluacion_asignatura.`q1_p1_ra1` AS evaluacion_asignatura_q1_p1_ra1,
+     evaluacion_asignatura.`q1_p1_i2` AS evaluacion_asignatura_q1_p1_i2,
+     evaluacion_asignatura.`q1_p1_ra2` AS evaluacion_asignatura_q1_p1_ra2,
+     evaluacion_asignatura.`q1_p1_i3` AS evaluacion_asignatura_q1_p1_i3,
+     evaluacion_asignatura.`q1_p1_ra3` AS evaluacion_asignatura_q1_p1_ra3,
+     evaluacion_asignatura.`q1_p1_i4` AS evaluacion_asignatura_q1_p1_i4,
+     evaluacion_asignatura.`q1_p1_ra4` AS evaluacion_asignatura_q1_p1_ra4,
+     evaluacion_asignatura.`q1_p1_nota` AS evaluacion_asignatura_q1_p1_nota,
+     informe_anual.`q1_p1_nota` AS informe_anual_q1_p1_nota,
+     estudiante.`id` AS estudiante_id,
+     estudiante.`apellidos` AS estudiante_apellidos,
+     estudiante.`nombres` AS estudiante_nombres,
+     matricula.`id` AS matricula_id,
+     asignatura_dictada.`id` AS asignatura_dictada_id,
+     evaluacion_asignatura.`id` AS evaluacion_asignatura_id
+FROM
+     `matricula` matricula INNER JOIN `informe_anual` informe_anual ON matricula.`id` = informe_anual.`matricula_id`
+     INNER JOIN `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON informe_anual.`id` = evaluacion_asignatura.`informe_anual_id`
+     INNER JOIN `asignatura_dictada` asignatura_dictada ON evaluacion_asignatura.`asignatura_id` = asignatura_dictada.`id`
+     INNER JOIN `estudiante` estudiante ON matricula.`estudiante_id` = estudiante.`id`
+WHERE
+     matricula.`paralelo_id` = $P{paralelo_id}]]>
+	</queryString>
+	<field name="matricula_paralelo_id" class="java.lang.Long"/>
+	<field name="asignatura_dictada_etiqueta" class="java.lang.String"/>
+	<field name="asignatura_dictada_orden" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_i1" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_ra1" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_i2" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_ra2" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_i3" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_ra3" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_i4" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_ra4" class="java.lang.Double"/>
+	<field name="evaluacion_asignatura_q1_p1_nota" class="java.lang.Double"/>
+	<field name="informe_anual_q1_p1_nota" class="java.lang.Double"/>
+	<field name="estudiante_id" class="java.lang.Long"/>
+	<field name="estudiante_apellidos" class="java.lang.String"/>
+	<field name="estudiante_nombres" class="java.lang.String"/>
+	<field name="matricula_id" class="java.lang.Long"/>
+	<field name="asignatura_dictada_id" class="java.lang.Long"/>
+	<field name="evaluacion_asignatura_id" class="java.lang.Long"/>
+	<pageHeader>
+		<band height="82">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="72" uuid="17788317-4dd8-4404-a2e9-f14bcfed4a6f"/>
+				<subreportParameter name="etiqueta">
+					<subreportParameterExpression><![CDATA["Quimestre 1 - Parcial 1"]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="paralelo_id">
+					<subreportParameterExpression><![CDATA[$P{paralelo_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + File.separator + "cabecera_evaluaciones.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="125" splitType="Immediate">
+			<crosstab columnBreakOffset="1000" ignoreWidth="false">
+				<reportElement x="0" y="0" width="802" height="70" uuid="cef81220-2e34-4258-af62-147e2a07e916"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="144" height="58" uuid="d2b3fbe6-1860-4ce4-8ea5-59a3cc678582"/>
+							<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
+								<font fontName="Arial"/>
+							</textElement>
+							<text><![CDATA[Quimestre 1 - Parcial 1]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="matricula_paralelo_id" width="144">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{estudiante_apellidos} + " " +$F{estudiante_nombres}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="144" height="12" uuid="ab22f26e-523f-497c-bd35-8c3ff32c6b03"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Arial" size="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{matricula_paralelo_id}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="evaluacion_asignatura_id" height="58" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{asignatura_dictada_orden} + " " +$F{asignatura_dictada_etiqueta}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Transparent">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="144" height="12" uuid="6c863f93-c37d-4610-b17b-311a77076968"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Arial"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{evaluacion_asignatura_id}]]></textFieldExpression>
+							</textField>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="0" y="12" width="16" height="46" uuid="c7ff6659-a30a-4415-9eb0-d319b6c8b18a"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Insumo 1]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="32" y="12" width="16" height="46" uuid="4f70eabf-54a0-4f6f-bcb4-02e6cc674db6"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Insumo 2]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="64" y="12" width="16" height="46" uuid="ebf19a23-9e10-434a-ad2d-d7cc09c753b4"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Insumo 3]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="96" y="12" width="16" height="46" uuid="324627b1-7e8f-4b11-8908-839d6f4c51cf"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Insumo 4]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="16" y="12" width="16" height="46" uuid="2920d687-3882-4424-a6fa-f97776a30a9c"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Refuerzo Académico 1]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="48" y="12" width="16" height="46" uuid="ddd522cb-af50-4fe5-bf51-3cb751382ed0"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Refuerzo Académico 2]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="80" y="12" width="16" height="46" uuid="b572f025-ee7d-4993-bb5f-f08fb86f20eb"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Refuerzo Académico 3]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="112" y="12" width="16" height="46" uuid="34b20502-aba2-450c-9d7b-fdc0341e3283"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Refuerzo Académico 4]]></text>
+							</staticText>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="128" y="12" width="16" height="46" uuid="34b20502-aba2-450c-9d7b-fdc0341e3283"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="6"/>
+								</textElement>
+								<text><![CDATA[Promedio]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#FFFFFF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="16" height="58" uuid="e44f02b8-00e0-430f-b5eb-21e4e5a2e4f2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Arial" size="5"/>
+								</textElement>
+								<text><![CDATA[Promedio Parcial]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="evaluacion_asignatura_q1_p1_notaMeasure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_nota}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_i2Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_i2}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_i1Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_i1}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_i3Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_i3}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_i4Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_i4}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_ra2Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_ra2}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_ra1Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_ra1}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_ra3Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_ra3}]]></measureExpression>
+				</measure>
+				<measure name="evaluacion_asignatura_q1_p1_ra4Measure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{evaluacion_asignatura_q1_p1_ra4}]]></measureExpression>
+				</measure>
+				<measure name="informe_anual_q1_p1_notaMeasure" class="java.lang.Double">
+					<measureExpression><![CDATA[$F{informe_anual_q1_p1_nota}]]></measureExpression>
+				</measure>
+				<crosstabCell width="144" height="12">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="16" height="12" uuid="918aade8-7563-4b90-91ea-7a7628f2d0c6"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_i1Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="16" y="0" width="16" height="12" uuid="944eecd9-40ce-4234-8b07-04d339e677a8"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_ra1Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="32" y="0" width="16" height="12" uuid="563fd583-6136-4888-9021-889ff78a2418"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_i2Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="48" y="0" width="16" height="12" uuid="fc9166b7-aeff-42db-b62e-3ce58c89d7cc"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_ra2Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="64" y="0" width="16" height="12" uuid="96c05ec9-a87f-43af-88a7-4256428e7b6b"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_i3Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="80" y="0" width="16" height="12" uuid="f8c5a609-d2ed-4bc8-8827-ee41ffc53a96"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_ra3Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="96" y="0" width="16" height="12" uuid="84765216-b8ce-4689-970b-3afbd68cf08c"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_i4Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="112" y="0" width="16" height="12" uuid="0848e07c-329c-4f32-a19f-1ad741b9827f"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_ra4Measure}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="128" y="0" width="16" height="12" uuid="0848e07c-329c-4f32-a19f-1ad741b9827f"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_notaMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="matricula_paralelo_id">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="30a1967d-558e-4b6a-a337-40461cab4991"/>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_notaMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="16" height="12" columnTotalGroup="evaluacion_asignatura_id">
+					<cellContents backcolor="#FFFFFF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField pattern="#0.00" isBlankWhenNull="true">
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="16" height="12" uuid="59c836a1-0558-4384-bfaa-a15bd0d38a72"/>
+							<textElement textAlignment="Right" verticalAlignment="Middle">
+								<font fontName="Arial" size="5"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{informe_anual_q1_p1_notaMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="matricula_paralelo_id" columnTotalGroup="evaluacion_asignatura_id">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" uuid="953c35cd-7c38-465f-ae02-f05c2e399bdd"/>
+							<textFieldExpression><![CDATA[$V{evaluacion_asignatura_q1_p1_notaMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

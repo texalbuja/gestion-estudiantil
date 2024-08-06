@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+		<h:panelGroup rendered="#{request.isUserInRole('1')}">
+			<h:form>
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Guardar" icon="ui-icon-document"
+							process="@form" update="tblDetalle"
+							actionListener="#{carnetizacionController.guardarCodigosCarnetizacion}">
+						</p:commandButton>
+						<p:commandButton value="Cargar Fotos" icon="ui-icon-document"
+							actionListener="#{carnetizacionController.cargarFotos}">
+						</p:commandButton>
+						<p:commandButton value="Imprimir" icon="ui-icon-document"
+							action="#{carnetizacionController.imprimir}">
+						</p:commandButton>
+					</f:facet>
+				</p:toolbar>
+
+				<h3>Estudiantes</h3>
+				<p:dataTable id="tblDetalle" paginator="true"
+					paginatorPosition="bottom"
+					value="#{carnetizacionController.estudiantes}" var="estudiante">
+					<p:column headerText="Estudiante">
+						<h:outputText
+							value="#{estudiante.apellidos} #{estudiante.nombres}" />
+					</p:column>
+					<p:column headerText="Código Foto">
+						<h:inputText value="#{estudiante.codigoFoto}" immediate="true">
+						</h:inputText>
+					</p:column>
+					<p:column headerText="Código Foto">
+						<h:outputText value="#{estudiante.codigoFoto}" />
+					</p:column>
+					<p:column headerText="Acciones"
+						rendered="#{request.isUserInRole('1')}">
+						<p:commandButton value="Editar" icon="ui-icon-pencil"
+							rendered="#{request.isUserInRole('1')}"
+							update=":frmEditar:wdgEditar"
+							oncomplete="PF('wdgEditar').show();">
+							<f:setPropertyActionListener
+								target="#{carnetizacionController.estudiante}"
+								value="#{estudiante}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			<h:form id="frmEditar" enctype="multipart/form-data">
+				<p:dialog header="Editar Foto" id="wdgEditar" widgetVar="wdgEditar"
+					dragrable="false" resizable="false" modal="true">
+					<p:messages id="messages" showDetail="true" />
+					<p:graphicImage value="#{imagenUtil.image}" cache="false"
+						width="98px" height="128px">
+						<f:param name="id"
+							value="#{carnetizacionController.estudiante.imagen.id}" />
+					</p:graphicImage>
+					<h:panelGrid columns="3">
+						<p:outputLabel for="estudiante" value="Estudiante: "></p:outputLabel>
+						<p:outputLabel id="estudiante"
+							value="#{carnetizacionController.estudiante.apellidos} #{carnetizacionController.estudiante.nombres}"></p:outputLabel>
+						<p:messages showIcon="false" autoUpdate="true" for="estudiante" />
+						<p:outputLabel for="foto" value="Foto:"></p:outputLabel>
+						<p:fileUpload id="foto" value="#{carnetizacionController.file}"
+							mode="simple" />
+						<p:commandButton value="Guardar" ajax="false" update=":frmEditar:wdgEditar"
+							action="#{carnetizacionController.guardarEstudiante()}" />
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

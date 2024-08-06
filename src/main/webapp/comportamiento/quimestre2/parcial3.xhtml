@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+
+
+			<li><a href="#{request.contextPath}/matriculacion/paralelo.jsf">#{grado.etiqueta}
+					- #{paralelo.etiqueta}</a></li>
+			<li class="active">#{asignatura.etiqueta}</li>
+		</ol>
+
+
+		<h:form
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('4') || request.isUserInRole('7')}">
+
+			<p:toolbar>
+				<f:facet name="left">
+
+					<p:selectOneRadio id="copiarEvaluacion" immediate="true"
+						value="#{evaluacionComportamientoController.evaluacionComportamiento.b6}">
+						<f:selectItem itemValue="A" itemLabel="Lidera"></f:selectItem>
+						<f:selectItem itemValue="B" itemLabel="Cumple"></f:selectItem>
+						<f:selectItem itemValue="C" itemLabel="Falla ocasionalmente"></f:selectItem>
+						<f:selectItem itemValue="D" itemLabel="Falla reiteradamente"></f:selectItem>
+						<f:selectItem itemValue="E" itemLabel="No cumple"></f:selectItem>
+					</p:selectOneRadio>
+					<p:commandButton value="Copiar" icon="ui-icon-copy" update="@form"
+						process="copiarEvaluacion, @this"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('4')}"
+						actionListener="#{evaluacionComportamientoController.copiar}">
+					</p:commandButton>
+					<p:commandButton value="Guardar" ajax="false"
+						action="#{evaluacionComportamientoController.guardar()}" />
+				</f:facet>
+			</p:toolbar>
+			<br />
+			<h3>Evaluación de Comportamiento</h3>
+			<h4>#{evaluacionComportamientoController.grupoDeEvaluacion.etiqueta}</h4>
+
+			<h3>Observaciones</h3>
+
+			<p:dataTable id="tblDetalleObservaciones"
+				value="#{evaluacionComportamientoController.observaciones}"
+				var="observacion">
+
+				<p:column headerText="Nómina">
+					<h:outputText
+						value="#{observacion.matricula.estudiante.apellidos} #{observacion.matricula.estudiante.nombres}" />
+				</p:column>
+				<p:column headerText="Fecha">
+					<h:outputText value="#{observacion.fecha}" />
+				</p:column>
+				<p:column headerText="Observación">
+					<h:outputText value="#{observacion.observacion}" />
+				</p:column>
+
+			</p:dataTable>
+			<h3>Evaluación de comportamiento</h3>
+			<p:dataTable id="tblDetalleEvaluaciones"
+				value="#{evaluacionComportamientoController.evaluacionesComportamiento}"
+				var="evaluacion">
+				<p:column headerText="Criterio de Evaluación">
+					<h:outputText value="#{evaluacion.criterioDeEvaluacion.etiqueta}" />
+				</p:column>
+				<p:column headerText="Nómina">
+					<h:outputText
+						value="#{evaluacion.matricula.estudiante.apellidos} #{evaluacion.matricula.estudiante.nombres}" />
+				</p:column>
+				<p:column headerText="Evaluación Cualitativa">
+					<p:selectOneRadio id="evaluacion" immediate="true" value="#{evaluacion.b6}">
+						<f:selectItem itemValue="A" itemLabel="Lidera"></f:selectItem>
+						<f:selectItem itemValue="B" itemLabel="Cumple"></f:selectItem>
+						<f:selectItem itemValue="C" itemLabel="Falla ocasionalmente"></f:selectItem>
+						<f:selectItem itemValue="D" itemLabel="Falla reiteradamente"></f:selectItem>
+						<f:selectItem itemValue="E" itemLabel="No cumple"></f:selectItem>
+					</p:selectOneRadio>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

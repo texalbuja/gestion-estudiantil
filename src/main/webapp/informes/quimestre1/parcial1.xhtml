@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h:panelGroup>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Libreta" icon="ui-icon-print"
+						action="#{informeParcialController.exportarReporteLibretasPrimerBloque()}" />
+				</f:facet>
+			</p:toolbar>
+		</h:panelGroup>
+
+		<h3>Quimestre 1 - Parcial 1</h3>
+
+		<br />
+		<p:dataTable id="tblDetalle" reflow="true"
+			value="#{informeParcialController.evaluaciones}" var="evaluacion">
+			<p:column headerText="Asignatura" width="20%">
+				<h:outputText value="#{evaluacion.asignatura.etiqueta}" />
+			</p:column>
+                    <p:column headerText="#{informeParcialController.periodoLectivo.insumo1}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1Insumo1}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo2}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1RefuerzoAcademico1}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo3}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1Insumo2}" />
+
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo4}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1RefuerzoAcademico2}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo5}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1Insumo3}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo6}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1RefuerzoAcademico3}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo7}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1Insumo4}" />
+			</p:column>
+			<p:column headerText="#{informeParcialController.periodoLectivo.insumo8}" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1RefuerzoAcademico4}" />
+			</p:column>
+			<p:column headerText="Quimestre 1 Parcial 1" width="5%">
+				<h:outputText styleClass="nota"
+					value="#{evaluacion.quimestre1Parcial1Nota}" />
+			</p:column>
+			<p:column headerText="Escala Cualitativa" width="5%">
+				<p:outputLabel converter="cualitativaConverter"
+					value="#{evaluacion.quimestre1Parcial1Nota}">
+				</p:outputLabel>
+			</p:column>
+			<p:column headerText="Recomendaciones" width="10%">
+				<h:outputText
+					value="#{evaluacion.quimestre1Parcial1Recomendaciones}" />
+			</p:column>
+			<p:column headerText="Plan de mejora" width="10%">
+				<h:outputText
+					value="#{evaluacion.quimestre1Parcial1PlanDeMejoraAcademico}" />
+			</p:column>
+		</p:dataTable>
+		<h3>Evaluación de Comportamiento</h3>
+		<p:dataTable id="tblDetalleEvaluaciones"
+			value="#{informeParcialController.evaluacionesComportamiento}"
+			var="evaluacion">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Criterio de Evaluación" />
+					<p:column headerText="Evaluación Cualitativa" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{evaluacion.criterioDeEvaluacion.etiqueta}" />
+			</p:column>
+			<p:column>
+				<p:selectOneRadio id="evaluacion" requiredMessage="Campo requerido"
+					disabled="true" required="true" immediate="true"
+					value="#{evaluacion.b1}">
+					<f:selectItem itemValue="A" itemLabel="Lidera"></f:selectItem>
+					<f:selectItem itemValue="B" itemLabel="Cumple"></f:selectItem>
+					<f:selectItem itemValue="C" itemLabel="Falla ocasionalmente"></f:selectItem>
+					<f:selectItem itemValue="D" itemLabel="Falla reiteradamente"></f:selectItem>
+					<f:selectItem itemValue="E" itemLabel="No cumple"></f:selectItem>
+				</p:selectOneRadio>
+			</p:column>
+		</p:dataTable>
+
+		<h3>Observaciones Inspección</h3>
+
+		<p:dataTable id="tblDetalleObservaciones"
+			value="#{informeParcialController.observaciones}" var="observacion">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Fecha" />
+					<p:column headerText="Bloque" />
+					<p:column headerText="Observación" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{observacion.fecha}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{observacion.bloque}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{observacion.observacion}" />
+			</p:column>
+		</p:dataTable>
+		<h3>Asistencia</h3>
+
+		<p:dataTable id="tblDetalleAsistencias"
+			value="#{informeParcialController.asistencias}" var="asistencia">
+			<p:columnGroup type="header">
+				<p:row>
+					<p:column headerText="Fecha" />
+					<p:column headerText="Estado" />
+					<p:column headerText="Observación" />
+				</p:row>
+			</p:columnGroup>
+			<p:column>
+				<h:outputText value="#{asistencia.fecha}" />
+			</p:column>
+			<p:column>
+				<h:outputText
+					value="#{asistencia.estado.equals('SJ') ? 'Sin Justificar' : 'Justificado'}" />
+			</p:column>
+			<p:column>
+				<h:outputText value="#{asistencia.observacion}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

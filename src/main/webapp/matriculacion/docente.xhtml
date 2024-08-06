@@ -1,0 +1,224 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li class="active">#{docente.apellidos} #{docente.nombres}</li>
+		</ol>
+		<h:form>
+			<h:panelGroup
+				rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5') || request.isUserInRole('4') || request.isUserInRole('6') || request.isUserInRole('9')}">
+				<p:toolbar>
+					<f:facet name="left">
+						<p:menuButton value="Evaluaciones">
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesPrimerQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesPrimerQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesPrimerQuimestreTercerBloque()}" />
+							<p:menuitem value="Primer Quimestre" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesPrimerQuimestre()}" />
+							<p:menuitem value="Primer Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesSegundoQuimestrePrimerBloque()}" />
+							<p:menuitem value="Segundo Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesSegundoQuimestreSegundoBloque()}" />
+							<p:menuitem value="Tercer Bloque" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesSegundoQuimestreTercerBloque()}" />
+							<p:menuitem value="Segundo Quimestre" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesSegundoQuimestre()}" />
+							<p:menuitem value="Anual" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluacionesAnual()}" />
+						</p:menuButton>
+
+						<p:menuButton value="Nóminas">
+							<p:menuitem value="Estudiantes" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEstudiantes()}" />
+							<p:menuitem value="Evaluaciones 1" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluaciones1()}" />
+							<p:menuitem value="Evaluaciones 2" icon="ui-icon-print"
+								action="#{docenteController.exportarReporteEvaluaciones2()}" />
+						</p:menuButton>
+					</f:facet>
+				</p:toolbar>
+			</h:panelGroup>
+
+			<h3>Asignaturas</h3>
+
+			<p:dataTable id="tblDetalle" value="#{docenteController.asignaturas}"
+				var="asignatura">
+				<p:column headerText="Grado">
+					<h:outputText
+						value="#{asignatura.paralelo.grado.grados.descripcionGrado}" />
+				</p:column>
+				<p:column headerText="Paralelo">
+					<h:outputText value="Paralelo #{asignatura.paralelo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{asignatura.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+						action="#{docenteController.seleccionarAsignatura()}">
+						<f:setPropertyActionListener
+							target="#{docenteController.asignatura}" value="#{asignatura}" />
+					</p:commandButton>
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+						<f:setPropertyActionListener
+							target="#{docenteController.asignatura}" value="#{asignatura}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminar:wdgEliminar"
+						oncomplete="PF('wdgEliminar').show();">
+						<f:setPropertyActionListener
+							target="#{docenteController.asignatura}" value="#{asignatura}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h3>Proyectos Escolares</h3>
+
+			<p:dataTable id="tblDetalleProyectos"
+				value="#{docenteController.proyectosEscolares}"
+				var="proyectoEscolar">
+				<p:column headerText="Grado">
+					<h:outputText
+						value="#{proyectoEscolar.paralelo.grado.grados.descripcionGrado}" />
+				</p:column>
+				<p:column headerText="Paralelo">
+					<h:outputText value="Paralelo #{proyectoEscolar.paralelo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Nombre">
+					<h:outputText value="#{proyectoEscolar.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+						action="#{docenteController.seleccionarProyectoEscolar()}">
+						<f:setPropertyActionListener
+							target="#{docenteController.proyectoEscolar}"
+							value="#{proyectoEscolar}" />
+					</p:commandButton>
+					<p:commandButton value="Editar" icon="ui-icon-pencil"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEditar:wdgEditar" oncomplete="PF('wdgEditar').show();">
+						<f:setPropertyActionListener
+							target="#{docenteController.proyectoEscolar}"
+							value="#{proyectoEscolar}" />
+					</p:commandButton>
+					<p:commandButton value="Eliminar" icon="ui-icon-trash"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+						update=":frmEliminar:wdgEliminar"
+						oncomplete="PF('wdgEliminar').show();">
+						<f:setPropertyActionListener
+							target="#{docenteController.proyectoEscolar}"
+							value="#{proyectoEscolar}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h3>Tutoría de Paralelos</h3>
+
+			<p:dataTable id="tblDetalleParalelo"
+				value="#{docenteController.paralelos}" var="paralelo">
+				<p:column headerText="Grado">
+					<h:outputText value="#{paralelo.grado.grados.descripcionGrado}" />
+				</p:column>
+				<p:column headerText="Paralelo">
+					<h:outputText value="Paralelo #{paralelo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+
+					<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+						action="#{docenteController.seleccionarParalelo()}">
+						<f:setPropertyActionListener
+							target="#{docenteController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+					<p:commandButton value="Evaluación de comportamiento"
+						icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+						action="#{docenteController.evaluarParalelo()}">
+						<f:setPropertyActionListener
+							target="#{docenteController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+
+
+			<h3>Destrezas de Desarrollo y Aprendizaje</h3>
+
+			<p:dataTable id="tblDetalleParaleloObjetivosDeDesarrollo"
+				value="#{docenteController.paralelosObjetivosDeDesarrollo}"
+				var="paralelo">
+				<p:column headerText="Grado">
+					<h:outputText value="#{paralelo.grado.grados.descripcionGrado}" />
+				</p:column>
+				<p:column headerText="Paralelo">
+					<h:outputText value="Paralelo #{paralelo.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Evaluar Destrezas de Desarrollo"
+						icon="ui-icon-folder-open"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+						action="#{docenteController.evaluarDestrezasDeDesarrollo()}">
+						<f:setPropertyActionListener
+							target="#{docenteController.paralelo}" value="#{paralelo}" />
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+		<h:form id="frmEditar">
+			<p:dialog header="Editar Asignatura" widgetVar="wdgEditar"
+				id="wdgEditar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="nombre" value="Nombre: "></p:outputLabel>
+					<p:outputLabel id="nombre"
+						value="#{docenteController.asignatura.etiqueta}"></p:outputLabel>
+					<p:messages showIcon="false" autoUpdate="true" for="nombre" />
+					<p:outputLabel for="docente" value="Docente: "></p:outputLabel>
+					<p:selectOneMenu id="docente" requiredMessage="Campo requerido"
+						required="true" converter="omnifaces.SelectItemsConverter"
+						value="#{docenteController.asignatura.docente}">
+						<f:selectItems value="#{docenteController.docentes}"
+							itemLabel="#{docente.apellidos} #{docente.nombres}"
+							itemValue="#{docente}" var="docente"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="docente" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false"
+					action="#{docenteController.editarAsignatura()}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Asignatura" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la asignatura: #{docenteController.asignatura.etiqueta}, Se eliminarán las notas asociadas?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{docenteController.eliminarAsignatura}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

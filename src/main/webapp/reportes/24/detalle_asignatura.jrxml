@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="361" pageHeight="842" columnWidth="361" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" fontName="Arial" fontSize="9">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="matricula_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestionestudiantil\\gestion-estudiantil\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="area_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     evaluacion_asignatura.`nota_final` AS evaluacion_asignatura_nota_final,
+     evaluacion_asignatura.`etiqueta_nota_final` AS evaluacion_asignatura_etiqueta_nota_final,
+     asignatura_dictada.`etiqueta` AS asignatura_dictada_etiqueta,
+     asignatura_dictada.`asignatura_id` AS contenedor_id,
+     asignatura_dictada.`orden` AS asignatura_dictada_orden
+FROM
+     `matricula` matricula INNER JOIN `paralelo` paralelo ON paralelo.`id` = matricula.`paralelo_id`
+     INNER JOIN `asignatura_dictada` asignatura_dictada ON paralelo.`id` = asignatura_dictada.`paralelo_id`
+     INNER JOIN `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+     INNER JOIN `informe_anual` informe_anual ON evaluacion_asignatura.`informe_anual_id` = informe_anual.`id`
+     AND matricula.`id` = informe_anual.`matricula_id`
+     INNER JOIN `area` area ON area.`id` = asignatura_dictada.`area_id`
+WHERE
+     matricula.`id` = $P{matricula_id}
+     AND area.id = $P{area_id}
+     AND certificado_promocion = 'S'
+ORDER BY
+     asignatura_dictada_orden ASC]]>
+	</queryString>
+	<field name="evaluacion_asignatura_nota_final" class="java.math.BigDecimal"/>
+	<field name="evaluacion_asignatura_etiqueta_nota_final" class="java.lang.String"/>
+	<field name="asignatura_dictada_etiqueta" class="java.lang.String"/>
+	<field name="contenedor_id" class="java.lang.Long"/>
+	<field name="asignatura_dictada_orden" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="150" y="0" width="48" height="16" forecolor="#000000" uuid="19c89a37-992c-4545-bbaf-767f54bec65a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_asignatura_nota_final}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="198" y="0" width="163" height="16" forecolor="#000000" uuid="17defc46-960b-4497-88a5-70087f067e5c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{evaluacion_asignatura_nota_final}.doubleValue() <= 4.00D ? "No alcanza los aprendizajes requeridos" :
+$F{evaluacion_asignatura_nota_final}.doubleValue() <= 6.99D ? "Está próximo a alcanzar los aprendizajes requeridos" :
+$F{evaluacion_asignatura_nota_final}.doubleValue() <= 8.99D ? "Alcanza los aprendizajes requeridos" :
+$F{evaluacion_asignatura_nota_final}.doubleValue() <= 10.00D ? "Domina los aprendizajes requeridos" : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="0" y="0" width="150" height="16" forecolor="#000000" uuid="61c553a7-e46c-438d-99e0-48ceee9a0004"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{contenedor_id} != null ? "     " : "") + $F{asignatura_dictada_etiqueta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

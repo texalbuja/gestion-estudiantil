@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					- #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">Registrar Observaciones</li>
+		</ol>
+		<h3>Registrar observación</h3>
+		<h:form id="frmObservacion"
+			rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}">
+			<p:panel header="Búsqueda de Estudiante">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="matricula" value="Búsqueda por apellidos" />
+					<p:autoComplete id="matricula"
+						emptyMessage="No existen estudiantes"
+						placeholder="Ingresar al menos 3 letras" size="50"
+						value="#{registroObservacionController.matricula}"
+						converter="matriculaConverter" var="matricula"
+						itemLabel="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}"
+						itemValue="#{matricula}"
+						completeMethod="#{registroObservacionController.completarMatriculas}"
+						effect="fade" forceSelection="true" />
+					<p:messages showIcon="false" autoUpdate="true" for="matricula" />
+					<p:outputLabel for="bloque" value="Bloque"></p:outputLabel>
+					<p:selectOneRadio id="bloque" converter="javax.faces.Integer"
+						requiredMessage="Campo requerido" required="true"
+						value="#{registroObservacionController.bloque}">
+						<f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+						<f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+						<f:selectItem itemValue="3" itemLabel="3"></f:selectItem>
+						<f:selectItem itemValue="4" itemLabel="4"></f:selectItem>
+						<f:selectItem itemValue="5" itemLabel="5"></f:selectItem>
+						<f:selectItem itemValue="6" itemLabel="6"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="numeroMatricula" />
+					<p:outputLabel for="fecha" value="Fecha: " />
+					<p:calendar id="fecha"
+						value="#{registroObservacionController.fecha}" showOn="button" />
+					<p:messages showIcon="false" autoUpdate="true" for="fecha" />
+					<p:outputLabel for="observacion" value="Observación" />
+					<p:inputTextarea id="observacion" cols="50"
+						value="#{registroObservacionController.detalle}" />
+					<p:messages showIcon="false" autoUpdate="true" for="observacion" />
+					<p:commandButton value="Guardar" update="@form"
+						action="#{registroObservacionController.guardar()}"></p:commandButton>
+					<p:commandButton value="Consultar" update="tblDetalle"
+						action="#{registroObservacionController.consultar()}"></p:commandButton>
+					<p:commandButton value="Todos" update="tblDetalle" process="@this"
+						action="#{registroObservacionController.consultarTodos()}"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+			<h:panelGroup>
+				<h3>Observaciones</h3>
+
+
+				<p:dataTable id="tblDetalle"
+					value="#{registroObservacionController.observaciones}"
+					var="observacion">
+					<p:column headerText="Estudiante">
+						<h:outputText
+							value="#{observacion.matricula.estudiante.apellidos} #{observacion.matricula.estudiante.nombres}" />
+					</p:column>
+					<p:column headerText="Bloque">
+						<h:outputText value="#{observacion.bloque}" />
+					</p:column>
+					<p:column headerText="Fecha">
+						<h:outputText value="#{observacion.fecha}" />
+					</p:column>
+					<p:column headerText="Observacion">
+						<h:outputText value="#{observacion.observacion}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						<p:commandButton value="Editar" icon="ui-icon-pencil"
+							rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}"
+							update=":frmEditar:wdgEditar" process="@this"
+							oncomplete="PF('wdgEditar').show();">
+							<f:setPropertyActionListener
+								target="#{registroObservacionController.observacion}"
+								value="#{observacion}" />
+						</p:commandButton>
+						<p:commandButton value="Eliminar" icon="ui-icon-trash"
+							rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1')}"
+							process="@this" update=":frmEliminar:wdgEliminar"
+							oncomplete="PF('wdgEliminar').show();">
+							<f:setPropertyActionListener
+								target="#{registroObservacionController.observacion}"
+								value="#{observacion}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+		</h:form>
+
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Observación" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar la observación: #{registroObservacionController.observacion.observacion}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{registroObservacionController.eliminar}" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="frmEditar">
+			<p:dialog header="Editar Observación" widgetVar="wdgEditar"
+				id="wdgEditar" draggable="false" resizable="false" modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="matricula" value="Búsqueda por apellidos" />
+					<p:autoComplete id="matricula"
+						emptyMessage="No existen estudiantes" size="50"
+						value="#{registroObservacionController.observacion.matricula}"
+						converter="matriculaConverter" var="matricula"
+						itemLabel="#{matricula.estudiante.apellidos} #{matricula.estudiante.nombres}"
+						itemValue="#{matricula}"
+						completeMethod="#{registroObservacionController.completarMatriculas}"
+						effect="fade" forceSelection="true" />
+					<p:messages showIcon="false" autoUpdate="true" for="matricula" />
+					<p:outputLabel for="bloque" value="Bloque"></p:outputLabel>
+					<p:selectOneRadio id="bloque" converter="javax.faces.Integer"
+						requiredMessage="Campo requerido" required="true"
+						value="#{registroObservacionController.observacion.bloque}">
+						<f:selectItem itemValue="1" itemLabel="1"></f:selectItem>
+						<f:selectItem itemValue="2" itemLabel="2"></f:selectItem>
+						<f:selectItem itemValue="3" itemLabel="3"></f:selectItem>
+						<f:selectItem itemValue="4" itemLabel="4"></f:selectItem>
+						<f:selectItem itemValue="5" itemLabel="5"></f:selectItem>
+						<f:selectItem itemValue="6" itemLabel="6"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="numeroMatricula" />
+					<p:outputLabel for="fecha" value="Fecha: " />
+					<p:calendar id="fecha"
+						value="#{registroObservacionController.observacion.fecha}"
+						showOn="button" />
+					<p:messages showIcon="false" autoUpdate="true" for="fecha" />
+					<p:outputLabel for="observacion" value="Observación" />
+					<p:inputTextarea id="observacion" cols="50"
+						value="#{registroObservacionController.observacion.observacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="observacion" />
+					<p:commandButton value="Editar Observación"
+						update=":frmObservacion:tblDetalle"
+						oncomplete="PF('wdgEditar').hide();"
+						action="#{registroObservacionController.editar()}"></p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+

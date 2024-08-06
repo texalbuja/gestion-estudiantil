@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="514" pageHeight="842" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="2.7272727272727404"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" fontName="Arial" fontSize="9">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="matricula_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestionestudiantil\\gestion-estudiantil\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     area.`etiqueta` AS area_etiqueta,
+     area.`orden` AS area_orden,
+     area.`id` AS area_id,
+     matricula.`id` AS matricula_id
+FROM
+     `matricula` matricula INNER JOIN `paralelo` paralelo ON paralelo.`id` = matricula.`paralelo_id`
+     INNER JOIN `asignatura_dictada` asignatura_dictada ON paralelo.`id` = asignatura_dictada.`paralelo_id`
+     INNER JOIN `area` area ON area.`id` = asignatura_dictada.`area_id`
+WHERE
+     matricula.`id` = $P{matricula_id}
+     AND certificado_promocion = 'S'
+GROUP BY
+     area_id
+ORDER BY
+     area_orden ASC]]>
+	</queryString>
+	<field name="area_etiqueta" class="java.lang.String"/>
+	<field name="area_orden" class="java.lang.Double"/>
+	<field name="area_id" class="java.lang.Long"/>
+	<field name="matricula_id" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="44">
+			<staticText>
+				<reportElement style="Column header" x="303" y="14" width="49" height="30" uuid="4dd95e9c-f81b-4ba8-9bbc-561b41a94c4e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[CALIFICACIÓN CUANTITATIVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="352" y="14" width="162" height="30" uuid="684a864a-41d4-4887-8a6d-3ea464f515ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CALIFICACIÓN CUALITATIVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="303" y="0" width="211" height="14" uuid="4b99f2cc-9c18-4971-b693-4d05d8288cf4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PROMEDIO ANUAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="153" y="0" width="150" height="44" uuid="ceceb681-2d98-4097-b7fb-f4fb8b96db1b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ASIGNATURAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="153" height="44" uuid="ff08040a-3da9-47c4-beaf-301a22901dc5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ÁREAS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="0" width="153" height="16" forecolor="#000000" uuid="271780e2-60ff-432b-bd87-41bcb302b5a4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_etiqueta}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="153" y="0" width="361" height="16" uuid="7598e882-56c7-4890-b660-5c4f0e7a8fa3"/>
+				<subreportParameter name="area_id">
+					<subreportParameterExpression><![CDATA[$F{area_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="matricula_id">
+					<subreportParameterExpression><![CDATA[$F{matricula_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + File.separator + "24" + File.separator +"detalle_asignatura.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

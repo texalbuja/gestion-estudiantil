@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+			<li><a href="#{request.contextPath}/matriculacion/paralelo.jsf">#{grado.etiqueta}
+					- #{paralelo.etiqueta}</a></li>
+			<li class="active">#{proyectoEscolar.etiqueta}</li>
+		</ol>
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Listas de Estudiantes"  icon="ui-icon-print"
+						action="#{proyectoEscolarController.exportarReporte()}" />
+				</f:facet>
+			</p:toolbar>
+			<h3>Evaluaciones</h3>
+			<p:dataTable id="tblDetalleEvaluaciones"
+				value="#{proyectoEscolarController.gruposDeEvaluacion}"
+				var="grupoDeEvaluacion">
+				<p:column headerText="Nombre">
+					<h:outputText value="#{grupoDeEvaluacion.etiqueta}" />
+				</p:column>
+				<p:column headerText="Acciones">
+					<p:commandButton value="Seleccionar" icon="ui-icon-document"
+						action="#{proyectoEscolarController.seleccionarGrupoDeEvaluacion()}"
+						rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('4') || request.isUserInRole('7')}">
+						<f:setPropertyActionListener
+							target="#{proyectoEscolarController.grupoDeEvaluacion}"
+							value="#{grupoDeEvaluacion}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

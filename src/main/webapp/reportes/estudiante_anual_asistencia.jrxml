@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="libreta_q1_b1_comportamiento" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3ab47c2e-8311-4cc7-8149-eb2869b3b3ed">
+	<property name="ireport.zoom" value="8.954302432552403"/>
+	<property name="ireport.x" value="248"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="matricula_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bloque_1" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grupo_evaluacion_codigo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="periodo_lectivo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bloque_2" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bloque_3" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    grupo_de_evaluacion.`diasAsistidos` AS dias_asistidos,
+    (SELECT
+            COUNT(*)
+        FROM
+            asistencia
+        WHERE
+            asistencia.`estado` = 'J'
+                and asistencia.`tipo` = 'F'
+                and asistencia.matricula_id = $P{matricula_id}) as faltas_justificadas,
+ (SELECT
+            COUNT(*)
+        FROM
+            asistencia
+        WHERE
+            asistencia.`estado` = 'SJ'
+                and asistencia.`tipo` = 'F'
+                and asistencia.matricula_id = $P{matricula_id}) as faltas_injustificadas,
+(SELECT
+            COUNT(*)
+        FROM
+            asistencia
+        WHERE
+            asistencia.`estado` = 'J'
+                and asistencia.`tipo` = 'A'
+                and asistencia.matricula_id = $P{matricula_id}) as atrasos_justificados,
+(SELECT
+            COUNT(*)
+        FROM
+            asistencia
+        WHERE
+            asistencia.`estado` = 'SJ'
+                and asistencia.`tipo` = 'A'
+                and asistencia.matricula_id = $P{matricula_id}) as atrasos_injustificados
+
+FROM
+    `grupo_de_evaluacion` grupo_de_evaluacion
+WHERE
+    grupo_de_evaluacion.codigo = $P{grupo_evaluacion_codigo} AND
+	grupo_de_evaluacion.periodo_lectivo_id = $P{periodo_lectivo_id};]]>
+	</queryString>
+	<field name="dias_asistidos" class="java.lang.Integer"/>
+	<field name="faltas_justificadas" class="java.lang.Long"/>
+	<field name="faltas_injustificadas" class="java.lang.Long"/>
+	<field name="atrasos_justificados" class="java.lang.Long"/>
+	<field name="atrasos_injustificados" class="java.lang.Long"/>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="555" height="16" forecolor="#000000" uuid="51e4da5c-16e1-4d17-99f3-c7025663e09b"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Faltas Justificadas: " + $F{faltas_justificadas}+ " Faltas Injustificadas: " + $F{faltas_injustificadas}+ " Atrasos Justificados: " + $F{atrasos_justificados} + " Atrasos Injustificados: " + $F{atrasos_injustificados} +" Días Asistidos: " + ($F{dias_asistidos} != null ? $F{dias_asistidos} - $F{faltas_justificadas} - $F{faltas_injustificadas}  : "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

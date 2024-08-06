@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<h3>Matrícula</h3>
+
+		<p:panel header="Información General">
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Periodo Lectivo:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.grado.periodoLectivo.etiqueta}" />
+				<h:outputLabel value="Número de Matrícula: " />
+				<h:outputLabel
+					value="#{matriculaController.matricula.numeroMatricula}" />
+				<h:outputLabel value="Nivel de Educación:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.grado.grados.descripcionNivel}" />
+				<h:outputLabel value="Grado:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.grado.etiqueta}" />
+				<h:outputLabel value="Paralelo:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.paralelo.etiqueta}" />
+				<h:outputLabel value="Fecha:" />
+				<h:outputLabel value="#{matriculaController.matricula.fecha}" />
+				<h:outputLabel value="Estudiante:" />
+				<h:outputLabel
+					value="#{matriculaController.matricula.estudiante.apellidos} #{matriculaController.matricula.estudiante.nombres}" />
+				<h:outputLabel value="Observación:" />
+				<h:outputLabel value="#{matriculaController.matricula.observacion}" />
+
+			</h:panelGrid>
+		</p:panel>
+
+		<br />
+		<h3>Evaluaciones</h3>
+		<p:dataTable id="tblDetalleEvaluaciones"
+			value="#{matriculaController.gruposDeEvaluacion}"
+			var="grupoDeEvaluacion">
+			<p:column headerText="Nombre">
+				<h:outputText value="#{grupoDeEvaluacion.etiqueta}" />
+			</p:column>
+			<p:column headerText="Acciones">
+				<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+					action="#{matriculaController.seleccionarGrupoDeEvaluacion()}"
+					rendered="#{request.isUserInRole('3') || request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7')}">
+					<f:setPropertyActionListener
+						target="#{matriculaController.grupoDeEvaluacion}"
+						value="#{grupoDeEvaluacion}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

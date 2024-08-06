@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/evaluaciones.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					: #{periodoLectivo.secciones.descripcion}</a></li>
+
+
+			<li><a href="#{request.contextPath}/matriculacion/paralelo.jsf">
+					#{grado.etiqueta} - #{paralelo.etiqueta}</a></li>
+			<li class="active">#{asignatura.etiqueta}</li>
+		</ol>
+		<h:form
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('4') || request.isUserInRole('7')}">
+			<h3>Evaluaciones</h3>
+
+
+			<p:dataTable id="tblDetalle"
+				value="#{evaluacionAnualController.evaluaciones}"
+				var="evaluacionAsignatura" rowIndexVar="rowIndex">
+				<p:column headerText="Nómina">
+					<h:outputText
+						value="#{evaluacionAsignatura.informeAnual.matricula.estudiante.apellidos} #{evaluacionAsignatura.informeAnual.matricula.estudiante.nombres}" />
+				</p:column>
+				<p:column headerText="Quimestre 1">
+					<p:outputLabel value="#{evaluacionAsignatura.quimestre1Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Quimestre 2">
+					<p:outputLabel value="#{evaluacionAsignatura.quimestre2Nota}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Exámen Recuperación">
+					<p:outputLabel
+						value="#{evaluacionAsignatura.notaExamenRecuperacion}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Exámen Supletorio">
+					<p:outputLabel value="#{evaluacionAsignatura.notaExamenSupletorio}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Exámen Remedial">
+					<p:outputLabel value="#{evaluacionAsignatura.notaExamenRemedial}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Exámen Gracia">
+					<p:outputLabel value="#{evaluacionAsignatura.notaExamenGracia}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Evaluación Final">
+					<p:outputLabel value="#{evaluacionAsignatura.notaFinal}">
+						<f:convertNumber pattern="#0.00"></f:convertNumber>
+					</p:outputLabel>
+				</p:column>
+				<p:column headerText="Resultado">
+					<p:outputLabel value="#{evaluacionAsignatura.resultado}">
+					</p:outputLabel>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

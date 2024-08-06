@@ -1,0 +1,4 @@
+<jboss-web>
+    <security-domain>gestudSecurityDomain</security-domain>
+    <context-root>web</context-root>
+</jboss-web>

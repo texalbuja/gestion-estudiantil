@@ -1,0 +1,385 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li class="active">#{estudiante.apellidos} #{estudiante.nombres}</li>
+		</ol>
+		<h3>Actualización de datos</h3>
+		<h:panelGroup
+			rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('5') || request.isUserInRole('4') || request.isUserInRole('6') || request.isUserInRole('8') || request.isUserInRole('9')}">
+			<h:form>
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="Certificados de Matrícula"
+							icon="ui-icon-print"
+							action="#{actualizarDatosController.exportarReporteDatosEstudiante()}" />
+					</f:facet>
+				</p:toolbar>
+			</h:form>
+
+		</h:panelGroup>
+		<h:form>
+			<p:panel header="Información General">
+				<p:graphicImage value="#{imagenUtil.image}" cache="false"
+					width="98px" height="128px">
+					<f:param name="id" value="#{estudiante.imagen.id}" />
+				</p:graphicImage>
+				<h:panelGrid columns="3">
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:outputLabel id="identificacion"
+						value="#{actualizarDatosController.estudiante.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:outputLabel id="apellidos"
+						value="#{actualizarDatosController.estudiante.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="nombres" value="Nombres" />
+					<p:outputLabel id="nombres"
+						value="#{actualizarDatosController.estudiante.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<p:outputLabel for="correo" value="Correo" />
+					<p:inputText id="correo" requiredMessage="Campo requerido"
+						required="true"
+						value="#{actualizarDatosController.estudiante.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:outputLabel for="sexo" value="Sexo " />
+					<p:selectOneRadio id="sexo" requiredMessage="Campo requerido"
+						required="true"
+						value="#{actualizarDatosController.estudiante.sexo}">
+						<f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="sexo" />
+
+					<p:outputLabel for="viveCon" value="Vive con" />
+					<p:inputText id="viveCon" requiredMessage="Campo requerido"
+						required="true"
+						value="#{actualizarDatosController.estudiante.viveCon}" />
+					<p:messages showIcon="false" autoUpdate="true" for="viveCon" />
+					<p:outputLabel value="Domicilio" />
+					<h:panelGrid id="domicilio" columns="8">
+						<p:inputText id="callePrincipal" required="true"
+							placeholder="Principal" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.domicilio.callePrincipal}" />
+
+						<p:inputText id="numero" required="true" placeholder="Número"
+							style="width:75px;" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.domicilio.numero}" />
+
+						<p:inputText id="calleSecundaria" required="true"
+							placeholder="Secundaria" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.domicilio.calleSecundaria}" />
+
+						<p:inputText id="referencia" required="true"
+							placeholder="Referencia / Sector"
+							requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.domicilio.referencia}" />
+					</h:panelGrid>
+					<p:messages showIcon="false" autoUpdate="true" for="domicilio" />
+					<p:outputLabel for="codigoUnicoElectricoNacional"
+						value="Código Único Eléctrico Nacional (Buscar en la planilla de luz)" />
+					<p:inputText id="codigoUnicoElectricoNacional"
+						value="#{actualizarDatosController.estudiante.codigoUnicoElectricoNacional}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="codigoUnicoElectricoNacional" />
+					<p:outputLabel for="plantelDeProcedencia"
+						value="Plantel de procedencia" />
+					<p:inputText id="plantelDeProcedencia"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.estudiante.plantelDeProcedencia}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="plantelDeProcedencia" />
+
+					<p:outputLabel for="seccion" value="Sección: "></p:outputLabel>
+					<p:selectOneRadio id="seccion" requiredMessage="Campo requerido"
+						required="true"
+						value="#{actualizarDatosController.estudiante.seccion}">
+						<f:selectItems value="#{actualizarDatosController.secciones}"
+							itemLabel="#{seccion.descripcion}" itemValue="#{seccion.codigo}"
+							var="seccion"></f:selectItems>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="seccion" />
+					<p:outputLabel for="refugiado" value="Refugiado " />
+					<p:selectOneRadio id="refugiado" requiredMessage="Campo requerido"
+						required="true"
+						value="#{actualizarDatosController.estudiante.refugiado}">
+						<f:selectItem itemValue="Si" itemLabel="Si"></f:selectItem>
+						<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="refugiado" />
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<p:panel header="Información de Nacimiento">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="somPais" value="Pais" />
+					<p:selectOneMenu id="somPais"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{actualizarDatosController.estudiante.pais}">
+						<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+						<f:selectItems value="#{actualizarDatosController.paises}"
+							itemLabel="#{pais.etiqueta}" itemValue="#{pais.valor}" var="pais"></f:selectItems>
+						<p:ajax update="somProvincia, somCanton, somParroquia"
+							process="@this"
+							listener="#{actualizarDatosController.obtenerProvincias()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somProvincia" />
+					<p:outputLabel for="somProvincia" value="Provincia" />
+					<p:selectOneMenu id="somProvincia"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{actualizarDatosController.estudiante.provincia}">
+						<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+						<f:selectItems value="#{actualizarDatosController.provincias}"
+							itemLabel="#{provincia.etiqueta}" itemValue="#{provincia.valor}"
+							var="provincia"></f:selectItems>
+						<p:ajax update="somCanton, somParroquia" process="@this"
+							listener="#{actualizarDatosController.obtenerCantones()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somProvincia" />
+					<p:outputLabel for="somCanton" value="Cantón" />
+					<p:selectOneMenu id="somCanton"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{actualizarDatosController.estudiante.canton}">
+						<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+						<f:selectItems value="#{actualizarDatosController.cantones}"
+							itemLabel="#{canton.etiqueta}" itemValue="#{canton.valor}"
+							var="canton"></f:selectItems>
+						<p:ajax update="somParroquia" process="@this"
+							listener="#{actualizarDatosController.obtenerParroquias()}"></p:ajax>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somCanton" />
+					<p:outputLabel for="somParroquia" value="Parroquia" />
+					<p:selectOneMenu id="somParroquia"
+						converter="omnifaces.SelectItemsConverter"
+						value="#{actualizarDatosController.estudiante.parroquia}">
+						<f:selectItem itemValue="#{null}" itemLabel="Seleccione" />
+						<f:selectItems value="#{actualizarDatosController.parroquias}"
+							itemLabel="#{parroquia.etiqueta}" itemValue="#{parroquia.valor}"
+							var="parroquia"></f:selectItems>
+					</p:selectOneMenu>
+					<p:messages showIcon="false" autoUpdate="true" for="somParroquia" />
+
+					<p:outputLabel for="fechaNacimiento" value="Fecha de Nacimiento" />
+					<p:calendar id="fechaNacimiento" required="true" locale="es"
+						requiredMessage="Campo requerido" showOn="button"
+						value="#{actualizarDatosController.estudiante.fechaNacimiento}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="fechaNacimiento" />
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<p:panel header="Información del Representante Principal">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="parentescoPrincipal" value="Parentesco " />
+					<p:selectOneRadio id="parentescoPrincipal"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.parentescoPrincipal}">
+						<f:selectItems
+							value="#{actualizarDatosController.parentescosPrincipal}"
+							itemLabel="#{parentesco}" itemValue="#{parentesco}"
+							var="parentesco"></f:selectItems>
+						<p:ajax event="change" update="parentescoAlterno"
+							listener="#{actualizarDatosController.removerAlterno()}"></p:ajax>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="parentescoPrincipal" />
+					<p:outputLabel for="identificacionMadre" value="Identificación" />
+					<p:inputText id="identificacionMadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.madre.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="identificacionMadre" />
+
+					<p:outputLabel for="nombresMadre" value="Nombres" />
+					<p:inputText id="nombresMadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.madre.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombresMadre" />
+
+					<p:outputLabel for="apellidosMadre" value="Apellidos" />
+					<p:inputText id="apellidosMadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.madre.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidosMadre" />
+
+					<p:outputLabel for="ocupacionMadre" value="Tit/Ocu/Pro" />
+					<p:inputText id="ocupacionMadre" required="true"
+						requiredMessage="Campo requerido"
+						placeholder="Título, Profesión, Ocupación"
+						value="#{actualizarDatosController.estudiante.madre.ocupacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="ocupacionMadre" />
+
+					<p:outputLabel value="Domicilio" />
+					<h:panelGrid id="domicilioMadre" columns="8">
+						<p:inputText id="callePrincipalMadre" required="true"
+							placeholder="Principal" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.madre.domicilio.callePrincipal}" />
+
+						<p:inputText id="numeroMadre" required="true" placeholder="Número"
+							style="width:75px;" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.madre.domicilio.numero}" />
+
+						<p:inputText id="calleSecundariaMadre" required="true"
+							placeholder="Secundaria" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.madre.domicilio.calleSecundaria}" />
+
+						<p:inputText id="referenciaMadre" required="true"
+							placeholder="Referencia / Sector"
+							requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.madre.domicilio.referencia}" />
+
+					</h:panelGrid>
+					<p:messages showIcon="false" autoUpdate="true" for="domicilioMadre" />
+					<p:outputLabel value="Teléfonos" />
+					<h:panelGrid columns="3">
+						<p:inputText id="tlfDomicilioMadre" style="width:125px;"
+							placeholder="Domicilio"
+							value="#{actualizarDatosController.estudiante.madre.telefonoDomicilio}" />
+
+						<p:inputText id="tlfTrabajoMadre" placeholder="Trabajo"
+							style="width:125px;"
+							value="#{actualizarDatosController.estudiante.madre.telefonoTrabajo}" />
+
+						<p:inputText id="tlfCelularMadre" style="width:125px;"
+							placeholder="Celular"
+							value="#{actualizarDatosController.estudiante.madre.telefonoCelular}" />
+					</h:panelGrid>
+					<p:messages showIcon="false" autoUpdate="true" for="domicilioMadre" />
+
+					<p:outputLabel for="correoMadre" value="Correo" />
+					<p:inputText id="correoMadre"
+						value="#{actualizarDatosController.estudiante.madre.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correoMadre" />
+
+					<p:outputLabel for="nacionalidadMadre" value="Nacionalidad" />
+					<p:inputText id="nacionalidadMadre"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.estudiante.madre.nacionalidad}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="nacionalidadMadre" />
+
+
+					<p:outputLabel for="refugiadoMadre" value="Refugiado " />
+					<p:selectOneRadio id="refugiadoMadre"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.estudiante.madre.refugiado}">
+						<f:selectItem itemValue="Si" itemLabel="Si"></f:selectItem>
+						<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="refugiadoMadre" />
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<p:panel header="Información del Representante Alterno">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="parentescoAlterno" value="Parentesco " />
+					<p:selectOneRadio id="parentescoAlterno"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.parentescoAlterno}">
+						<f:selectItems
+							value="#{actualizarDatosController.parentescosAlterno}"
+							itemLabel="#{parentesco}" itemValue="#{parentesco}"
+							var="parentesco"></f:selectItems>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="parentescoAlterno" />
+					<p:outputLabel for="identificacionPadre" value="Identificación" />
+					<p:inputText id="identificacionPadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.padre.identificacion}">
+					</p:inputText>
+					<p:messages showIcon="false" autoUpdate="true"
+						for="identificacionPadre" />
+
+					<p:outputLabel for="nombresPadre" value="Nombres" />
+					<p:inputText id="nombresPadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.padre.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombresPadre" />
+
+					<p:outputLabel for="apellidosPadre" value="Apellidos" />
+					<p:inputText id="apellidosPadre" required="true"
+						requiredMessage="Campo requerido"
+						value="#{actualizarDatosController.estudiante.padre.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidosPadre" />
+
+					<p:outputLabel for="ocupacionPadre" value="Tit/Pro/Ocu" />
+					<p:inputText id="ocupacionPadre" required="true"
+						requiredMessage="Campo requerido"
+						placeholder="Título, Profesión, Ocupación"
+						value="#{actualizarDatosController.estudiante.padre.ocupacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="ocupacionPadre" />
+
+					<p:outputLabel value="Domicilio" />
+					<h:panelGrid id="domicilioPadre" columns="8">
+						<p:inputText id="callePrincipalPadre" required="true"
+							placeholder="Principal" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.padre.domicilio.callePrincipal}" />
+
+						<p:inputText id="numeroPadre" required="true" placeholder="Número"
+							style="width:75px;" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.padre.domicilio.numero}" />
+
+						<p:inputText id="calleSecundariaPadre" required="true"
+							placeholder="Secundaria" requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.padre.domicilio.calleSecundaria}" />
+
+						<p:inputText id="referenciaPadre" required="true"
+							placeholder="Referencia / Sector"
+							requiredMessage="Campo requerido"
+							value="#{actualizarDatosController.estudiante.padre.domicilio.referencia}" />
+
+					</h:panelGrid>
+					<p:messages showIcon="false" autoUpdate="true" for="domicilioPadre" />
+					<p:outputLabel value="Teléfonos" />
+					<h:panelGrid columns="3">
+						<p:inputText id="tlfDomicilioPadre" style="width:125px;"
+							placeholder="Domicilio"
+							value="#{actualizarDatosController.estudiante.padre.telefonoDomicilio}" />
+
+						<p:inputText id="tlfTrabajoPadre" placeholder="Trabajo"
+							style="width:125px;"
+							value="#{actualizarDatosController.estudiante.padre.telefonoTrabajo}" />
+
+						<p:inputText id="tlfCelularPadre" style="width:125px;"
+							placeholder="Celular"
+							value="#{actualizarDatosController.estudiante.padre.telefonoCelular}" />
+					</h:panelGrid>
+					<p:messages showIcon="false" autoUpdate="true" for="domicilioPadre" />
+
+					<p:outputLabel for="correoPadre" value="Correo" />
+					<p:inputText id="correoPadre"
+						value="#{actualizarDatosController.estudiante.padre.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correoPadre" />
+
+					<p:outputLabel for="nacionalidadPadre" value="Nacionalidad" />
+					<p:inputText id="nacionalidadPadre"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.estudiante.padre.nacionalidad}" />
+					<p:messages showIcon="false" autoUpdate="true"
+						for="nacionalidadPadre" />
+
+
+					<p:outputLabel for="refugiadoPadre" value="Refugiado " />
+					<p:selectOneRadio id="refugiadoPadre"
+						requiredMessage="Campo requerido" required="true"
+						value="#{actualizarDatosController.estudiante.padre.refugiado}">
+						<f:selectItem itemValue="Si" itemLabel="Si"></f:selectItem>
+						<f:selectItem itemValue="No" itemLabel="No"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="refugiadoPadre" />
+					<p:commandButton value="Actualizar Datos" update="@form"
+						actionListener="#{actualizarDatosController.actualizarDatos()}"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+

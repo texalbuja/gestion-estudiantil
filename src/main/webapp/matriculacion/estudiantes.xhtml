@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+
+	<ui:define name="content">
+
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li class="active"><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+
+		</ol>
+		<h:form id="frmEstudiantes"
+			rendered="#{request.isUserInRole('5') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('1') || request.isUserInRole('6') || request.isUserInRole('9')}">
+			<p:panel header="Búsqueda de Estudiante">
+				<h:panelGrid columns="3">
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:inputText id="apellidos"
+						value="#{estudiantesController.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:inputText id="identificacion"
+						value="#{estudiantesController.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:commandButton value="Consultar" update="@form"
+						action="#{estudiantesController.consultar}"></p:commandButton>
+				</h:panelGrid>
+			</p:panel>
+
+			<h:panelGroup>
+
+				<h3>Estudiantes</h3>
+				<p:dataTable id="tblDetalleMatriculados" paginator="true"
+					paginatorPosition="bottom" rows="10"
+					value="#{estudiantesController.estudiantes}" var="estudiante">
+					<p:column headerText="Identificación">
+						<h:outputText value="#{estudiante.identificacion}" />
+					</p:column>
+					<p:column headerText="Estudiante">
+						<h:outputText
+							value="#{estudiante.apellidos} #{estudiante.nombres}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						<p:commandButton value="Seleccionar" icon="ui-icon-folder-open"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2') || request.isUserInRole('7') || request.isUserInRole('6') || request.isUserInRole('9')}"
+							action="#{estudiantesController.seleccionarEstudiante()}">
+							<f:setPropertyActionListener
+								target="#{estudiantesController.estudiante}"
+								value="#{estudiante}" />
+						</p:commandButton>
+						<p:commandButton value="Editar" icon="ui-icon-pencil"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7')}"
+							update=":frmEditar:wdgEditar"
+							oncomplete="PF('wdgEditar').show();">
+							<f:setPropertyActionListener
+								target="#{estudiantesController.estudiante}"
+								value="#{estudiante}" />
+						</p:commandButton>
+						<p:commandButton value="Actualizar Datos"
+							rendered="#{request.isUserInRole('1') || request.isUserInRole('2')  || request.isUserInRole('7') || request.isUserInRole('4')}"
+							icon="ui-icon-folder-open"
+							action="#{estudiantesController.actualizarDatosEstudiante()}">
+							<f:setPropertyActionListener
+								target="#{estudiantesController.estudiante}"
+								value="#{estudiante}" />
+						</p:commandButton>
+						<p:commandButton value="Eliminar" icon="ui-icon-trash"
+							rendered="#{request.isUserInRole('1')}"
+							update=":frmEliminar:wdgEliminar"
+							oncomplete="PF('wdgEliminar').show();">
+							<f:setPropertyActionListener
+								target="#{estudiantesController.estudiante}"
+								value="#{estudiante}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+
+		</h:form>
+		<h:form id="frmEditar" enctype="multipart/form-data">
+			<p:dialog header="Editar Estudiante" id="wdgEditar"
+				widgetVar="wdgEditar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="3">
+					<p:outputLabel for="identificacion" value="Identificación" />
+					<p:inputText id="identificacion" required="true"
+						requiredMessage="Campo requerido"
+						value="#{estudiantesController.estudiante.identificacion}" />
+					<p:messages showIcon="false" autoUpdate="true" for="identificacion" />
+					<p:outputLabel for="apellidos" value="Apellidos" />
+					<p:inputText id="apellidos" required="true"
+						requiredMessage="Campo requerido"
+						value="#{estudiantesController.estudiante.apellidos}" />
+					<p:messages showIcon="false" autoUpdate="true" for="apellidos" />
+					<p:outputLabel for="nombres" value="Nombres" />
+					<p:inputText id="nombres" requiredMessage="Campo requerido"
+						required="true"
+						value="#{estudiantesController.estudiante.nombres}" />
+					<p:messages showIcon="false" autoUpdate="true" for="nombres" />
+					<p:outputLabel for="correo" value="Correo" />
+					<p:inputText id="correo" requiredMessage="Campo requerido"
+						required="true" value="#{estudiantesController.estudiante.correo}" />
+					<p:messages showIcon="false" autoUpdate="true" for="correo" />
+					<p:outputLabel for="sexo" value="Sexo " />
+					<p:selectOneRadio id="sexo" requiredMessage="Campo requerido"
+						required="true" value="#{estudiantesController.estudiante.sexo}">
+						<f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+						<f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+					</p:selectOneRadio>
+					<p:messages showIcon="false" autoUpdate="true" for="sexo" />
+				</h:panelGrid>
+				<p:commandButton value="Guardar" ajax="false" update="tblDetalle"
+					action="#{estudiantesController.editarEstudiante}" />
+			</p:dialog>
+		</h:form>
+		<h:form id="frmEliminar">
+			<p:dialog header="Eliminar Estudiante" id="wdgEliminar"
+				widgetVar="wdgEliminar" draggable="false" resizable="false"
+				modal="true">
+				<p:messages id="messages" showDetail="true" />
+				<h:panelGrid columns="1" cellpadding="5">
+					<p:outputLabel
+						value="Seguro que desea eliminar el estudiante: #{estudiantesController.estudiante.apellidos} #{estudiantesController.estudiante.nombres}?">
+					</p:outputLabel>
+				</h:panelGrid>
+				<p:commandButton value="Aceptar" ajax="false" update="tblDetalle"
+					action="#{estudiantesController.eliminarEstudiante}" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

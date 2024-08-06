@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" template="/plantillas/comun.xhtml">
+	<ui:define name="content">
+		<ol class="breadcrumb">
+			<li><a href="#{request.contextPath}/resumen.jsf">Inicio</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/institucion.jsf">#{institucion.nombre}</a></li>
+			<li><a
+				href="#{request.contextPath}/matriculacion/periodoLectivo.jsf">#{periodoLectivo.etiqueta}
+					- #{periodoLectivo.secciones.descripcion}</a></li>
+			<li class="active">Consulta de Observaciones</li>
+		</ol>
+		<h3>Consulta de observaciones</h3>
+
+		<h:panelGroup>
+			<h3>Observaciones</h3>
+			<p:dataTable id="tblDetalle"
+				value="#{observacionesController.observaciones}" var="observacion">
+				<p:column headerText="Bloque">
+					<h:outputText value="#{observacion.bloque}" />
+				</p:column>
+				<p:column headerText="Fecha">
+					<h:outputText value="#{observacion.fecha}" />
+				</p:column>
+				<p:column headerText="Observacion">
+					<h:outputText value="#{observacion.observacion}" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>
+

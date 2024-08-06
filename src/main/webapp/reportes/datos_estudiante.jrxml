@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="datos_estudiante" pageWidth="2000" pageHeight="595" orientation="Landscape" columnWidth="1960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="372"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="12" isBold="true" pdfFontName="Helvetica">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="12">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true" fontName="Arial" fontSize="10"/>
+	<parameter name="periodo_lectivo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("3", 10)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     institucion.`nombre` AS institucion_nombre,
+     periodo_lectivo.`etiqueta` AS periodo_lectivo_etiqueta,
+     grado.`etiqueta` AS grado_etiqueta,
+     paralelo.`id` AS paralelo_id,
+     paralelo.`etiqueta` AS paralelo_etiqueta,
+     matricula.`numero_matricula` AS matricula_numero_matricula,
+     estudiante.`apellidos` AS estudiante_apellidos,
+     estudiante.`nombres` AS estudiante_nombres,
+     estudiante.`identificacion` AS estudiante_identificacion,
+     estudiante.`correo` AS estudiante_correo,
+     estudiante.`vive_con` AS estudiante_vive_con,
+     estudiante.`plantel_de_procedencia` AS estudiante_plantel_de_procedencia,
+     direccion_estudiante.`calle_principal` AS direccion_estudiante_calle_principal,
+     direccion_estudiante.`calle_secundaria` AS direccion_estudiante_calle_secundaria,
+     direccion_estudiante.`numero` AS direccion_estudiante_numero,
+     direccion_estudiante.`referencia` AS direccion_estudiante_referencia,
+     periodo_lectivo.`seccion` AS periodo_lectivo_seccion,
+     paralelo.`especialidad` AS paralelo_especialidad,
+     estudiante.`fecha_nacimiento` AS estudiante_fecha_nacimiento,
+     representante_principal.`apellidos` AS representante_principal_apellidos,
+     representante_principal.`nombres` AS representante_principal_nombres,
+     representante_principal.`identificacion` AS representante_principal_identificacion,
+     representante_principal.`parentesco` AS contacto_parentesco,
+     representante_principal.`telefono_celular` AS representante_principal_telefono_celular,
+     representante_principal.`telefono_domicilio` AS representante_principal_telefono_domicilio,
+     representante_principal.`telefono_trabajo` AS representante_principal_telefono_trabajo,
+     representante_principal.`parentesco` AS representante_principal_parentesco,
+     representante_principal.`ocupacion` AS representante_principal_ocupacion,
+     representante_principal.`correo` AS representante_principal_correo,
+     representante_principal.`nacionalidad` AS representante_principal_nacionalidad,
+     direccion_representante_principal.`calle_principal` AS direccion_representante_principal_calle_principal,
+     direccion_representante_principal.`calle_secundaria` AS direccion_representante_principal_calle_secundaria,
+     direccion_representante_principal.`numero` AS direccion_representante_principal_numero,
+     direccion_representante_principal.`referencia` AS direccion_representante_principal_referencia,
+     representante_alterno.`apellidos` AS representante_alterno_apellidos,
+     representante_alterno.`nombres` AS representante_alterno_nombres,
+     representante_alterno.`identificacion` AS representante_alterno_identificacion,
+     representante_alterno.`parentesco` AS representante_alterno_parentesco,
+     representante_alterno.`telefono_celular` AS representante_alterno_telefono_celular,
+     representante_alterno.`telefono_domicilio` AS representante_alterno_telefono_domicilio,
+     representante_alterno.`telefono_trabajo` AS representante_alterno_telefono_trabajo,
+	 representante_alterno.`parentesco` AS representante_alterno_parentesco,
+     representante_alterno.`ocupacion` AS representante_alterno_ocupacion,
+     representante_alterno.`correo` AS representante_alterno_correo,
+     representante_alterno.`nacionalidad` AS representante_alterno_nacionalidad,
+     direccion_representante_alterno.`calle_principal` AS direccion_representante_alterno_calle_principal,
+     direccion_representante_alterno.`calle_secundaria` AS direccion_representante_alterno_calle_secundaria,
+     direccion_representante_alterno.`numero` AS direccion_representante_alterno_numero,
+     direccion_representante_alterno.`referencia` AS direccion_representante_alterno_referencia,
+     grado.`grado` AS grado_grado,
+     estudiante.`nacionalidad` AS estudiante_nacionalidad,
+     estudiante.`pais` AS estudiante_pais,
+     estudiante.`refugiado` AS estudiante_refugiado,
+     estudiante.`seccion` AS estudiante_seccion,
+     estudiante.`sexo` AS estudiante_sexo,
+     estudiante.`domicilio_id` AS estudiante_domicilio_id,
+     estudiante.`institucion_id` AS estudiante_institucion_id,
+     estudiante.`imagen_id` AS estudiante_imagen_id,
+     estudiante.`madre_id` AS estudiante_madre_id,
+     estudiante.`padre_id` AS estudiante_padre_id,
+     estudiante.`usuario_id` AS estudiante_usuario_id,
+     estudiante.`codigo_unico_electrico_nacional` AS estudiante_codigo_unico_electrico_nacional,
+     provincia.etiqueta AS estudiante_provincia,
+     canton.etiqueta AS estudiante_canton,
+     parroquia.etiqueta AS estudiante_parroquia
+FROM
+     `institucion` institucion INNER JOIN `periodo_lectivo` periodo_lectivo ON institucion.`id` = periodo_lectivo.`institucion_id`
+     INNER JOIN `grado` grado ON periodo_lectivo.`id` = grado.`periodo_lectivo_id`
+     INNER JOIN `paralelo` paralelo ON grado.`id` = paralelo.`grado_id`
+     INNER JOIN `matricula` matricula ON paralelo.`id` = matricula.`paralelo_id`
+     INNER JOIN `estudiante` estudiante ON matricula.`estudiante_id` = estudiante.`id`
+     LEFT JOIN `direccion` direccion_estudiante ON estudiante.`domicilio_id` = direccion_estudiante.`id`
+     LEFT JOIN `contacto` representante_principal ON estudiante.`madre_id` = representante_principal.`id`
+     LEFT JOIN `contacto` representante_alterno ON estudiante.`padre_id` = representante_alterno.`id`
+     LEFT JOIN `direccion` direccion_representante_alterno ON representante_alterno.`domicilio_id` = direccion_representante_alterno.`id`
+     LEFT JOIN `direccion` direccion_representante_principal ON representante_principal.`domicilio_id` = direccion_representante_principal.`id`
+    LEFT JOIN `catalogo` provincia ON `estudiante`.provincia = provincia.valor
+    LEFT JOIN `catalogo` canton ON `estudiante`.canton = canton.valor
+    LEFT JOIN `catalogo` parroquia ON `estudiante`.parroquia = parroquia.valor
+WHERE
+     periodo_lectivo.`id` = $P{periodo_lectivo_id}
+ORDER BY
+     grado_grado ASC,
+     paralelo_etiqueta ASC,
+     estudiante_apellidos ASC,
+     estudiante_nombres ASC]]>
+	</queryString>
+	<field name="institucion_nombre" class="java.lang.String"/>
+	<field name="periodo_lectivo_etiqueta" class="java.lang.String"/>
+	<field name="grado_etiqueta" class="java.lang.String"/>
+	<field name="paralelo_id" class="java.lang.Long"/>
+	<field name="paralelo_etiqueta" class="java.lang.String"/>
+	<field name="matricula_numero_matricula" class="java.lang.String"/>
+	<field name="estudiante_apellidos" class="java.lang.String"/>
+	<field name="estudiante_nombres" class="java.lang.String"/>
+	<field name="estudiante_identificacion" class="java.lang.String"/>
+	<field name="estudiante_correo" class="java.lang.String"/>
+	<field name="estudiante_vive_con" class="java.lang.String"/>
+	<field name="estudiante_plantel_de_procedencia" class="java.lang.String"/>
+	<field name="direccion_estudiante_calle_principal" class="java.lang.String"/>
+	<field name="direccion_estudiante_calle_secundaria" class="java.lang.String"/>
+	<field name="direccion_estudiante_numero" class="java.lang.String"/>
+	<field name="direccion_estudiante_referencia" class="java.lang.String"/>
+	<field name="periodo_lectivo_seccion" class="java.lang.String"/>
+	<field name="paralelo_especialidad" class="java.lang.String"/>
+	<field name="estudiante_fecha_nacimiento" class="java.sql.Date"/>
+	<field name="representante_principal_apellidos" class="java.lang.String"/>
+	<field name="representante_principal_nombres" class="java.lang.String"/>
+	<field name="representante_principal_identificacion" class="java.lang.String"/>
+	<field name="contacto_parentesco" class="java.lang.String"/>
+	<field name="representante_principal_telefono_celular" class="java.lang.String"/>
+	<field name="representante_principal_telefono_domicilio" class="java.lang.String"/>
+	<field name="representante_principal_telefono_trabajo" class="java.lang.String"/>
+	<field name="representante_principal_parentesco" class="java.lang.String"/>
+	<field name="representante_principal_ocupacion" class="java.lang.String"/>
+	<field name="representante_principal_correo" class="java.lang.String"/>
+	<field name="representante_principal_nacionalidad" class="java.lang.String"/>
+	<field name="direccion_representante_principal_calle_principal" class="java.lang.String"/>
+	<field name="direccion_representante_principal_calle_secundaria" class="java.lang.String"/>
+	<field name="direccion_representante_principal_numero" class="java.lang.String"/>
+	<field name="direccion_representante_principal_referencia" class="java.lang.String"/>
+	<field name="representante_alterno_apellidos" class="java.lang.String"/>
+	<field name="representante_alterno_nombres" class="java.lang.String"/>
+	<field name="representante_alterno_identificacion" class="java.lang.String"/>
+	<field name="representante_alterno_parentesco" class="java.lang.String"/>
+	<field name="representante_alterno_telefono_celular" class="java.lang.String"/>
+	<field name="representante_alterno_telefono_domicilio" class="java.lang.String"/>
+	<field name="representante_alterno_telefono_trabajo" class="java.lang.String"/>
+	<field name="representante_alterno_ocupacion" class="java.lang.String"/>
+	<field name="representante_alterno_correo" class="java.lang.String"/>
+	<field name="representante_alterno_nacionalidad" class="java.lang.String"/>
+	<field name="direccion_representante_alterno_calle_principal" class="java.lang.String"/>
+	<field name="direccion_representante_alterno_calle_secundaria" class="java.lang.String"/>
+	<field name="direccion_representante_alterno_numero" class="java.lang.String"/>
+	<field name="direccion_representante_alterno_referencia" class="java.lang.String"/>
+	<field name="grado_grado" class="java.lang.Integer"/>
+	<field name="estudiante_canton" class="java.lang.String"/>
+	<field name="estudiante_nacionalidad" class="java.lang.String"/>
+	<field name="estudiante_pais" class="java.lang.String"/>
+	<field name="estudiante_parroquia" class="java.lang.String"/>
+	<field name="estudiante_refugiado" class="java.lang.String"/>
+	<field name="estudiante_provincia" class="java.lang.String"/>
+	<field name="estudiante_seccion" class="java.lang.String"/>
+	<field name="estudiante_sexo" class="java.lang.String"/>
+	<field name="estudiante_domicilio_id" class="java.lang.Long"/>
+	<field name="estudiante_institucion_id" class="java.lang.Long"/>
+	<field name="estudiante_imagen_id" class="java.lang.Long"/>
+	<field name="estudiante_madre_id" class="java.lang.Long"/>
+	<field name="estudiante_padre_id" class="java.lang.Long"/>
+	<field name="estudiante_usuario_id" class="java.lang.Long"/>
+	<field name="estudiante_codigo_unico_electrico_nacional" class="java.lang.String"/>
+	<group name="paralelo" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{paralelo_id}]]></groupExpression>
+		<groupHeader>
+			<band height="62">
+				<staticText>
+					<reportElement style="Column header" x="16" y="48" width="57" height="14" forecolor="#000000" uuid="11e63ee9-ae76-4040-810b-f1ffcbfcb23d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[No. Matrícula]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="100" y="48" width="205" height="14" forecolor="#000000" uuid="33348257-2855-4204-a790-5bcdfe7b0ac6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Apellidos y Nombres]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="73" y="48" width="27" height="14" forecolor="#000000" uuid="569703ba-99bc-468f-a6ba-676be1d30ec1"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Identificación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1056" y="48" width="92" height="14" forecolor="#000000" uuid="6eaf82e0-7bb0-4106-9208-cac4826d630d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Representante Principal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1303" y="48" width="27" height="14" forecolor="#000000" uuid="6ed6e070-a38a-4030-a39e-4e550200fb81"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Celular]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1330" y="48" width="27" height="14" forecolor="#000000" uuid="c1cec2d0-dabc-43fb-814e-d99c168a2633"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Domicilio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1357" y="48" width="27" height="14" forecolor="#000000" uuid="b5b21827-c4a3-4172-b1e0-cb1006ed98ef"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Trabajo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="305" y="48" width="27" height="14" forecolor="#000000" uuid="558f8338-f578-42af-8069-e5cd1862e2c0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Correo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1254" y="48" width="49" height="14" forecolor="#000000" uuid="e60d89b7-4e63-4b84-b2f6-375a66d6abcd"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Identificación]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="SubTitle" x="0" y="16" width="1960" height="16" forecolor="#000000" uuid="19b7ee47-3745-428c-824d-f1de3a06a644"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{institucion_nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="0" y="0" width="1960" height="16" forecolor="#000000" uuid="b92920a1-fdde-443e-ac84-de8342087d98"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Año Lectivo :"+$F{periodo_lectivo_etiqueta}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="SubTitle" x="0" y="32" width="1960" height="16" forecolor="#000000" uuid="a942c0a4-33c9-4514-a011-a90eb13fb791"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Grado: " + $F{grado_etiqueta} + " - " + $F{paralelo_etiqueta}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="0" y="48" width="16" height="14" forecolor="#000000" uuid="bd1b1333-c780-4e52-ae60-c64cee79fc1a"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="332" y="48" width="27" height="14" forecolor="#000000" uuid="d0ee19ad-ddd0-4af3-bf66-4bf8c46b5b28"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Sexo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="386" y="48" width="76" height="14" forecolor="#000000" uuid="54076e92-9a6d-47df-a883-f064f6540d27"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Domicilio - Principal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="462" y="48" width="27" height="14" forecolor="#000000" uuid="4a1d0ada-39da-4db7-b81a-18b88e57c2d6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Número]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="359" y="48" width="27" height="14" forecolor="#000000" uuid="70cc2e44-8a67-40b6-a753-558f2e2c4910"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Vive con]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="489" y="48" width="72" height="14" forecolor="#000000" uuid="17a2fb65-f57f-4a8b-b9d7-70fa9ad8bf1d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Domicilio: Secundaria]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="561" y="48" width="72" height="14" forecolor="#000000" uuid="1436dc14-925e-4037-b0bf-dd7008d17081"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Referencia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="633" y="48" width="72" height="14" forecolor="#000000" uuid="cc0f6786-13b0-40e7-82d2-e4583d93eda1"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Cód. Un. Eléctrico]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="862" y="48" width="37" height="14" forecolor="#000000" uuid="2b27630a-77ae-4b63-9bda-126dd9d37e12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Cantón]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="971" y="48" width="85" height="14" forecolor="#000000" uuid="47b6e83d-f6a9-4d7d-b489-f688166b4ccd"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Fecha de Nacimiento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="705" y="48" width="30" height="14" forecolor="#000000" uuid="49e165e4-ff48-48fc-9764-18332e0ee483"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Plantel de prcedencia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="796" y="48" width="66" height="14" forecolor="#000000" uuid="a5bd1886-5350-4698-95ba-d0fafe77308c"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Provincia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="735" y="48" width="27" height="14" forecolor="#000000" uuid="598d6348-a64b-4958-a739-53a222e2cded"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Sección]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="762" y="48" width="34" height="14" forecolor="#000000" uuid="fc22c6f4-ba34-4e55-bec2-16127c14e5fb"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Refugiado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="899" y="48" width="72" height="14" forecolor="#000000" uuid="140afb3e-6af7-4f64-8cb9-aa1e5b3b6a7f"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Parroquia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1148" y="48" width="49" height="14" forecolor="#000000" uuid="9f37bc90-60fc-46aa-aaf0-67bdfdb2f7c7"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Parentezco]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1197" y="48" width="57" height="14" forecolor="#000000" uuid="0091afc2-0100-44dc-923a-62d79d4cb19c"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Ocupación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1582" y="48" width="49" height="14" forecolor="#000000" uuid="3e75ac8e-4338-4807-99b0-084f43b03647"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Identificación]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1384" y="48" width="92" height="14" forecolor="#000000" uuid="9d11aba2-50d7-4e83-8fba-31b5956e67c5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Representante Principal]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1685" y="48" width="27" height="14" forecolor="#000000" uuid="73fb0c3c-c254-4d7a-8f00-3d0c38751e71"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Trabajo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1631" y="48" width="27" height="14" forecolor="#000000" uuid="16f53ae2-a5b0-4e5a-9b5e-849cb740855a"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Celular]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1658" y="48" width="27" height="14" forecolor="#000000" uuid="239197e6-45af-4a1a-8715-afad76891421"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Domicilio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1476" y="48" width="49" height="14" forecolor="#000000" uuid="145fa223-43bb-41df-ba09-0813081076c4"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Parentezco]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="Column header" x="1525" y="48" width="57" height="14" forecolor="#000000" uuid="261ba904-c63d-4811-bdc4-64572bf87a01"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Ocupación]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="16" y="0" width="57" height="14" uuid="8b9e0bc5-dca2-4f8f-983a-00593526cf8c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricula_numero_matricula}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="100" y="0" width="205" height="14" uuid="d90cd84d-e03a-48f1-8c1c-29de2701d64c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_apellidos} + " "+ $F{estudiante_nombres}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="73" y="0" width="27" height="14" uuid="eb64a105-1ee1-4f27-8eae-763fe2768cca"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_identificacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1056" y="0" width="92" height="14" uuid="fe7872fd-09a1-43c9-9c97-bffbf4ade70f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{representante_principal_apellidos}!= null ? $F{representante_principal_apellidos} : " ") +" "+ ($F{representante_principal_nombres}!= null ? $F{representante_principal_nombres} : " ")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1303" y="0" width="27" height="14" uuid="b64ea319-b63b-49a8-8729-b5df7188f11a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_telefono_celular}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1330" y="0" width="27" height="14" uuid="79a52da6-0a03-4740-b0b6-f64f3be0a773"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_telefono_domicilio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1357" y="0" width="27" height="14" uuid="b883ec4f-2d29-4aa9-9016-1e638d200d59"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_telefono_trabajo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="305" y="0" width="27" height="14" uuid="82d8717d-8a4b-4e12-bdf0-2940742d81ef"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_correo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1254" y="0" width="49" height="14" uuid="dbe167ea-7dc2-4150-aa3f-ba3dd27c1ee4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_identificacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="16" height="14" uuid="1e891547-3bc6-407c-8a27-0ace1d474a51"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{paralelo_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="332" y="0" width="27" height="14" uuid="7683bc15-6b4b-489c-9fae-8905080fcf41"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_sexo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="462" y="0" width="27" height="14" uuid="e0418ae4-edc8-4b46-a9c9-ebc22e8763c2"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion_estudiante_numero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="386" y="0" width="76" height="14" uuid="f9358172-a6b8-4f17-ba3d-17308a6286cc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion_estudiante_calle_principal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="489" y="0" width="72" height="14" uuid="17dbe0cf-b11e-4c85-a485-827345870541"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion_estudiante_calle_secundaria}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="359" y="0" width="27" height="14" uuid="d067d26d-1547-4e6a-b149-35d8a0803f22"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_vive_con}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="561" y="0" width="72" height="14" uuid="1a831fd3-b24d-43c9-a55e-f6c13d95dafb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direccion_estudiante_referencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="633" y="0" width="72" height="14" uuid="21d97feb-de99-409e-84dc-ae1224f5db5b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_codigo_unico_electrico_nacional}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="705" y="0" width="30" height="14" uuid="58657c86-be58-4d73-aa5a-fe5a0d8b44b9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_plantel_de_procedencia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="735" y="0" width="27" height="14" uuid="a2de2a0c-9a13-4bc4-99ec-7917d58b6162"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{periodo_lectivo_seccion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="762" y="0" width="34" height="14" uuid="29cca432-747d-46d3-a7b5-a752e2b1479d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_refugiado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="796" y="0" width="66" height="14" uuid="2ee24734-6211-447f-a4a4-9e2cca927a28"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_provincia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="862" y="0" width="37" height="14" uuid="4fbdf206-41d3-40bc-b602-260b1e9e1464"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_canton}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="899" y="0" width="72" height="14" uuid="f177865b-e149-4cc5-b6aa-8fda2a6a8e3c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_parroquia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="971" y="0" width="85" height="14" uuid="f5a28018-ba5b-458a-a0d9-6a750aad2953"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_fecha_nacimiento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1148" y="0" width="49" height="14" uuid="5d85e8de-dbbf-4074-a222-4236c96783e0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_parentesco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1197" y="0" width="57" height="14" uuid="926f530d-6b62-4d8a-882d-a86c64f22dc3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_principal_ocupacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1525" y="0" width="57" height="14" uuid="483dade9-8ce0-49fb-88b1-95856d04cbf1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_ocupacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1476" y="0" width="49" height="14" uuid="6484f912-80ca-426e-96c9-85019fd676f8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_parentesco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1631" y="0" width="27" height="14" uuid="43923653-e86c-4fcd-91cf-3053a4ccf0dc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_telefono_celular}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1384" y="0" width="92" height="14" uuid="594df547-e270-4a38-9e39-3cf88c461ce0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{representante_alterno_apellidos}!= null ? $F{representante_alterno_apellidos} : " ") +" "+ ($F{representante_alterno_nombres}!= null ? $F{representante_alterno_nombres} : " ")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1582" y="0" width="49" height="14" uuid="236180ba-b35f-4efb-8191-2bee5f33df51"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_identificacion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1685" y="0" width="27" height="14" uuid="5f4b0b88-8041-4ed5-b046-924c471c95c5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_telefono_trabajo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Detail" x="1658" y="0" width="27" height="14" uuid="2a1d6a42-3bf2-4494-b305-2f5b14106764"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph tabStopWidth="1"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante_alterno_telefono_domicilio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

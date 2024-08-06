@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="555" pageHeight="822" columnWidth="535" leftMargin="20" rightMargin="0" topMargin="0" bottomMargin="0" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#666666"/>
+			<topPen lineWidth="1.0" lineColor="#666666"/>
+			<leftPen lineWidth="1.0" lineColor="#666666"/>
+			<bottomPen lineWidth="1.0" lineColor="#666666"/>
+			<rightPen lineWidth="1.0" lineColor="#666666"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#666666" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#666666"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#666666"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="paralelo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestionestudiantil\\gestion-estudiantil\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     institucion.`nombre` AS institucion_nombre,
+     periodo_lectivo.`etiqueta` AS periodo_lectivo_etiqueta,
+     periodo_lectivo.`id` AS periodo_lectivo_id,
+     periodo_lectivo.`seccion` AS periodo_lectivo_seccion,
+     grado.`grado` AS grado_grado,
+     grado.`etiqueta` AS grado_etiqueta,
+     paralelo.`etiqueta` AS paralelo_etiqueta,
+     paralelo.`folio` AS paralelo_folio,
+     estudiante.`apellidos` AS estudiante_apellidos,
+     estudiante.`nombres` AS estudiante_nombres,
+     estudiante.`identificacion` AS estudiante_identificacion,
+     matricula.`id` AS matricula_id,
+     matricula.`numero_matricula` AS matricula_numero_matricula,
+     docente.`apellidos` AS docente_apellidos,
+     docente.`nombres` AS docente_nombres,
+     docente.`apellidos` AS docente_apellidos,
+     docente.`nombres` AS docente_nombres
+FROM
+     `institucion` institucion INNER JOIN `periodo_lectivo` periodo_lectivo ON institucion.`id` = periodo_lectivo.`institucion_id`
+     INNER JOIN `imagen` imagen ON institucion.`imagen_id` = imagen.`id`
+     INNER JOIN `grado` grado ON periodo_lectivo.`id` = grado.`periodo_lectivo_id`
+     INNER JOIN `paralelo` paralelo ON grado.`id` = paralelo.`grado_id`
+     INNER JOIN `matricula` matricula ON paralelo.`id` = matricula.`paralelo_id`
+     INNER JOIN `docente` docente ON paralelo.`docente_id` = docente.`id`
+     INNER JOIN `estudiante` estudiante ON matricula.`estudiante_id` = estudiante.`id`
+WHERE
+     paralelo.`id` = $P{paralelo_id}
+ORDER BY
+     estudiante_apellidos ASC,
+     estudiante_nombres ASC]]>
+	</queryString>
+	<field name="institucion_nombre" class="java.lang.String"/>
+	<field name="periodo_lectivo_etiqueta" class="java.lang.String"/>
+	<field name="periodo_lectivo_id" class="java.lang.Long"/>
+	<field name="periodo_lectivo_seccion" class="java.lang.String"/>
+	<field name="grado_grado" class="java.lang.Integer"/>
+	<field name="grado_etiqueta" class="java.lang.String"/>
+	<field name="paralelo_etiqueta" class="java.lang.String"/>
+	<field name="paralelo_folio" class="java.lang.String"/>
+	<field name="estudiante_apellidos" class="java.lang.String"/>
+	<field name="estudiante_nombres" class="java.lang.String"/>
+	<field name="estudiante_identificacion" class="java.lang.String"/>
+	<field name="matricula_id" class="java.lang.Long"/>
+	<field name="matricula_numero_matricula" class="java.lang.String"/>
+	<field name="docente_apellidos" class="java.lang.String"/>
+	<field name="docente_nombres" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="90">
+			<textField>
+				<reportElement style="Column header" x="274" y="72" width="261" height="18" forecolor="#000000" uuid="0371a074-789f-44ce-beae-40f8efc18984"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PARALELO: " + $F{paralelo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="0" y="36" width="535" height="18" forecolor="#000000" uuid="b907b731-1e92-4211-ae7f-5fdeac5b32cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AÑO LECTIVO: "+$F{periodo_lectivo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="0" y="0" width="535" height="18" forecolor="#000000" uuid="eb189608-7de4-4b64-9feb-a3104eb1c96a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{institucion_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="0" y="54" width="535" height="18" forecolor="#000000" uuid="fb1fbeeb-7afe-4211-87e0-a53df01419f9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grado_etiqueta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="0" y="72" width="274" height="18" forecolor="#000000" uuid="5fd22c64-9169-4e88-a402-823f81cd0c47"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["JORNADA: " + ($F{periodo_lectivo_seccion}.equals("M") ? "MATUTINA" : "VESPERTINA")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="0" y="18" width="535" height="18" forecolor="#000000" uuid="bbf2fbe0-16ce-45ed-8cdc-43c9abdc3ecb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NÓMINA DE MATRICULADOS"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18">
+			<staticText>
+				<reportElement style="Column header" x="34" y="0" width="207" height="18" uuid="947c6569-1495-4dea-aed2-b1ca3b1f7ba2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[APELLIDOS Y NOMBRES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="34" height="18" uuid="4a6baa35-e796-4a62-9b9d-ab656f5528d5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[ORD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="312" y="0" width="71" height="18" uuid="b17928a1-a1d7-4c42-b516-f420de17d745"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[FOLIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="241" y="0" width="71" height="18" uuid="8ca06363-981c-4fd1-98b9-332ae9279c7e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[MATRÍCULA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="383" y="0" width="152" height="18" uuid="110c3e6c-b8b5-4262-82d7-a3392b1b196f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<text><![CDATA[OBSERVACIONES]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="34" y="0" width="207" height="18" uuid="0768ed8d-3f45-44da-97a2-460574ea6028"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{estudiante_apellidos} + " " + $F{estudiante_nombres}).toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="0" y="0" width="34" height="18" uuid="e448eefb-8f69-4d00-8957-b4c6c35626cf"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="241" y="0" width="71" height="18" uuid="97712b5a-ef0e-4a4a-864d-f4e706471e51"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricula_numero_matricula}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="312" y="0" width="71" height="18" uuid="fcc2f7e0-ff75-43ad-870a-859a863e109b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{paralelo_folio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Detail" stretchType="RelativeToBandHeight" x="383" y="0" width="152" height="18" uuid="71d7f527-15ca-4ebb-88b4-05e33f6372f3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

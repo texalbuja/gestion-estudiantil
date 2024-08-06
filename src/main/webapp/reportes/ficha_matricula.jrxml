@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report10" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="20" uuid="18e0dc67-c8c4-49a9-a7db-c30110c0e5e4">
+	<property name="ireport.zoom" value="1.6500000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="49"/>
+	<import value="net.sf.jasperreports.engine.util.JRLoader"/>
+	<import value="net.sf.jasperreports.engine.util.JRImageLoader"/>
+	<parameter name="paralelo_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[Long.parseLong("1", 10)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMAGE_DIR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Eduardo\\git\\gestion-estudiantil\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    institucion.nombre institucion_nombre,
+    imagen.bytes imagen_bytes,
+    institucion.direccion institucion_direccion,
+    periodo_lectivo.etiqueta periodo_lectivo_etiqueta,
+    grado.etiqueta grado_etiqueta,
+    grado.grado grado_grado,
+    paralelo.etiqueta paralelo_etiqueta,
+    paralelo.id paralelo_id,
+    matricula.fecha matricula_fecha,
+    matricula.numero_matricula matricula_numero_matricula,
+    estudiante.apellidos estudiante_apellidos,
+    estudiante.nombres estudiante_nombres,
+    estudiante.fecha_nacimiento estudiante_fecha_nacimiento,
+    estudiante.plantel_de_procedencia estudiante_plantel_de_procedencia,
+    estudiante.identificacion estudiante_identificacion,
+    estudiante.padre_id,
+    estudiante.madre_id,
+    domicilio_estudiante.calle_principal domicilio_estudiante_calle_principal,
+    domicilio_estudiante.numero domicilio_estudiante_numero,
+    domicilio_estudiante.calle_secundaria domicilio_estudiante_calle_secundaria,
+    domicilio_estudiante.referencia domicilio_estudiante_referencia,
+    parroquia.etiqueta parroquia_etiqueta,
+    grado.nombre_firmante_b nombre_firmante_b,
+    grado.cargo_firmante_b cargo_firmante_b,
+    representante.apellidos representante_apellidos,
+    representante.nombres representante_nombres
+FROM
+    periodo_lectivo
+        INNER JOIN
+    institucion ON periodo_lectivo.institucion_id = institucion.id
+        LEFT JOIN
+    imagen ON institucion.imagen_id = imagen.id
+        INNER JOIN
+    grado ON grado.periodo_lectivo_id = periodo_lectivo.id
+        INNER JOIN
+    paralelo ON paralelo.grado_id = grado.id
+        INNER JOIN
+    matricula ON matricula.paralelo_id = paralelo.id
+        INNER JOIN
+    estudiante ON matricula.estudiante_id = estudiante.id
+        LEFT JOIN
+    catalogo parroquia ON parroquia.valor = estudiante.parroquia
+        LEFT JOIN
+    direccion domicilio_estudiante ON estudiante.domicilio_id = domicilio_estudiante.id
+        LEFT JOIN
+    contacto representante ON representante.id = estudiante.madre_id
+WHERE
+     paralelo.id = $P{paralelo_id}
+ORDER BY
+     estudiante_apellidos ASC,
+     estudiante_nombres ASC]]>
+	</queryString>
+	<field name="institucion_nombre" class="java.lang.String"/>
+	<field name="imagen_bytes" class="java.io.InputStream"/>
+	<field name="institucion_direccion" class="java.lang.String"/>
+	<field name="periodo_lectivo_etiqueta" class="java.lang.String"/>
+	<field name="grado_etiqueta" class="java.lang.String"/>
+	<field name="grado_grado" class="java.lang.Integer"/>
+	<field name="paralelo_etiqueta" class="java.lang.String"/>
+	<field name="paralelo_id" class="java.lang.Long"/>
+	<field name="matricula_fecha" class="java.sql.Date"/>
+	<field name="matricula_numero_matricula" class="java.lang.String"/>
+	<field name="estudiante_apellidos" class="java.lang.String"/>
+	<field name="estudiante_nombres" class="java.lang.String"/>
+	<field name="estudiante_fecha_nacimiento" class="java.sql.Date"/>
+	<field name="estudiante_plantel_de_procedencia" class="java.lang.String"/>
+	<field name="estudiante_identificacion" class="java.lang.String"/>
+	<field name="padre_id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="madre_id" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="domicilio_estudiante_calle_principal" class="java.lang.String"/>
+	<field name="domicilio_estudiante_numero" class="java.lang.String"/>
+	<field name="domicilio_estudiante_calle_secundaria" class="java.lang.String"/>
+	<field name="domicilio_estudiante_referencia" class="java.lang.String"/>
+	<field name="parroquia_etiqueta" class="java.lang.String"/>
+	<field name="nombre_firmante_b" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cargo_firmante_b" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="representante_apellidos" class="java.lang.String"/>
+	<field name="representante_nombres" class="java.lang.String"/>
+	<group name="paralelo" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{paralelo_id}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="72">
+			<image>
+				<reportElement x="395" y="0" width="120" height="50" uuid="b4f673d8-e2bb-4dd2-87b8-1afcd8aaf8fb"/>
+				<imageExpression><![CDATA[$P{IMAGE_DIR}+ File.separator +"logo_ministerio.jpg"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="20" width="481" height="24" forecolor="#000000" uuid="eb189608-7de4-4b64-9feb-a3104eb1c96a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{institucion_nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="481" height="20" uuid="e7d9d2f4-cd1c-4d58-ada7-f7e333be84b9"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FICHA DE MATRICULA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="44" width="481" height="24" forecolor="#000000" uuid="0371a074-789f-44ce-beae-40f8efc18984"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periodo Lectivo: "+$F{periodo_lectivo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="false">
+				<reportElement x="0" y="0" width="72" height="72" forecolor="#FFFFFF" uuid="2b96f3eb-ebf8-4f39-b5e9-328c2645c2ed"/>
+				<imageExpression><![CDATA[JRImageLoader.loadImage((byte [ ] ) (JRLoader.loadBytes($F{imagen_bytes})))]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="730" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="13" width="99" height="24" uuid="496ab28c-44fd-49bd-8350-a65a8875c5a7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nivel de educación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="343" y="669" width="172" height="14" uuid="1455aac9-551b-40e2-87e8-82cb7a092b3e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nombre_firmante_b}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="99" y="13" width="200" height="24" forecolor="#000000" uuid="b5f9ba53-8d1a-40f3-9b19-fb6425356b5f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{grado_etiqueta} + " " + $F{paralelo_etiqueta}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="343" y="665" width="172" height="1" uuid="bc0051bd-d11b-46a0-82ee-2a0339d3229e"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="343" y="683" width="172" height="14" uuid="c6b14704-1e91-48b0-9c8e-a28e9f7d3538"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{cargo_firmante_b}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="187" width="515" height="168" uuid="08a366c0-560d-4a01-bb88-70dbcee18ec2"/>
+				<subreportParameter name="contacto_id">
+					<subreportParameterExpression><![CDATA[$F{madre_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + File.separator + "contacto.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="34" y="38" width="481" height="24" forecolor="#000000" uuid="b3404b1a-f541-4272-8441-24ea65cefc85"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{matricula_fecha} != null ? (new SimpleDateFormat("dd-MM-YYYY")).format($F{matricula_fecha}) : ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="38" width="34" height="24" uuid="a346501a-0536-4552-9b2f-5c629dabcf6b"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="63" width="128" height="24" uuid="bfa8d04b-88bf-4635-ba66-5aa6926c1d4c"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nombre del estudiante:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="128" y="63" width="387" height="24" forecolor="#000000" uuid="e4cb4a78-0a58-436f-93d0-26f36a609ba6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{estudiante_apellidos} != null ? $F{estudiante_apellidos} : "") + " " + ($F{estudiante_nombres} != null ? $F{estudiante_nombres} : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="88" width="59" height="24" uuid="b1cdee88-b7dc-49ab-8ea6-bb0ee88fa67d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Domicilio:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="59" y="88" width="456" height="24" forecolor="#000000" uuid="8f751728-5f5b-4b42-b2d2-4fb76bd826fb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{domicilio_estudiante_calle_principal} != null ? $F{domicilio_estudiante_calle_principal} : "") + " " + ($F{domicilio_estudiante_numero} != null ? $F{domicilio_estudiante_numero}: "") + " " + ($F{domicilio_estudiante_calle_secundaria} != null ? $F{domicilio_estudiante_calle_secundaria} : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="113" width="154" height="24" uuid="af2f7431-5ca0-4afb-ab48-3f3da65e4fa1"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Lugar y fecha de nacimiento:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="154" y="113" width="361" height="24" forecolor="#000000" uuid="3ee7a956-7454-413c-9efc-7723432faa77"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{parroquia_etiqueta} != null ? $F{parroquia_etiqueta} : "") + ", " + (new SimpleDateFormat("d 'de' MMMMM 'del' yyyy", new Locale("es", "EC"))).format($F{estudiante_fecha_nacimiento})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="135" width="72" height="24" uuid="67fccd35-bffc-4741-b9ff-c76e5585edf6"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Identificación:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="72" y="135" width="443" height="24" forecolor="#000000" uuid="947990ef-3ec7-409e-a1f0-165a6674b10d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estudiante_identificacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="162" width="515" height="24" uuid="278201e8-527a-40d2-b863-3949dde3452f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Representante Principal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="382" width="515" height="24" uuid="8b9fe6a6-37b6-432c-b9d6-071583e2f0fb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Representante Alterno]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="406" width="515" height="168" uuid="ce821613-e275-4e82-8cce-06e12e11acd9"/>
+				<subreportParameter name="contacto_id">
+					<subreportParameterExpression><![CDATA[$F{padre_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + File.separator + "contacto.jasper"]]></subreportExpression>
+			</subreport>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="669" width="238" height="14" uuid="c48d885f-078e-401d-a025-9ee1e7eafdde"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[($F{representante_apellidos} != null ? $F{representante_apellidos} + " " : "") + ($F{representante_nombres} != null ? $F{representante_nombres} + " " : "")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="665" width="238" height="1" uuid="8924010c-25b4-41f4-b92d-2a0b46e69f91"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="34" y="683" width="172" height="14" uuid="36063e00-6de8-45ca-b045-b3061d1e4834"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["REPRESENTANTE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="299" y="14" width="216" height="24" forecolor="#000000" uuid="b815c42c-a33e-45d3-87cb-94468da0fe3e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Número de Matrícula: " +$F{matricula_numero_matricula}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

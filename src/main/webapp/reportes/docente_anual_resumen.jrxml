@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="docente_q2_b1_resumen" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e07558a1-729e-4c36-9ddd-b71235ac77d0">
+	<property name="ireport.zoom" value="3.7974983358324153"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Arial" fontSize="18" isBold="true" pdfFontName="Helvetica-Bold">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="SubTitle" forecolor="#000000" fontName="Arial" fontSize="18">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2"/>
+	</style>
+	<style name="Column header" forecolor="#000000" fontName="Arial" fontSize="8" isBold="true">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineWidth="1.0" lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Detail" forecolor="#000000" fontName="Arial" fontSize="8">
+		<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+			<pen lineColor="#000000"/>
+			<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Footer" isDefault="true"/>
+	<parameter name="asignatura_id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    (SELECT
+            COUNT(evaluacion_asignatura.`nota_final`)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS total,
+    (SELECT
+            COUNT(evaluacion_asignatura.`nota_final`)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}
+                and evaluacion_asignatura.`nota_final` >= 9) AS total_dar,
+    (SELECT
+            COUNT(evaluacion_asignatura.`nota_final`)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}
+                and evaluacion_asignatura.`nota_final` >= 7
+                AND evaluacion_asignatura.`nota_final` <= 8.99) AS total_aar,
+    (SELECT
+            COUNT(evaluacion_asignatura.`nota_final`)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}
+                and evaluacion_asignatura.`nota_final` >= 5
+                AND evaluacion_asignatura.`nota_final` <= 6.99) AS total_par,
+    (SELECT
+            COUNT(evaluacion_asignatura.`nota_final`)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}
+                and evaluacion_asignatura.`nota_final` <= 4.99) AS total_naar,
+    (SELECT
+            ROUND (AVG(evaluacion_asignatura.`q2_p1_nota`),2)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS promedio_parcial_1,
+    (SELECT
+            ROUND (AVG(evaluacion_asignatura.`q2_p2_nota`),2)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS promedio_parcial_2,
+    (SELECT
+            ROUND (AVG(evaluacion_asignatura.`q2_p3_nota`),2)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS promedio_parcial_3,
+    (SELECT
+            ROUND (AVG(evaluacion_asignatura.`q2_nota_examen`),2)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS promedio_examen_quimestral,
+    (SELECT
+            ROUND (AVG(evaluacion_asignatura.`nota_final`),2)
+        FROM
+            `asignatura_dictada` asignatura_dictada
+                INNER JOIN
+            `evaluacion_asignatura_2016_julio` evaluacion_asignatura ON asignatura_dictada.`id` = evaluacion_asignatura.`asignatura_id`
+        WHERE
+            asignatura_dictada.`id` = $P{asignatura_id}) AS promedio_quimestre_1;]]>
+	</queryString>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="total_dar" class="java.math.BigDecimal"/>
+	<field name="total_aar" class="java.math.BigDecimal"/>
+	<field name="total_par" class="java.math.BigDecimal"/>
+	<field name="total_naar" class="java.math.BigDecimal"/>
+	<field name="promedio_parcial_1" class="java.lang.Double"/>
+	<field name="promedio_parcial_2" class="java.lang.Double"/>
+	<field name="promedio_parcial_3" class="java.lang.Double"/>
+	<field name="promedio_examen_quimestral" class="java.lang.Double"/>
+	<field name="promedio_quimestre_1" class="java.lang.Double"/>
+	<detail>
+		<band height="112" splitType="Stretch">
+			<staticText>
+				<reportElement style="Detail" x="243" y="96" width="204" height="16" uuid="c6a7b28d-e69c-437b-b90e-a6f01b35389d"/>
+				<text><![CDATA[Total estudiantes]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="447" y="96" width="54" height="16" uuid="fa1c16dd-484f-4d07-8efc-74f24cd45876"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="243" y="16" width="204" height="16" uuid="98d61821-5119-459b-9e74-fac95f875734"/>
+				<text><![CDATA[Domina los aprendizajes requeridos]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="447" y="16" width="54" height="16" uuid="453deba2-6c7d-4a25-9e90-b5430c3dda12"/>
+				<textFieldExpression><![CDATA[$F{total_dar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="243" y="32" width="204" height="16" uuid="0ec9cc4a-b613-42a8-be43-a520705c7a98"/>
+				<text><![CDATA[Alcanza los aprendizajes requeridos]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="447" y="32" width="54" height="16" uuid="e60468c3-2dc5-4ae2-8f8b-8cdfcdd215a2"/>
+				<textFieldExpression><![CDATA[$F{total_aar}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="243" y="48" width="204" height="16" uuid="ea28fa3e-759f-4c40-bcb0-73f89c449f87"/>
+				<text><![CDATA[Está próximo a alcanzar los aprendizajes requeridos]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="447" y="48" width="54" height="16" uuid="e385f002-53fc-47ac-8e4c-f36cb872863a"/>
+				<textFieldExpression><![CDATA[$F{total_par}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="243" y="64" width="204" height="16" uuid="4c4c5e3f-7902-44d9-924e-ba0fd0caf3ae"/>
+				<text><![CDATA[No alcanza los aprendizajes requeridos]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Detail" x="447" y="64" width="54" height="16" uuid="d6e423dc-2d0d-479b-9c24-ac7599d7a207"/>
+				<textFieldExpression><![CDATA[$F{total_naar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="501" y="48" width="54" height="16" uuid="6039ab8c-b263-4085-81c3-0b35ec13918f"/>
+				<textFieldExpression><![CDATA[$F{total} != null && !$F{total}.equals(BigDecimal.ZERO) ? $F{total_par}.multiply(BigDecimal.valueOf(100L)).divide($F{total}, 2, BigDecimal.ROUND_UP) +"%" : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="501" y="96" width="54" height="16" uuid="a1f2d05e-4eb0-478f-90f4-cfd614798a4d"/>
+				<textFieldExpression><![CDATA["100.00%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="501" y="64" width="54" height="16" uuid="835923da-07a6-43a5-95c7-0296559caa03"/>
+				<textFieldExpression><![CDATA[$F{total} != null && !$F{total}.equals(BigDecimal.ZERO) ? $F{total_naar}.multiply(BigDecimal.valueOf(100L)).divide($F{total}, 2, BigDecimal.ROUND_UP) +"%" : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="501" y="32" width="54" height="16" uuid="b96a4fa7-eb04-48e9-90d5-8c9a32c942b2"/>
+				<textFieldExpression><![CDATA[$F{total} != null && !$F{total}.equals(BigDecimal.ZERO) ? $F{total_aar}.multiply(BigDecimal.valueOf(100L)).divide($F{total}, 2, BigDecimal.ROUND_UP) +"%" : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="501" y="16" width="54" height="16" uuid="622c5ec4-0353-4ad3-854d-a9cb87658f8d"/>
+				<textFieldExpression><![CDATA[$F{total} != null && !$F{total}.equals(BigDecimal.ZERO) ? $F{total_dar}.multiply(BigDecimal.valueOf(100L)).divide($F{total}, 2, BigDecimal.ROUND_UP) +"%" : ""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="0" y="16" width="135" height="16" uuid="9ce66af6-a23d-4333-a0a6-f57c9e657226"/>
+				<text><![CDATA[Parcial 1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="0" y="32" width="135" height="16" uuid="5a680ff3-752e-4e31-98a6-800948a6512c"/>
+				<text><![CDATA[Parcial 2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="0" y="64" width="135" height="16" uuid="2f52b4f9-d8ec-4001-a67e-62f72cc6c6cd"/>
+				<text><![CDATA[Exámen Quimestral]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="0" y="48" width="135" height="16" uuid="6f7619a8-a047-4254-b802-76a2b8d99a18"/>
+				<text><![CDATA[Parcial 3]]></text>
+			</staticText>
+			<textField pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="135" y="16" width="108" height="16" uuid="2670e566-192e-46a4-9bf8-d0c10fd267bd"/>
+				<textFieldExpression><![CDATA[$F{promedio_parcial_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="135" y="32" width="108" height="16" uuid="8282f7a2-74e2-4676-92b7-a71eeaed8db3"/>
+				<textFieldExpression><![CDATA[$F{promedio_parcial_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="135" y="48" width="108" height="16" uuid="ff525faf-19b2-4f8a-9757-5dc614c19bbe"/>
+				<textFieldExpression><![CDATA[$F{promedio_parcial_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="135" y="64" width="108" height="16" uuid="e738301d-a5c6-4357-ba6b-59be578ce577"/>
+				<textFieldExpression><![CDATA[$F{promedio_examen_quimestral}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="0" y="0" width="243" height="16" uuid="3e534930-7b85-4a7e-bace-e901a42611cd"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Promedio por componente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="243" y="0" width="312" height="16" uuid="2cabc51a-3f22-4691-ab6a-fe5706cb5ae9"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Porcentaje cualitativo de promedios (Anual)]]></text>
+			</staticText>
+			<textField pattern="#0.00" isBlankWhenNull="true">
+				<reportElement style="Detail" x="135" y="80" width="108" height="16" uuid="234cc64f-8f9b-4dba-9459-defb014e6b1c"/>
+				<textFieldExpression><![CDATA[$F{promedio_quimestre_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Detail" x="0" y="80" width="135" height="16" uuid="cb745ea7-276d-4fd2-b7a6-bc8cc3d63881"/>
+				<text><![CDATA[Promedio General]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="243" y="80" width="204" height="16" uuid="29f19934-b304-4d4a-a0f6-18e0e988574f"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="501" y="80" width="54" height="16" uuid="52a936a8-8a5e-4667-bd09-28ae5c951c42"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Detail" x="447" y="80" width="54" height="16" uuid="0b8c628b-335c-4447-9aaa-27afe228c4f8"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
